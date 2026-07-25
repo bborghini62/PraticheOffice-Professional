@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-alpha - 2026-07-25
+- modello di dominio iniziale
+- utenti e profili
+- ruoli e permessi
+- gruppi di lavoro
+- workspace
+- documenti e versioni
+- workflow
+- attività
+- pratiche
+
 ## 0.0.2-alpha - 2026-07-25
 - bootstrap applicativo
 - error boundary

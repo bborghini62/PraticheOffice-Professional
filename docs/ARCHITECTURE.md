@@ -3,9 +3,10 @@
 PraticheOffice Professional is organized as a layered application so the foundation can scale without mixing responsibilities.
 
 ## Core
-- Contains the application shell, route configuration, layout primitives, and shared types.
+- Contains the application shell, route configuration, layout primitives, shared types, and the initial domain model layer.
 - The router is centralized in [src/core/router/AppRouter.tsx](src/core/router/AppRouter.tsx) and the path constants live in [src/core/router/routes.ts](src/core/router/routes.ts).
 - The Material UI theme is centralized in [src/theme/theme.ts](src/theme/theme.ts).
+- The domain foundation lives under [src/core/domain](src/core/domain) and defines pure TypeScript interfaces for common entities, users, roles, groups, workspaces, documents, workflow, tasks, and practices.
 
 ## Modules
 - Feature-oriented modules live under [src/modules](src/modules).
@@ -35,3 +36,4 @@ PraticheOffice Professional is organized as a layered application so the foundat
 - Avoid placing domain logic in shared components.
 - Reuse shared services and utilities where appropriate.
 - Keep routes centralized in the core router package.
+- Keep domain entities in the core domain layer and avoid introducing persistence or service logic into the models.
