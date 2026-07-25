@@ -53,3 +53,12 @@ PraticheOffice Professional is organized as a layered application so the foundat
 - Keep routes centralized in the core router package.
 - Keep domain entities in the core domain layer and avoid introducing persistence or service logic into the models.
 - Keep functional product requirements documented in the blueprint set under [docs/blueprint](docs/blueprint) so implementation work stays aligned with the intended product scope.
+
+## Project planning documentation
+- The official product planning set lives under [docs/project](docs/project).
+- Use [docs/project/BACKLOG.md](docs/project/BACKLOG.md) to track work items by type and priority.
+- Use [docs/project/ROADMAP.md](docs/project/ROADMAP.md) for the release sequence from Alpha to 1.0.
+- Use [docs/project/EPICS.md](docs/project/EPICS.md) to keep the core product scope aligned with the delivery plan.
+- Use [docs/project/SPRINTS.md](docs/project/SPRINTS.md) for near-term implementation planning.
+- Use [docs/project/PROJECT-STATUS.md](docs/project/PROJECT-STATUS.md) and [docs/project/PROJECT-METRICS.md](docs/project/PROJECT-METRICS.md) to monitor health and progress.
+- Use [docs/project/RELEASE-PLAN.md](docs/project/RELEASE-PLAN.md) and [docs/project/CHANGE-REQUESTS.md](docs/project/CHANGE-REQUESTS.md) to coordinate releases and incoming change requests.

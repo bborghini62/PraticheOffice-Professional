@@ -1,5 +1,10 @@
 # Changelog
 
+## DOC-0002 — Backlog ufficiale e roadmap Beta 0.2 - 2026-07-25
+- aggiunta la documentazione ufficiale di pianificazione in [docs/project](docs/project)
+- creati backlog, roadmap, epic, sprint plan, project status, project metrics, release plan e change requests
+- aggiornati i riferimenti principali in [README.md](README.md), [docs/ARCHITECTURE.md](ARCHITECTURE.md) e [docs/CHANGELOG.md](CHANGELOG.md)
+
 ## ARCH-0006 — Persistence Layer Architecture - 2026-07-25
 - creata l’architettura di persistence layer in [src/core/persistence](src/core/persistence)
 - introdotta l’interfaccia PersistenceProvider con metodi standardizzati

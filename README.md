@@ -39,3 +39,12 @@ npm run lint
 ## Documentazione
 - Release: [docs/releases/RELEASE-0.1.0-alpha.1.md](docs/releases/RELEASE-0.1.0-alpha.1.md)
 - Changelog: [docs/CHANGELOG.md](docs/CHANGELOG.md)
+- Architettura: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- Pianificazione progetto: [docs/project/BACKLOG.md](docs/project/BACKLOG.md)
+- Roadmap: [docs/project/ROADMAP.md](docs/project/ROADMAP.md)
+- Epic: [docs/project/EPICS.md](docs/project/EPICS.md)
+- Sprint: [docs/project/SPRINTS.md](docs/project/SPRINTS.md)
+- Stato progetto: [docs/project/PROJECT-STATUS.md](docs/project/PROJECT-STATUS.md)
+- Metriche: [docs/project/PROJECT-METRICS.md](docs/project/PROJECT-METRICS.md)
+- Release plan: [docs/project/RELEASE-PLAN.md](docs/project/RELEASE-PLAN.md)
+- Change requests: [docs/project/CHANGE-REQUESTS.md](docs/project/CHANGE-REQUESTS.md)
