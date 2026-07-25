@@ -1,5 +1,14 @@
 # Changelog
 
+## FEAT-0008 — Gestione Documenti - 2026-07-25
+- elenco documenti con ricerca e filtri
+- nuova registrazione documento con codice automatico
+- collegamento ai documenti dalle pratiche
+- versioni e scheda documento dedicata
+- provider locale, Google Drive e Dropbox
+- aggiornamento automatico della timeline con document_added
+- dati dimostrativi in-memory
+
 ## FEAT-0006 — Gestione Attività - 2026-07-25
 - elenco attività con ricerca e filtri
 - nuova attività con codice automatico

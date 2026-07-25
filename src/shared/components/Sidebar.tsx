@@ -21,7 +21,7 @@ const navItems = [
   { label: appRoutes.clients.title, to: appRoutes.clients.path, icon: BusinessRoundedIcon, implemented: true },
   { label: appRoutes.activities.title, to: appRoutes.activities.path, icon: AssignmentRoundedIcon, implemented: true },
   { label: 'Calendario', to: '/calendario', icon: CalendarTodayRoundedIcon, implemented: false },
-  { label: 'Documenti', to: '/documenti', icon: DescriptionRoundedIcon, implemented: false },
+  { label: appRoutes.documents.title, to: appRoutes.documents.path, icon: DescriptionRoundedIcon, implemented: true },
   { label: 'Persone', to: '/persone', icon: PeopleRoundedIcon, implemented: false },
   { label: 'Report', to: '/report', icon: BarChartRoundedIcon, implemented: false },
   { label: appRoutes.settings.title, to: appRoutes.settings.path, icon: SettingsRoundedIcon, implemented: true },

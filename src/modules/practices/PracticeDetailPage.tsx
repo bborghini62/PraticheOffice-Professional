@@ -7,6 +7,7 @@ import { PracticeHeader } from './components/PracticeHeader';
 import { PracticeDetailsTabs } from './components/PracticeDetailsTabs';
 import { getPracticeById, getPracticeClientDisplayName } from './services/practicesService';
 import { getLatestEventByPracticeId } from '../timeline/services/timelineService';
+import { getDocumentsByPracticeId } from '../documents/services/documentsService';
 
 export const PracticeDetailPage = () => {
   const { practiceId } = useParams<{ practiceId: string }>();
@@ -30,6 +31,7 @@ export const PracticeDetailPage = () => {
   const clientName = getPracticeClientDisplayName(practice);
   const clientLink = practice.clientId ? appRoutes.clientDetail.path.replace(':clientId', practice.clientId) : undefined;
   const latestTimelineEvent = getLatestEventByPracticeId(practice.id);
+  const linkedDocuments = getDocumentsByPracticeId(practice.id);
 
   return (
     <PageContainer>
@@ -91,7 +93,7 @@ export const PracticeDetailPage = () => {
                 <Typography variant="body2" color="text.secondary">
                   Documenti
                 </Typography>
-                <Typography variant="subtitle1">3 allegati</Typography>
+                <Typography variant="subtitle1">{linkedDocuments.length} allegati</Typography>
               </Box>
               <Box>
                 <Typography variant="body2" color="text.secondary">

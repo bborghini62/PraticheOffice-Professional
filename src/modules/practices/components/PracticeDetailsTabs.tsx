@@ -6,6 +6,7 @@ import { getPracticeClientDisplayName } from '../services/practicesService';
 import { getActivitiesByPracticeId, updateActivityStatus } from '../../activities/services/activitiesService';
 import { PracticeTimeline } from '../../timeline/components/PracticeTimeline';
 import { getEventsByPracticeId } from '../../timeline/services/timelineService';
+import { getDocumentsByPracticeId } from '../../documents/services/documentsService';
 import { useNotification } from '../../../core/runtime/useNotification';
 import type { PracticePriority, PracticeRecord, PracticeStatus } from '../practices.types';
 
@@ -41,6 +42,7 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
 
   const activities = getActivitiesByPracticeId(practice.id);
   const timelineEvents = getEventsByPracticeId(practice.id);
+  const linkedDocuments = getDocumentsByPracticeId(practice.id);
 
   const summaryItems = [
     { label: 'Cliente', value: getPracticeClientDisplayName(practice) },
@@ -56,6 +58,14 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
 
   const handleNewActivity = () => {
     navigate(`/pratiche/${practice.id}/attivita/nuova`);
+  };
+
+  const handleNewDocument = () => {
+    navigate(`/pratiche/${practice.id}/documenti/nuovo`);
+  };
+
+  const handleOpenDocument = (documentId: string) => {
+    navigate(`/documenti/${documentId}`);
   };
 
   const handleCompleteActivity = (activityId: string) => {
@@ -137,13 +147,31 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
 
       {activeTab === 2 && (
         <Box sx={{ display: 'grid', gap: 1.25 }}>
-          <Typography variant="subtitle2">Documenti allegati</Typography>
-          {['Documento tecnico.pdf', 'Certificato anagrafico.pdf', 'Lettera di accompagnamento.docx'].map((document) => (
-            <Box key={document} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.2, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
-              <Typography variant="body2">{document}</Typography>
-              <Typography variant="caption" color="text.secondary">Aggiornato</Typography>
-            </Box>
-          ))}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
+            <Typography variant="subtitle2">Documenti collegati</Typography>
+            <PrimaryButton size="small" onClick={handleNewDocument}>
+              Nuovo documento
+            </PrimaryButton>
+          </Box>
+          {linkedDocuments.length > 0 ? (
+            linkedDocuments.map((document) => (
+              <Box key={document.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.2, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                <Box>
+                  <Typography variant="subtitle2">{document.name}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {document.code} • {document.owner}
+                  </Typography>
+                </Box>
+                <SecondaryButton size="small" onClick={() => handleOpenDocument(document.id)}>
+                  Apri
+                </SecondaryButton>
+              </Box>
+            ))
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              Nessun documento collegato a questa pratica per il momento.
+            </Typography>
+          )}
         </Box>
       )}
 

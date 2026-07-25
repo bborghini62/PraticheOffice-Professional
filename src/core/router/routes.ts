@@ -35,6 +35,22 @@ export const appRoutes: AppRouteConfig = {
     path: '/pratiche/:practiceId/attivita/nuova',
     title: 'Nuova attività',
   },
+  documents: {
+    path: '/documenti',
+    title: 'Documenti',
+  },
+  newDocument: {
+    path: '/documenti/nuovo',
+    title: 'Nuovo documento',
+  },
+  documentDetail: {
+    path: '/documenti/:documentId',
+    title: 'Scheda documento',
+  },
+  practiceDocumentsNew: {
+    path: '/pratiche/:practiceId/documenti/nuovo',
+    title: 'Nuovo documento',
+  },
   newClient: {
     path: '/clienti/nuovo',
     title: 'Nuovo cliente',

@@ -1,0 +1,10 @@
+export type { DocumentCategory, DocumentProvider, DocumentRecord, DocumentStatus } from './documents.types';
+export * from './services/documentsService';
+export * from './services/documentCodeService';
+export * from './components/DocumentsTable';
+export { DocumentsFilters } from './components/DocumentsFilters';
+export * from './components/DocumentForm';
+export * from './components/DocumentHeader';
+export * from './components/DocumentDetailsTabs';
+export * from './components/DocumentStatusBadge';
+export * from './components/EmptyDocumentsState';

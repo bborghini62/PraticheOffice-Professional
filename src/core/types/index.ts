@@ -16,5 +16,9 @@ export interface AppRouteConfig {
   activities: RouteDefinition;
   newActivity: RouteDefinition;
   practiceActivitiesNew: RouteDefinition;
+  documents: RouteDefinition;
+  newDocument: RouteDefinition;
+  documentDetail: RouteDefinition;
+  practiceDocumentsNew: RouteDefinition;
   settings: RouteDefinition;
 }
