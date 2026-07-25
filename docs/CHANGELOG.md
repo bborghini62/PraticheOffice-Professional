@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.0.2-alpha - 2026-07-25
+- bootstrap applicativo
+- error boundary
+- gestione errori globali
+- logger centralizzato
+- configurazione tipizzata
+- notifiche globali
+- componenti di caricamento ed errore
+
 ## 0.0.1-alpha - 2026-07-25
 - Framework React e TypeScript
 - Material UI

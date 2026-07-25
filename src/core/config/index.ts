@@ -1,6 +1,4 @@
-// Core configuration values shared across the application shell.
+// Public exports for core configuration.
 
-export const APP_CONFIG = {
-  appName: 'PraticheOffice Professional',
-  defaultRoute: '/',
-};
+export { appConfig } from './appConfig';
+export { environment } from './environment';

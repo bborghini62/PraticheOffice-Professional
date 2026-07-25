@@ -25,6 +25,11 @@ PraticheOffice Professional is organized as a layered application so the foundat
 - The visual system is defined once in the MUI theme and applied through the app root.
 - Components should consume the shared theme instead of redefining styling values.
 
+## Core Runtime
+- The runtime layer contains the application bootstrap, global error handling, logging, configuration, and notification services.
+- AppBootstrap wires the router with error boundaries, notifications, and lazy-loading fallback UI.
+- Errors are captured centrally so the application stays resilient without changing the existing visual shell.
+
 ## Rules for future modules
 - Keep modules focused on a single feature area.
 - Avoid placing domain logic in shared components.
