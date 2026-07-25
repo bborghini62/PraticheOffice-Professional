@@ -6,6 +6,7 @@ export interface RouteDefinition {
 }
 
 export interface AppRouteConfig {
+  login: RouteDefinition;
   dashboard: RouteDefinition;
   practices: RouteDefinition;
   newPractice: RouteDefinition;

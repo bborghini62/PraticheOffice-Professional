@@ -8,6 +8,7 @@ import { AppLoading } from '../../shared/components/AppLoading';
 import { initializeGlobalErrorHandler } from './GlobalErrorHandler';
 import { databaseService } from '../database';
 import { configService } from '../config';
+import { AuthProvider } from '../../modules/auth/context/AuthProvider';
 
 const AppRouter = lazy(() => import('../router/AppRouter').then((module) => ({ default: module.AppRouter })));
 
@@ -42,11 +43,13 @@ export const AppBootstrap = () => {
   return (
     <AppErrorBoundary>
       <NotificationProvider>
-        <Suspense fallback={<AppLoading />}>
-          <BrowserRouter>
-            <AppRouter />
-          </BrowserRouter>
-        </Suspense>
+        <AuthProvider>
+          <Suspense fallback={<AppLoading />}>
+            <BrowserRouter>
+              <AppRouter />
+            </BrowserRouter>
+          </Suspense>
+        </AuthProvider>
       </NotificationProvider>
     </AppErrorBoundary>
   );

@@ -3,6 +3,10 @@
 import type { AppRouteConfig } from '../types';
 
 export const appRoutes: AppRouteConfig = {
+  login: {
+    path: '/login',
+    title: 'Accesso',
+  },
   dashboard: {
     path: '/',
     title: 'Cruscotto',

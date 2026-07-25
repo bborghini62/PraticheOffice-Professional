@@ -1,14 +1,17 @@
 // Shared top bar component for the application shell.
 
-import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
-import { useLocation } from 'react-router-dom';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { appRoutes } from '../../core/router/routes';
 import { getClientById } from '../../modules/clients/services/clientsService';
 import { getDocumentById } from '../../modules/documents/services/documentsService';
 import { getPracticeById } from '../../modules/practices/services/practicesService';
+import { useAuth } from '../../modules/auth/context/useAuth';
 
 interface TopBarProps {
   onMenuOpen: () => void;
@@ -65,7 +68,24 @@ const getCurrentPageMeta = (pathname: string) => {
 
 export const TopBar = ({ onMenuOpen }: TopBarProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const currentPage = getCurrentPageMeta(location.pathname);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    handleCloseMenu();
+    await logout();
+    navigate(appRoutes.login.path, { replace: true });
+  };
 
   return (
     <AppBar
@@ -93,6 +113,24 @@ export const TopBar = ({ onMenuOpen }: TopBarProps) => {
           <IconButton color="inherit">
             <NotificationsRoundedIcon />
           </IconButton>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 1 }}>
+            <IconButton color="inherit" onClick={handleOpenMenu}>
+              <AccountCircleRoundedIcon />
+            </IconButton>
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                {user?.name ?? 'Utente'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {user?.role ?? 'Accesso demo'}
+              </Typography>
+            </Box>
+          </Box>
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
+            <MenuItem disabled>Profilo</MenuItem>
+            <MenuItem onClick={() => { handleCloseMenu(); navigate(appRoutes.settings.path); }}>Impostazioni</MenuItem>
+            <MenuItem onClick={handleLogout}>Esci</MenuItem>
+          </Menu>
         </Box>
       </Toolbar>
     </AppBar>

@@ -1,5 +1,14 @@
 # Changelog
 
+## FEAT-0010 — Login e sessione utente - 2026-07-25
+- pagina di accesso
+- utenti dimostrativi
+- protezione delle rotte
+- sessione locale
+- ripristino sessione
+- logout
+- informazioni utente nella TopBar
+
 ## DOC-0002 — Backlog ufficiale e roadmap Beta 0.2 - 2026-07-25
 - aggiunta la documentazione ufficiale di pianificazione in [docs/project](docs/project)
 - creati backlog, roadmap, epic, sprint plan, project status, project metrics, release plan e change requests

@@ -3,8 +3,10 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { MainLayout } from '../layout/MainLayout';
+import { AuthGuard } from '../../modules/auth/components/AuthGuard';
 import { appRoutes } from './routes';
 
+const LoginPage = lazy(() => import('../../modules/auth/LoginPage'));
 const DashboardPage = lazy(() => import('../../modules/dashboard/DashboardPage'));
 const PracticesPage = lazy(() => import('../../modules/practices/PracticesPage'));
 const NewPracticePage = lazy(() => import('../../modules/practices/NewPracticePage'));
@@ -21,9 +23,10 @@ const CalendarPage = lazy(() => import('../../modules/calendar/CalendarPage'));
 const SettingsPage = lazy(() => import('../../modules/settings/SettingsPage'));
 
 export const AppRouter = () => (
-  <Suspense fallback={<div />}> 
+  <Suspense fallback={<div />}>
     <Routes>
-      <Route element={<MainLayout />}>
+      <Route path={appRoutes.login.path} element={<LoginPage />} />
+      <Route element={<AuthGuard><MainLayout /></AuthGuard>}>
         <Route path={appRoutes.dashboard.path} element={<DashboardPage />} />
         <Route path={appRoutes.practices.path} element={<PracticesPage />} />
         <Route path={appRoutes.newPractice.path} element={<NewPracticePage />} />
