@@ -5,21 +5,28 @@ import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import { useLocation } from 'react-router-dom';
+import { appRoutes } from '../../core/router/routes';
+import { getPracticeById } from '../../modules/practices/services/practicesService';
 
 interface TopBarProps {
   onMenuOpen: () => void;
 }
 
 const pageMeta: Record<string, { title: string; subtitle: string }> = {
-  '/': { title: 'Dashboard', subtitle: 'Panoramica operativa' },
-  '/pratiche': { title: 'Pratiche', subtitle: 'Gestione delle pratiche operative' },
-  '/pratiche/nuova': { title: 'Nuova pratica', subtitle: 'Creazione di una nuova pratica operativa' },
-  '/settings': { title: 'Impostazioni', subtitle: 'Configurazione dell’applicazione' },
+  [appRoutes.dashboard.path]: { title: 'Dashboard', subtitle: 'Panoramica operativa' },
+  [appRoutes.practices.path]: { title: 'Pratiche', subtitle: 'Gestione delle pratiche operative' },
+  [appRoutes.newPractice.path]: { title: 'Nuova pratica', subtitle: 'Creazione di una nuova pratica operativa' },
+  [appRoutes.settings.path]: { title: 'Impostazioni', subtitle: 'Configurazione dell’applicazione' },
 };
 
 export const TopBar = ({ onMenuOpen }: TopBarProps) => {
   const location = useLocation();
-  const currentPage = pageMeta[location.pathname] ?? { title: 'Pagina', subtitle: 'Contenuto in aggiornamento' };
+  const practiceDetailMatch = location.pathname.match(/^\/pratiche\/([^/]+)$/);
+  const matchedPractice = practiceDetailMatch ? getPracticeById(practiceDetailMatch[1]) : undefined;
+
+  const currentPage = matchedPractice
+    ? { title: 'Scheda pratica', subtitle: `${matchedPractice.code} • ${matchedPractice.subject}` }
+    : pageMeta[location.pathname] ?? { title: 'Scheda pratica', subtitle: 'Dettaglio della pratica selezionata' };
 
   return (
     <AppBar

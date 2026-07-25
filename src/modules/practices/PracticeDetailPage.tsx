@@ -27,7 +27,7 @@ export const PracticeDetailPage = () => {
 
   return (
     <PageContainer>
-      <PageTitle subtitle="Visualizza i dettagli e il contesto operativo della pratica selezionata.">Dettaglio pratica</PageTitle>
+      <PageTitle subtitle={`${practice.code} • ${practice.subject}`}>Scheda pratica</PageTitle>
       <PracticeHeader
         practice={practice}
         onEdit={() => navigate('/pratiche')}
@@ -44,27 +44,42 @@ export const PracticeDetailPage = () => {
               Contesto operativo
             </Typography>
             <Box sx={{ display: 'grid', gap: 1.5 }}>
-              <Box>
+              <Box sx={{ p: 1.25, borderRadius: 2, bgcolor: 'grey.50', border: '1px solid', borderColor: 'divider' }}>
                 <Typography variant="body2" color="text.secondary">
                   Gruppo
                 </Typography>
                 <Typography variant="subtitle1">{practice.group}</Typography>
               </Box>
-              <Divider />
-              <Box>
+              <Box sx={{ p: 1.25, borderRadius: 2, bgcolor: 'grey.50', border: '1px solid', borderColor: 'divider' }}>
                 <Typography variant="body2" color="text.secondary">
-                  Area di attenzione
+                  Responsabile
                 </Typography>
-                <Typography variant="subtitle1">Verifica documentale e coordinamento interno</Typography>
+                <Typography variant="subtitle1">{practice.responsible}</Typography>
+              </Box>
+              <Box sx={{ p: 1.25, borderRadius: 2, bgcolor: 'grey.50', border: '1px solid', borderColor: 'divider' }}>
+                <Typography variant="body2" color="text.secondary">
+                  Scadenza
+                </Typography>
+                <Typography variant="subtitle1">{new Date(practice.dueDate).toLocaleDateString('it-IT')}</Typography>
               </Box>
               <Divider />
               <Box>
                 <Typography variant="body2" color="text.secondary">
-                  Note di supporto
+                  Attività aperte
                 </Typography>
+                <Typography variant="subtitle1">3</Typography>
+              </Box>
+              <Box>
                 <Typography variant="body2" color="text.secondary">
-                  La pratica è pronta per la successiva valutazione del team e per eventuali aggiornamenti di stato.
+                  Documenti
                 </Typography>
+                <Typography variant="subtitle1">3 allegati</Typography>
+              </Box>
+              <Box>
+                <Typography variant="body2" color="text.secondary">
+                  Stato workflow
+                </Typography>
+                <Typography variant="subtitle1">In verifica</Typography>
               </Box>
             </Box>
           </SectionCard>

@@ -34,9 +34,15 @@ export const PracticeHeader = ({ practice, onEdit, onChangeStatus, onMoreActions
         </Box>
       </Box>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignSelf: { xs: 'flex-start', md: 'flex-end' } }}>
-        <SecondaryButton onClick={onEdit}>Modifica</SecondaryButton>
-        <PrimaryButton onClick={onChangeStatus}>Cambia stato</PrimaryButton>
-        <SecondaryButton onClick={onMoreActions}>Altre azioni</SecondaryButton>
+        <SecondaryButton size="small" sx={{ px: 1.5, py: 0.75 }} onClick={onEdit}>
+          Modifica
+        </SecondaryButton>
+        <PrimaryButton size="small" sx={{ px: 1.5, py: 0.75 }} onClick={onChangeStatus}>
+          Cambia stato
+        </PrimaryButton>
+        <SecondaryButton size="small" sx={{ px: 1.5, py: 0.75 }} onClick={onMoreActions}>
+          Altre azioni
+        </SecondaryButton>
       </Box>
     </Box>
     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, minmax(0, 1fr))' }, gap: 2, mt: 3 }}>

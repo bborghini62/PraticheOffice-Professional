@@ -6,6 +6,13 @@
 - componenti riutilizzabili Material UI
 - documentazione design system e linee guida UI
 
+## UX-0003 — Rifinitura Scheda Pratica - 2026-07-25
+- rifinitura della scheda pratica con header più compatti
+- TopBar contestuale con titolo e sottotitolo della pratica selezionata
+- tab multipli per riepilogo, attività, documenti, comunicazioni, scadenze, timeline, storico e permessi
+- pannello laterale con contesto operativo più leggibile
+- riepilogo dettagliato con dati dimostrativi coerenti
+
 ## UX-0002 — Rifinitura Nuova Pratica - 2026-07-25
 - TopBar corretta
 - valori in italiano
