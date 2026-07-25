@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.5-alpha - 2026-07-25
+- servizio configurazione centralizzato
+- valori predefiniti, ambiente e runtime
+- configurazione tipizzata
+- integrazione con bootstrap applicativo
+
 ## 0.0.4-alpha - 2026-07-25
 - adapter database astratto
 - servizio database centralizzato

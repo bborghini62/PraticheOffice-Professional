@@ -6,33 +6,35 @@ import { NotificationProvider } from './NotificationProvider';
 import { AppLoading } from '../../shared/components/AppLoading';
 import { initializeGlobalErrorHandler } from './GlobalErrorHandler';
 import { databaseService } from '../database';
+import { configService } from '../config';
 
 const AppRouter = lazy(() => import('../router/AppRouter').then((module) => ({ default: module.AppRouter })));
 
 initializeGlobalErrorHandler();
 
 export const AppBootstrap = () => {
-  const [isDatabaseReady, setIsDatabaseReady] = useState(false);
-  const [databaseError, setDatabaseError] = useState<Error | null>(null);
+  const [isRuntimeReady, setIsRuntimeReady] = useState(false);
+  const [runtimeError, setRuntimeError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const initializeDatabase = async () => {
+    const initializeRuntime = async () => {
       try {
+        await configService.initialize();
         await databaseService.initialize();
-        setIsDatabaseReady(true);
+        setIsRuntimeReady(true);
       } catch (error) {
-        setDatabaseError(error instanceof Error ? error : new Error('Database initialization failed'));
+        setRuntimeError(error instanceof Error ? error : new Error('Runtime initialization failed'));
       }
     };
 
-    void initializeDatabase();
+    void initializeRuntime();
   }, []);
 
-  if (databaseError) {
-    throw databaseError;
+  if (runtimeError) {
+    throw runtimeError;
   }
 
-  if (!isDatabaseReady) {
+  if (!isRuntimeReady) {
     return <AppLoading />;
   }
 
