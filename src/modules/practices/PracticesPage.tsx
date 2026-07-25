@@ -25,6 +25,7 @@ const PracticesPage = () => {
   const filteredPractices = useMemo(() => filterPractices(practices, filters.search, filters.status, filters.priority), [practices, filters]);
 
   const handleOpenPractice = (practice: PracticeRecord) => {
+    navigate(appRoutes.practiceDetail.path.replace(':practiceId', practice.id));
     showNotification({ message: `Hai aperto ${practice.code}`, severity: 'info' });
   };
 

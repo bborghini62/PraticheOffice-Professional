@@ -9,5 +9,6 @@ export interface AppRouteConfig {
   dashboard: RouteDefinition;
   practices: RouteDefinition;
   newPractice: RouteDefinition;
+  practiceDetail: RouteDefinition;
   settings: RouteDefinition;
 }

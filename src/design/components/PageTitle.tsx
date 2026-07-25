@@ -1,5 +1,18 @@
 import { Typography, type TypographyProps } from '@mui/material';
 
-export const PageTitle = ({ sx, ...props }: TypographyProps) => (
-  <Typography variant="h4" sx={{ fontWeight: 700, lineHeight: 1.2, ...sx }} {...props} />
+interface PageTitleProps extends TypographyProps {
+  subtitle?: string;
+}
+
+export const PageTitle = ({ sx, subtitle, children, ...props }: PageTitleProps) => (
+  <>
+    <Typography variant="h4" sx={{ fontWeight: 700, lineHeight: 1.2, ...sx }} {...props}>
+      {children}
+    </Typography>
+    {subtitle ? (
+      <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
+        {subtitle}
+      </Typography>
+    ) : null}
+  </>
 );

@@ -100,6 +100,8 @@ export const addPractice = (practice: PracticeRecord): PracticeRecord[] => {
   return getPractices();
 };
 
+export const getPracticeById = (id: string): PracticeRecord | undefined => practicesStore.find((practice) => practice.id === id);
+
 export const filterPractices = (
   practices: PracticeRecord[],
   search: string,
