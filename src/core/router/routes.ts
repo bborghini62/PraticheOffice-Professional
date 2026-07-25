@@ -39,6 +39,10 @@ export const appRoutes: AppRouteConfig = {
     path: '/documenti',
     title: 'Documenti',
   },
+  calendar: {
+    path: '/calendario',
+    title: 'Calendario',
+  },
   newDocument: {
     path: '/documenti/nuovo',
     title: 'Nuovo documento',

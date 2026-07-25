@@ -8,6 +8,14 @@
 - estesa ConfigService con il setting persistence.type
 - documentazione tecnica aggiunta in [docs/specs/ARCH-000006-Persistence-Layer.md](docs/specs/ARCH-000006-Persistence-Layer.md)
 
+## FEAT-0009 — Calendario operativo - 2026-07-25
+- viste mese, settimana e agenda
+- scadenze pratiche, attività e documenti
+- filtri per tipo evento, stato, responsabile, gruppo e pratica
+- navigazione tra periodi con Oggi, precedente e successivo
+- collegamenti alle schede pratica e documento
+- evidenza scaduti, oggi e urgenze
+
 ## Release 0.1.0-alpha.1 - 2026-07-25
 - primo flusso operativo completo
 - clienti

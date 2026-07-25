@@ -20,5 +20,6 @@ export interface AppRouteConfig {
   newDocument: RouteDefinition;
   documentDetail: RouteDefinition;
   practiceDocumentsNew: RouteDefinition;
+  calendar: RouteDefinition;
   settings: RouteDefinition;
 }
