@@ -1,5 +1,16 @@
 # Changelog
 
+## Release 0.1.0-alpha.1 - 2026-07-25
+- primo flusso operativo completo
+- clienti
+- pratiche
+- attività
+- documenti
+- timeline
+- Design System
+- collegamenti tra i moduli
+- verifica manuale completata con esito positivo
+
 ## FEAT-0008 — Gestione Documenti - 2026-07-25
 - elenco documenti con ricerca e filtri
 - nuova registrazione documento con codice automatico

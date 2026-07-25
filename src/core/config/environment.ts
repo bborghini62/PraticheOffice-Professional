@@ -15,5 +15,5 @@ const env = import.meta.env as unknown as ImportMeta['env'];
 export const environment = {
   appEnv: env.VITE_APP_ENV ?? 'development',
   appName: env.VITE_APP_NAME ?? 'PraticheOffice Professional',
-  appVersion: env.VITE_APP_VERSION ?? '0.0.2-alpha',
+  appVersion: env.VITE_APP_VERSION ?? '0.1.0-alpha.1',
 };

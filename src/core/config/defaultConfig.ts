@@ -4,7 +4,7 @@ import type { AppConfig } from './config.types';
 export const defaultConfig: AppConfig = {
   app: {
     name: 'PraticheOffice Professional',
-    version: '0.0.5-alpha',
+    version: '0.1.0-alpha.1',
     locale: 'it-IT',
     timezone: 'Europe/Rome',
     environment: environment.appEnv,

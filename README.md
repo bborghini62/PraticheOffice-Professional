@@ -1,32 +1,41 @@
-# React + TypeScript + Vite
+# PraticheOffice Professional
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+PraticheOffice Professional è un’applicazione React + TypeScript per la gestione operativa di pratiche, clienti, attività e documenti in ambito professionale.
 
-Currently, two official plugins are available:
+## Stato della release
+Alpha 0.1.0-alpha.1
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Requisiti
+- Node.js
+- npm
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## Installazione
+```bash
+npm install
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Avvio in sviluppo
+```bash
+npm run dev
+```
+
+## Build
+```bash
+npm run build
+```
+
+## Lint
+```bash
+npm run lint
+```
+
+## Limitazioni della release
+- Dati gestiti solo in-memory e persi al riavvio.
+- Nessun database SQLite reale o autenticazione reale.
+- Nessun upload file reale; Google Drive e Dropbox sono solo predisposti.
+- Azioni come Modifica, Duplica, Archivia e simili restano parziali.
+- Non sono presenti test automatici completi.
+
+## Documentazione
+- Release: [docs/releases/RELEASE-0.1.0-alpha.1.md](docs/releases/RELEASE-0.1.0-alpha.1.md)
+- Changelog: [docs/CHANGELOG.md](docs/CHANGELOG.md)
