@@ -1,7 +1,10 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { useState } from 'react';
-import { SectionCard } from '../../../design/components';
+import { useNavigate } from 'react-router-dom';
+import { PrimaryButton, SecondaryButton, SectionCard } from '../../../design/components';
 import { getPracticeClientDisplayName } from '../services/practicesService';
+import { getActivitiesByPracticeId, updateActivityStatus } from '../../activities/services/activitiesService';
+import { useNotification } from '../../../core/runtime/useNotification';
 import type { PracticePriority, PracticeRecord, PracticeStatus } from '../practices.types';
 
 interface PracticeDetailsTabsProps {
@@ -9,6 +12,8 @@ interface PracticeDetailsTabsProps {
 }
 
 export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
+  const navigate = useNavigate();
+  const { showNotification } = useNotification();
   const [activeTab, setActiveTab] = useState(0);
 
   const statusLabels: Record<PracticeStatus, string> = {
@@ -32,6 +37,8 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
 
   const tabItems = ['Riepilogo', 'Attività', 'Documenti', 'Comunicazioni', 'Scadenze', 'Timeline', 'Storico', 'Permessi'];
 
+  const activities = getActivitiesByPracticeId(practice.id);
+
   const summaryItems = [
     { label: 'Cliente', value: getPracticeClientDisplayName(practice) },
     { label: 'Contatto', value: 'Marco Bellini' },
@@ -43,6 +50,20 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
     { label: 'Stato', value: statusLabels[practice.status] },
     { label: 'Priorità', value: priorityLabels[practice.priority] },
   ];
+
+  const handleNewActivity = () => {
+    navigate(`/pratiche/${practice.id}/attivita/nuova`);
+  };
+
+  const handleCompleteActivity = (activityId: string) => {
+    const updated = updateActivityStatus(activityId, 'completed');
+    if (updated) {
+      showNotification({ message: 'Attività completata', severity: 'success' });
+      return;
+    }
+
+    showNotification({ message: 'Impossibile aggiornare l’attività richiesta.', severity: 'info' });
+  };
 
   return (
     <SectionCard>
@@ -81,15 +102,33 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
 
       {activeTab === 1 && (
         <Box sx={{ display: 'grid', gap: 1.25 }}>
-          <Typography variant="subtitle2">Cronologia operativa</Typography>
-          {['Richiesta ricevuta e assegnata al team responsabile', 'Verifica documentale in corso', 'Aggiornamento previsto entro la scadenza'].map((item) => (
-            <Box key={item} sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
-              <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'primary.main', mt: 0.7 }} />
-              <Typography variant="body2" color="text.secondary">
-                {item}
-              </Typography>
-            </Box>
-          ))}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
+            <Typography variant="subtitle2">Attività collegate</Typography>
+            <PrimaryButton size="small" onClick={handleNewActivity}>
+              Nuova attività
+            </PrimaryButton>
+          </Box>
+          {activities.length > 0 ? (
+            activities.map((activity) => (
+              <Box key={activity.id} sx={{ p: 1.35, borderRadius: 2, border: '1px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 2 }}>
+                  <Box>
+                    <Typography variant="subtitle2">{activity.title}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {activity.code} • {activity.assignee}
+                    </Typography>
+                  </Box>
+                  <SecondaryButton size="small" onClick={() => handleCompleteActivity(activity.id)}>
+                    Completa
+                  </SecondaryButton>
+                </Box>
+              </Box>
+            ))
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              Nessuna attività collegata a questa pratica per il momento.
+            </Typography>
+          )}
         </Box>
       )}
 

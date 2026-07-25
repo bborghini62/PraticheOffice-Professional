@@ -13,5 +13,8 @@ export interface AppRouteConfig {
   clients: RouteDefinition;
   newClient: RouteDefinition;
   clientDetail: RouteDefinition;
+  activities: RouteDefinition;
+  newActivity: RouteDefinition;
+  practiceActivitiesNew: RouteDefinition;
   settings: RouteDefinition;
 }

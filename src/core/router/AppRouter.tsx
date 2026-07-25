@@ -12,6 +12,8 @@ const PracticeDetailPage = lazy(() => import('../../modules/practices/PracticeDe
 const ClientsPage = lazy(() => import('../../modules/clients/ClientsPage'));
 const NewClientPage = lazy(() => import('../../modules/clients/NewClientPage'));
 const ClientDetailPage = lazy(() => import('../../modules/clients/ClientDetailPage'));
+const ActivitiesPage = lazy(() => import('../../modules/activities/ActivitiesPage'));
+const NewActivityPage = lazy(() => import('../../modules/activities/NewActivityPage'));
 const SettingsPage = lazy(() => import('../../modules/settings/SettingsPage'));
 
 export const AppRouter = () => (
@@ -25,6 +27,9 @@ export const AppRouter = () => (
         <Route path={appRoutes.clients.path} element={<ClientsPage />} />
         <Route path={appRoutes.newClient.path} element={<NewClientPage />} />
         <Route path={appRoutes.clientDetail.path} element={<ClientDetailPage />} />
+        <Route path={appRoutes.activities.path} element={<ActivitiesPage />} />
+        <Route path={appRoutes.newActivity.path} element={<NewActivityPage />} />
+        <Route path={appRoutes.practiceActivitiesNew.path} element={<NewActivityPage />} />
         <Route path={appRoutes.settings.path} element={<SettingsPage />} />
         <Route path="*" element={<Navigate to={appRoutes.dashboard.path} replace />} />
       </Route>

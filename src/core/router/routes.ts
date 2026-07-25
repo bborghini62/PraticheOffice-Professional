@@ -23,6 +23,18 @@ export const appRoutes: AppRouteConfig = {
     path: '/clienti',
     title: 'Clienti',
   },
+  activities: {
+    path: '/attivita',
+    title: 'Attività',
+  },
+  newActivity: {
+    path: '/attivita/nuova',
+    title: 'Nuova attività',
+  },
+  practiceActivitiesNew: {
+    path: '/pratiche/:practiceId/attivita/nuova',
+    title: 'Nuova attività',
+  },
   newClient: {
     path: '/clienti/nuovo',
     title: 'Nuovo cliente',

@@ -1,5 +1,13 @@
 # Changelog
 
+## FEAT-0006 — Gestione Attività - 2026-07-25
+- elenco attività con ricerca e filtri
+- nuova attività con codice automatico
+- collegamento alle pratiche
+- assegnazione e completamento attività
+- dati dimostrativi in-memory
+- integrazione nella sidebar e nel routing principale
+
 ## FEAT-0004 — Anagrafica Clienti - 2026-07-25
 - elenco clienti con ricerca e filtri
 - nuova anagrafica cliente con codice automatico
