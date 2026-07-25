@@ -1,6 +1,8 @@
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../core/runtime/useNotification';
+import { appRoutes } from '../../core/router/routes';
 import { EmptyPracticesState } from './components/EmptyPracticesState';
 import { PracticesFilters } from './components/PracticesFilters';
 import { PracticesTable } from './components/PracticesTable';
@@ -14,6 +16,7 @@ const initialFilters: PracticesFilterState = {
 };
 
 const PracticesPage = () => {
+  const navigate = useNavigate();
   const { showNotification } = useNotification();
   const [filters, setFilters] = useState<PracticesFilterState>(initialFilters);
 
@@ -30,7 +33,7 @@ const PracticesPage = () => {
   };
 
   const handleNewPractice = () => {
-    showNotification({ message: 'La creazione di una nuova pratica sarà disponibile nel prossimo aggiornamento.', severity: 'info' });
+    navigate(appRoutes.newPractice.path);
   };
 
   const handleResetFilters = () => {

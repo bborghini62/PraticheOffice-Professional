@@ -11,6 +11,10 @@ export const appRoutes: AppRouteConfig = {
     path: '/pratiche',
     title: 'Pratiche',
   },
+  newPractice: {
+    path: '/pratiche/nuova',
+    title: 'Nuova pratica',
+  },
   settings: {
     path: '/settings',
     title: 'Settings',

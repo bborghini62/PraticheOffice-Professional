@@ -1,5 +1,12 @@
 # Changelog
 
+## FEAT-0002 — Nuova Pratica - 2026-07-25
+- nuova schermata di creazione pratica
+- rotta dedicata /pratiche/nuova
+- salvataggio in-memory con immediata visualizzazione
+- validazione dei campi in italiano
+- notifica di successo e ritorno all’elenco
+
 ## UX-0001 — Miglioramento schermata Pratiche - 2026-07-25
 - interfaccia completamente in italiano
 - TopBar contestuale

@@ -91,7 +91,14 @@ const practicesSeed: PracticeRecord[] = [
   },
 ];
 
-export const getPractices = (): PracticeRecord[] => practicesSeed;
+let practicesStore: PracticeRecord[] = [...practicesSeed];
+
+export const getPractices = (): PracticeRecord[] => practicesStore.map((practice) => ({ ...practice }));
+
+export const addPractice = (practice: PracticeRecord): PracticeRecord[] => {
+  practicesStore = [practice, ...practicesStore];
+  return getPractices();
+};
 
 export const filterPractices = (
   practices: PracticeRecord[],
