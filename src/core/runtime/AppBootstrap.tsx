@@ -1,6 +1,7 @@
 // Application bootstrap that wires runtime providers and lazy-loaded routing.
 
 import { Suspense, lazy, useEffect, useState } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { AppErrorBoundary } from './AppErrorBoundary';
 import { NotificationProvider } from './NotificationProvider';
 import { AppLoading } from '../../shared/components/AppLoading';
@@ -42,7 +43,9 @@ export const AppBootstrap = () => {
     <AppErrorBoundary>
       <NotificationProvider>
         <Suspense fallback={<AppLoading />}>
-          <AppRouter />
+          <BrowserRouter>
+            <AppRouter />
+          </BrowserRouter>
         </Suspense>
       </NotificationProvider>
     </AppErrorBoundary>
