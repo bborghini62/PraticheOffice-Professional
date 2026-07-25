@@ -1,5 +1,13 @@
 # Changelog
 
+## ARCH-0006 — Persistence Layer Architecture - 2026-07-25
+- creata l’architettura di persistence layer in [src/core/persistence](src/core/persistence)
+- introdotta l’interfaccia PersistenceProvider con metodi standardizzati
+- aggiunto provider InMemoryPersistenceProvider come implementazione attiva
+- aggiunti provider stub per SQLite, Google Drive e Dropbox senza dipendenze
+- estesa ConfigService con il setting persistence.type
+- documentazione tecnica aggiunta in [docs/specs/ARCH-000006-Persistence-Layer.md](docs/specs/ARCH-000006-Persistence-Layer.md)
+
 ## Release 0.1.0-alpha.1 - 2026-07-25
 - primo flusso operativo completo
 - clienti

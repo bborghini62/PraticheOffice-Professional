@@ -116,6 +116,8 @@ export class ConfigService {
         return this.defaults.cloud.defaultProvider;
       case 'logging.level':
         return this.defaults.logging.level;
+      case 'persistence.type':
+        return this.defaults.persistence.type;
       default:
         return undefined;
     }
@@ -147,6 +149,8 @@ export class ConfigService {
         return this.environmentValues.cloud?.defaultProvider;
       case 'logging.level':
         return this.environmentValues.logging?.level;
+      case 'persistence.type':
+        return this.environmentValues.persistence?.type;
       default:
         return undefined;
     }
@@ -178,6 +182,9 @@ export class ConfigService {
       logging: {
         level: environment.appEnv === 'development' ? 'debug' : 'info',
       },
+      persistence: {
+        type: 'InMemory',
+      },
     };
   }
 
@@ -206,6 +213,9 @@ export class ConfigService {
       },
       logging: {
         level: this.get('logging.level') as string,
+      },
+      persistence: {
+        type: this.get('persistence.type') as string,
       },
     };
   }

@@ -41,6 +41,11 @@ PraticheOffice Professional is organized as a layered application so the foundat
 - The initial implementation uses an in-memory adapter for development and testing without introducing external dependencies.
 - The database service is initialized during app bootstrap and uses the existing loading and error handling flow.
 
+## Persistence layer
+- A new persistence abstraction lives under [src/core/persistence](src/core/persistence) and defines a provider-based contract for future storage backends.
+- The current implementation uses an in-memory provider as the default strategy while keeping the API ready for SQLite, Google Drive, and Dropbox stubs.
+- The configuration service now exposes a persistence type setting so the runtime can select the appropriate provider without changing the UI or business flows.
+
 ## Rules for future modules
 - Keep modules focused on a single feature area.
 - Avoid placing domain logic in shared components.

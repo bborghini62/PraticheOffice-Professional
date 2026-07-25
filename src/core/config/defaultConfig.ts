@@ -26,4 +26,7 @@ export const defaultConfig: AppConfig = {
   logging: {
     level: environment.appEnv === 'development' ? 'debug' : 'info',
   },
+  persistence: {
+    type: 'InMemory',
+  },
 };

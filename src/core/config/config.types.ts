@@ -12,7 +12,8 @@ export type ConfigKey =
   | 'database.adapter'
   | 'database.schemaVersion'
   | 'cloud.defaultProvider'
-  | 'logging.level';
+  | 'logging.level'
+  | 'persistence.type';
 
 export type ConfigValue = string | number | boolean;
 
@@ -40,6 +41,9 @@ export interface AppConfig {
   };
   logging: {
     level: string;
+  };
+  persistence: {
+    type: string;
   };
 }
 
