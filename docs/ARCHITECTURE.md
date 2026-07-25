@@ -47,3 +47,4 @@ PraticheOffice Professional is organized as a layered application so the foundat
 - Reuse shared services and utilities where appropriate.
 - Keep routes centralized in the core router package.
 - Keep domain entities in the core domain layer and avoid introducing persistence or service logic into the models.
+- Keep functional product requirements documented in the blueprint set under [docs/blueprint](docs/blueprint) so implementation work stays aligned with the intended product scope.

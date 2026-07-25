@@ -1,5 +1,14 @@
 # Changelog
 
+## DOC-0001 — Blueprint V1 - 2026-07-25
+- visione funzionale
+- mappa navigazione
+- catalogo schermate
+- workflow standard
+- matrice permessi
+- configurazione cloud guidata
+- delimitazione MVP
+
 ## 0.0.5-alpha - 2026-07-25
 - servizio configurazione centralizzato
 - valori predefiniti, ambiente e runtime
