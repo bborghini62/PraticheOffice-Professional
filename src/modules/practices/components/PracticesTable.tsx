@@ -1,6 +1,6 @@
 import { Box, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type MouseEvent } from 'react';
 import { PracticeStatusChip } from './PracticeStatusChip';
 import type { PracticeRecord, PracticePriority, PracticeStatus } from '../practices.types';
 
@@ -26,7 +26,8 @@ export const PracticesTable = ({ practices, onOpenPractice, onInformationalActio
 
   const sortedPractices = useMemo(() => [...practices].sort((left, right) => left.subject.localeCompare(right.subject)), [practices]);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 
@@ -39,9 +40,13 @@ export const PracticesTable = ({ practices, onOpenPractice, onInformationalActio
     handleMenuClose();
   };
 
+  const handleRowClick = (practice: PracticeRecord) => {
+    onOpenPractice(practice);
+  };
+
   return (
     <Box>
-      <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+      <TableContainer component={Paper} sx={{ overflowX: 'auto', borderRadius: 3 }}>
         <Table sx={{ minWidth: 960 }}>
           <TableHead>
             <TableRow>
@@ -58,24 +63,45 @@ export const PracticesTable = ({ practices, onOpenPractice, onInformationalActio
           </TableHead>
           <TableBody>
             {sortedPractices.map((practice) => (
-              <TableRow key={practice.id} hover>
-                <TableCell>{practice.code}</TableCell>
-                <TableCell>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                    {practice.subject}
+              <TableRow
+                key={practice.id}
+                hover
+                onClick={() => handleRowClick(practice)}
+                sx={{ cursor: 'pointer', '&:hover': { bgcolor: 'grey.50' }, height: 64 }}
+              >
+                <TableCell sx={{ py: 1.4 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                    {practice.code}
                   </Typography>
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ py: 1.4 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 600, lineHeight: 1.3 }}>
+                      {practice.subject}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Verifica e aggiornamento operativo
+                    </Typography>
+                  </Box>
+                </TableCell>
+                <TableCell sx={{ py: 1.4 }}>
                   <PracticeStatusChip status={practice.status as PracticeStatus} />
                 </TableCell>
-                <TableCell>{priorityLabels[practice.priority as PracticePriority]}</TableCell>
-                <TableCell>{practice.responsible}</TableCell>
-                <TableCell>{practice.group}</TableCell>
-                <TableCell>{formatDate(practice.dueDate)}</TableCell>
-                <TableCell>{formatDate(practice.updatedAt)}</TableCell>
-                <TableCell align="right">
+                <TableCell sx={{ py: 1.4 }}>{priorityLabels[practice.priority as PracticePriority]}</TableCell>
+                <TableCell sx={{ py: 1.4 }}>{practice.responsible}</TableCell>
+                <TableCell sx={{ py: 1.4 }}>{practice.group}</TableCell>
+                <TableCell sx={{ py: 1.4 }}>{formatDate(practice.dueDate)}</TableCell>
+                <TableCell sx={{ py: 1.4 }}>{formatDate(practice.updatedAt)}</TableCell>
+                <TableCell align="right" sx={{ py: 1.4 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-                    <Typography component="button" onClick={() => onOpenPractice(practice)} sx={{ cursor: 'pointer', color: 'primary.main', border: 'none', background: 'transparent', p: 0 }}>
+                    <Typography
+                      component="button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onOpenPractice(practice);
+                      }}
+                      sx={{ cursor: 'pointer', color: 'primary.main', border: 'none', background: 'transparent', p: 0, fontWeight: 600 }}
+                    >
                       Apri
                     </Typography>
                     <IconButton size="small" onClick={(event) => handleMenuOpen(event)}>

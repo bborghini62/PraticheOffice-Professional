@@ -32,15 +32,16 @@ const priorityLabels: Record<PracticePriority | 'all', string> = {
 };
 
 export const PracticesFilters = ({ filters, onFiltersChange, onReset }: PracticesFiltersProps) => (
-  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
+  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'minmax(260px, 1.5fr) minmax(170px, 0.9fr) minmax(170px, 0.9fr) auto' }, gap: 1.5, alignItems: 'center' }}>
     <TextField
       label="Ricerca"
+      placeholder="Cerca per codice o oggetto"
       value={filters.search}
       onChange={(event) => onFiltersChange({ ...filters, search: event.target.value })}
       size="small"
-      sx={{ minWidth: { xs: '100%', sm: 220 } }}
+      fullWidth
     />
-    <FormControl size="small" sx={{ minWidth: 180 }}>
+    <FormControl size="small" fullWidth>
       <InputLabel id="status-filter-label">Stato</InputLabel>
       <Select
         labelId="status-filter-label"
@@ -55,7 +56,7 @@ export const PracticesFilters = ({ filters, onFiltersChange, onReset }: Practice
         ))}
       </Select>
     </FormControl>
-    <FormControl size="small" sx={{ minWidth: 180 }}>
+    <FormControl size="small" fullWidth>
       <InputLabel id="priority-filter-label">Priorità</InputLabel>
       <Select
         labelId="priority-filter-label"
@@ -70,7 +71,7 @@ export const PracticesFilters = ({ filters, onFiltersChange, onReset }: Practice
         ))}
       </Select>
     </FormControl>
-    <Button variant="outlined" onClick={onReset}>
+    <Button variant="outlined" onClick={onReset} sx={{ height: 40, justifySelf: { xs: 'start', md: 'stretch' } }}>
       Azzera filtri
     </Button>
   </Box>

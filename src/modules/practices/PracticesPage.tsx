@@ -39,19 +39,21 @@ const PracticesPage = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2, mb: 3 }}>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2, mb: 3.5 }}>
         <Box>
-          <Typography variant="h4">Pratiche</Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography variant="h4" sx={{ fontWeight: 700 }}>
+            Pratiche
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
             Gestisci pratiche, stato, priorità e scadenze da una vista unica.
           </Typography>
         </Box>
-        <Button variant="contained" onClick={handleNewPractice}>
+        <Button variant="contained" onClick={handleNewPractice} sx={{ alignSelf: { xs: 'flex-start', md: 'center' } }}>
           Nuova pratica
         </Button>
       </Box>
 
-      <Paper sx={{ p: 2.5, mb: 3 }}>
+      <Paper sx={{ p: { xs: 2, md: 2.5 }, mb: 3, borderRadius: 3 }}>
         <PracticesFilters filters={filters} onFiltersChange={setFilters} onReset={handleResetFilters} />
       </Paper>
 

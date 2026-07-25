@@ -1,5 +1,14 @@
 # Changelog
 
+## UX-0001 — Miglioramento schermata Pratiche - 2026-07-25
+- interfaccia completamente in italiano
+- TopBar contestuale
+- Sidebar estesa
+- testata pagina migliorata
+- filtri riallineati
+- tabella più leggibile e interattiva
+- miglioramenti responsive
+
 ## FEAT-0001 — Elenco Pratiche - 2026-07-25
 - nuova sezione Pratiche
 - ricerca
