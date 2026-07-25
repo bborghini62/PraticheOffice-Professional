@@ -1,5 +1,12 @@
 # Changelog
 
+## FEAT-0004 — Anagrafica Clienti - 2026-07-25
+- elenco clienti con ricerca e filtri
+- nuova anagrafica cliente con codice automatico
+- scheda cliente con tab per riepilogo, contatti, pratiche, documenti, comunicazioni e storico
+- dati dimostrativi in-memory
+- integrazione nella sidebar e nel routing principale
+
 ## DESIGN-0001 — Design System - 2026-07-25
 - design system ufficiale introdotto
 - palette e token centralizzati

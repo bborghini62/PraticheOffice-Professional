@@ -8,6 +8,7 @@ import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import BusinessRoundedIcon from '@mui/icons-material/BusinessRounded';
 import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -17,6 +18,7 @@ import { appRoutes } from '../../core/router/routes';
 const navItems = [
   { label: appRoutes.dashboard.title, to: appRoutes.dashboard.path, icon: DashboardRoundedIcon, implemented: true },
   { label: appRoutes.practices.title, to: appRoutes.practices.path, icon: FolderRoundedIcon, implemented: true },
+  { label: appRoutes.clients.title, to: appRoutes.clients.path, icon: BusinessRoundedIcon, implemented: true },
   { label: 'Attività', to: '/attivita', icon: AssignmentRoundedIcon, implemented: false },
   { label: 'Calendario', to: '/calendario', icon: CalendarTodayRoundedIcon, implemented: false },
   { label: 'Documenti', to: '/documenti', icon: DescriptionRoundedIcon, implemented: false },

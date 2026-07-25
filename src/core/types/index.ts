@@ -10,5 +10,8 @@ export interface AppRouteConfig {
   practices: RouteDefinition;
   newPractice: RouteDefinition;
   practiceDetail: RouteDefinition;
+  clients: RouteDefinition;
+  newClient: RouteDefinition;
+  clientDetail: RouteDefinition;
   settings: RouteDefinition;
 }

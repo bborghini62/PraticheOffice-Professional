@@ -9,7 +9,9 @@ const statusColors: Record<string, { color: 'default' | 'primary' | 'secondary' 
   under_review: { color: 'warning', label: 'Da controllare' },
   approved: { color: 'success', label: 'Approvata' },
   completed: { color: 'success', label: 'Completata' },
-  archived: { color: 'default', label: 'Archiviata' },
+  active: { color: 'success', label: 'Attivo' },
+  inactive: { color: 'warning', label: 'Inattivo' },
+  archived: { color: 'default', label: 'Archiviato' },
   cancelled: { color: 'error', label: 'Annullata' },
 };
 
