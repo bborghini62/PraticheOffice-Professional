@@ -1,10 +1,11 @@
-import { Box, Divider, Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid, Link, Typography } from '@mui/material';
 import { useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
+import { appRoutes } from '../../core/router/routes';
 import { PageContainer, PageTitle, SectionCard, EmptyState } from '../../design/components';
 import { PracticeHeader } from './components/PracticeHeader';
 import { PracticeDetailsTabs } from './components/PracticeDetailsTabs';
-import { getPracticeById } from './services/practicesService';
+import { getPracticeById, getPracticeClientDisplayName } from './services/practicesService';
 
 export const PracticeDetailPage = () => {
   const { practiceId } = useParams<{ practiceId: string }>();
@@ -24,6 +25,9 @@ export const PracticeDetailPage = () => {
       </PageContainer>
     );
   }
+
+  const clientName = getPracticeClientDisplayName(practice);
+  const clientLink = practice.clientId ? appRoutes.clientDetail.path.replace(':clientId', practice.clientId) : undefined;
 
   return (
     <PageContainer>
@@ -49,6 +53,18 @@ export const PracticeDetailPage = () => {
                   Gruppo
                 </Typography>
                 <Typography variant="subtitle1">{practice.group}</Typography>
+              </Box>
+              <Box sx={{ p: 1.25, borderRadius: 2, bgcolor: 'grey.50', border: '1px solid', borderColor: 'divider' }}>
+                <Typography variant="body2" color="text.secondary">
+                  Cliente
+                </Typography>
+                {clientLink ? (
+                  <Link component={RouterLink} to={clientLink} underline="hover" color="primary.main" sx={{ fontWeight: 600 }}>
+                    {clientName}
+                  </Link>
+                ) : (
+                  <Typography variant="subtitle1">{clientName}</Typography>
+                )}
               </Box>
               <Box sx={{ p: 1.25, borderRadius: 2, bgcolor: 'grey.50', border: '1px solid', borderColor: 'divider' }}>
                 <Typography variant="body2" color="text.secondary">

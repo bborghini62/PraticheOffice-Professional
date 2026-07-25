@@ -1,6 +1,7 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { ChangeEvent, FormEvent } from 'react';
+import { getClientDisplayName, getClients } from '../../clients/services/clientsService';
 import type { PracticePriority, PracticeStatus } from '../practices.types';
 
 export interface PracticeFormValues {
@@ -46,18 +47,25 @@ const priorityOptions = [
   { value: 'urgent', label: 'Urgente' },
 ] as const;
 const practiceTypeOptions = ['Amministrativa', 'Tecnica', 'Commerciale', 'Contrattuale', 'Assistenza'];
-const customerOptions = ['Studio Rossi', 'Comune di Firenze', 'Edilizia Toscana S.r.l.', 'Conformae S.r.l.'];
-const contactOptions = ['Marco Rossi', 'Laura Bianchi', 'Paolo Galli', 'Elena Bassi'];
 const responsibleOptions = ['Marco Rossi', 'Laura Bianchi', 'Giulia Ferri', 'Luca Neri'];
 const groupOptions = ['Amministrazione', 'Segreteria', 'Ufficio tecnico', 'Direzione'];
 
 export const PracticeForm = ({ values, errors, onChange, onSubmit, onCancel }: PracticeFormProps) => {
+  const clientOptions = getClients();
   const handleTextChange = (field: keyof PracticeFormValues) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     onChange(field, event.target.value);
   };
 
   const handleSelectChange = (field: keyof PracticeFormValues) => (event: SelectChangeEvent<string>) => {
     onChange(field, event.target.value as string);
+  };
+
+  const handleCustomerChange = (event: SelectChangeEvent<string>) => {
+    const selectedClientId = event.target.value as string;
+    const selectedClient = clientOptions.find((client) => client.id === selectedClientId);
+
+    onChange('customer', selectedClientId);
+    onChange('contact', selectedClient?.contactPerson ?? '');
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -77,25 +85,16 @@ export const PracticeForm = ({ values, errors, onChange, onSubmit, onCancel }: P
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
             <FormControl size="small" fullWidth>
               <InputLabel id="customer-label">Cliente</InputLabel>
-              <Select labelId="customer-label" label="Cliente" value={values.customer} onChange={handleSelectChange('customer')} error={Boolean(errors.customer)}>
-                {customerOptions.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
+              <Select labelId="customer-label" label="Cliente" value={values.customer} onChange={handleCustomerChange} error={Boolean(errors.customer)}>
+                {clientOptions.map((client) => (
+                  <MenuItem key={client.id} value={client.id}>
+                    {getClientDisplayName(client)}
                   </MenuItem>
                 ))}
               </Select>
               {errors.customer ? <Typography variant="caption" color="error.main">{errors.customer}</Typography> : null}
             </FormControl>
-            <FormControl size="small" fullWidth>
-              <InputLabel id="contact-label">Contatto</InputLabel>
-              <Select labelId="contact-label" label="Contatto" value={values.contact} onChange={handleSelectChange('contact')}>
-                {contactOptions.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <TextField label="Contatto" value={values.contact} disabled size="small" fullWidth />
           </Box>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
             <FormControl size="small" fullWidth>

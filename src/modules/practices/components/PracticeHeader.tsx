@@ -1,5 +1,7 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import { PrimaryButton, SecondaryButton, SectionCard, StatusBadge } from '../../../design/components';
+import { getPracticeClientDisplayName } from '../services/practicesService';
 import type { PracticeRecord, PracticePriority, PracticeStatus } from '../practices.types';
 
 interface PracticeHeaderProps {
@@ -18,7 +20,11 @@ const priorityLabels: Record<PracticePriority, string> = {
 
 const formatDate = (value: string) => new Date(value).toLocaleDateString('it-IT');
 
-export const PracticeHeader = ({ practice, onEdit, onChangeStatus, onMoreActions }: PracticeHeaderProps) => (
+export const PracticeHeader = ({ practice, onEdit, onChangeStatus, onMoreActions }: PracticeHeaderProps) => {
+  const clientName = getPracticeClientDisplayName(practice);
+  const clientLink = practice.clientId ? `/clienti/${practice.clientId}` : undefined;
+
+  return (
   <SectionCard>
     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', gap: 2 }}>
       <Box sx={{ display: 'grid', gap: 1 }}>
@@ -32,6 +38,16 @@ export const PracticeHeader = ({ practice, onEdit, onChangeStatus, onMoreActions
             Priorità {priorityLabels[practice.priority]}
           </Typography>
         </Box>
+        {clientLink ? (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.25 }}>
+            <Typography variant="body2" color="text.secondary">
+              Cliente
+            </Typography>
+            <Link component={RouterLink} to={clientLink} underline="hover" color="primary.main" sx={{ fontWeight: 600 }}>
+              {clientName}
+            </Link>
+          </Box>
+        ) : null}
       </Box>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignSelf: { xs: 'flex-start', md: 'flex-end' } }}>
         <SecondaryButton size="small" sx={{ px: 1.5, py: 0.75 }} onClick={onEdit}>
@@ -66,4 +82,5 @@ export const PracticeHeader = ({ practice, onEdit, onChangeStatus, onMoreActions
       </Box>
     </Box>
   </SectionCard>
-);
+  );
+};

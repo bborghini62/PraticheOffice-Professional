@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { EmptyState, PageContainer, PageTitle, SectionCard } from '../../design/components';
 import { ClientDetailsTabs } from './components/ClientDetailsTabs';
 import { ClientHeader } from './components/ClientHeader';
-import { getClientById } from './services/clientsService';
+import { getClientById, getClientDisplayName } from './services/clientsService';
 
 export const ClientDetailPage = () => {
   const { clientId } = useParams<{ clientId: string }>();
@@ -20,7 +20,7 @@ export const ClientDetailPage = () => {
     );
   }
 
-  const displayName = [client.companyName, `${client.firstName} ${client.lastName}`.trim()].filter(Boolean).join(' ') || client.contactPerson;
+  const displayName = getClientDisplayName(client);
 
   return (
     <PageContainer>

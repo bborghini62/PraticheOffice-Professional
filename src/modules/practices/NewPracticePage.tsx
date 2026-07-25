@@ -81,6 +81,7 @@ const NewPracticePage = () => {
       subject: values.subject.trim(),
       status: values.status as PracticeStatus,
       priority: values.priority as PracticePriority,
+      clientId: values.customer.trim(),
       responsible: values.responsible.trim(),
       group: values.group.trim(),
       dueDate: values.dueDate,

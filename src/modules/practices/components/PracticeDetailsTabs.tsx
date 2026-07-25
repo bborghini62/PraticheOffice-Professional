@@ -1,6 +1,7 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { useState } from 'react';
 import { SectionCard } from '../../../design/components';
+import { getPracticeClientDisplayName } from '../services/practicesService';
 import type { PracticePriority, PracticeRecord, PracticeStatus } from '../practices.types';
 
 interface PracticeDetailsTabsProps {
@@ -32,7 +33,7 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
   const tabItems = ['Riepilogo', 'Attività', 'Documenti', 'Comunicazioni', 'Scadenze', 'Timeline', 'Storico', 'Permessi'];
 
   const summaryItems = [
-    { label: 'Cliente', value: 'Alpha Costruzioni S.r.l.' },
+    { label: 'Cliente', value: getPracticeClientDisplayName(practice) },
     { label: 'Contatto', value: 'Marco Bellini' },
     { label: 'Tipo pratica', value: 'Permesso edilizio' },
     { label: 'Gruppo', value: practice.group },

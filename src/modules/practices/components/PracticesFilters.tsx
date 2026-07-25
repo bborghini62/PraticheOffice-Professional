@@ -1,4 +1,5 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { getClientDisplayName, getClients } from '../../clients/services/clientsService';
 import type { PracticePriority, PracticeStatus, PracticesFilters as PracticesFilterState } from '../practices.types';
 
 interface PracticesFiltersProps {
@@ -31,8 +32,11 @@ const priorityLabels: Record<PracticePriority | 'all', string> = {
   urgent: 'Urgente',
 };
 
-export const PracticesFilters = ({ filters, onFiltersChange, onReset }: PracticesFiltersProps) => (
-  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'minmax(260px, 1.5fr) minmax(170px, 0.9fr) minmax(170px, 0.9fr) auto' }, gap: 1.5, alignItems: 'center' }}>
+export const PracticesFilters = ({ filters, onFiltersChange, onReset }: PracticesFiltersProps) => {
+  const clientOptions = getClients();
+
+  return (
+  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'minmax(220px, 1.3fr) minmax(170px, 0.9fr) minmax(170px, 0.9fr) minmax(190px, 0.9fr) auto' }, gap: 1.5, alignItems: 'center' }}>
     <TextField
       label="Ricerca"
       placeholder="Cerca per codice o oggetto"
@@ -71,8 +75,25 @@ export const PracticesFilters = ({ filters, onFiltersChange, onReset }: Practice
         ))}
       </Select>
     </FormControl>
+    <FormControl size="small" fullWidth>
+      <InputLabel id="client-filter-label">Cliente</InputLabel>
+      <Select
+        labelId="client-filter-label"
+        label="Cliente"
+        value={filters.clientId}
+        onChange={(event) => onFiltersChange({ ...filters, clientId: event.target.value as string | 'all' })}
+      >
+        <MenuItem value="all">Tutti i clienti</MenuItem>
+        {clientOptions.map((client) => (
+          <MenuItem key={client.id} value={client.id}>
+            {getClientDisplayName(client)}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
     <Button variant="outlined" onClick={onReset} sx={{ height: 40, justifySelf: { xs: 'start', md: 'stretch' } }}>
       Azzera filtri
     </Button>
   </Box>
-);
+  );
+};

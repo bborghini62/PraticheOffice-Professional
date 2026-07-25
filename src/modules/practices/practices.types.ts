@@ -17,6 +17,7 @@ export interface PracticeRecord {
   subject: string;
   status: PracticeStatus;
   priority: PracticePriority;
+  clientId: string;
   responsible: string;
   group: string;
   dueDate: string;
@@ -27,4 +28,5 @@ export interface PracticesFilters {
   search: string;
   status: PracticeStatus | 'all';
   priority: PracticePriority | 'all';
+  clientId: string | 'all';
 }

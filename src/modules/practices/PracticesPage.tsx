@@ -13,6 +13,7 @@ const initialFilters: PracticesFilterState = {
   search: '',
   status: 'all',
   priority: 'all',
+  clientId: 'all',
 };
 
 const PracticesPage = () => {
@@ -22,7 +23,7 @@ const PracticesPage = () => {
 
   const practices = useMemo(() => getPractices(), []);
 
-  const filteredPractices = useMemo(() => filterPractices(practices, filters.search, filters.status, filters.priority), [practices, filters]);
+  const filteredPractices = useMemo(() => filterPractices(practices, filters.search, filters.status, filters.priority, filters.clientId), [practices, filters]);
 
   const handleOpenPractice = (practice: PracticeRecord) => {
     navigate(appRoutes.practiceDetail.path.replace(':practiceId', practice.id));

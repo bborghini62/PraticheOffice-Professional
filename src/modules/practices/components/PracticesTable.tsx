@@ -1,6 +1,7 @@
 import { Box, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import { useMemo, useState, type MouseEvent } from 'react';
+import { getPracticeClientDisplayName } from '../services/practicesService';
 import { PracticeStatusChip } from './PracticeStatusChip';
 import type { PracticeRecord, PracticePriority, PracticeStatus } from '../practices.types';
 
@@ -54,6 +55,7 @@ export const PracticesTable = ({ practices, onOpenPractice, onInformationalActio
               <TableCell>Oggetto</TableCell>
               <TableCell>Stato</TableCell>
               <TableCell>Priorità</TableCell>
+              <TableCell>Cliente</TableCell>
               <TableCell>Responsabile</TableCell>
               <TableCell>Gruppo</TableCell>
               <TableCell>Scadenza</TableCell>
@@ -88,6 +90,7 @@ export const PracticesTable = ({ practices, onOpenPractice, onInformationalActio
                   <PracticeStatusChip status={practice.status as PracticeStatus} />
                 </TableCell>
                 <TableCell sx={{ py: 1.4 }}>{priorityLabels[practice.priority as PracticePriority]}</TableCell>
+                <TableCell sx={{ py: 1.4 }}>{getPracticeClientDisplayName(practice)}</TableCell>
                 <TableCell sx={{ py: 1.4 }}>{practice.responsible}</TableCell>
                 <TableCell sx={{ py: 1.4 }}>{practice.group}</TableCell>
                 <TableCell sx={{ py: 1.4 }}>{formatDate(practice.dueDate)}</TableCell>

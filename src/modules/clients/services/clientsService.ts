@@ -191,6 +191,14 @@ let clientsStore: ClientRecord[] = [...clientsSeed];
 
 export const getClients = (): ClientRecord[] => clientsStore.map((client) => ({ ...client }));
 
+export const getClientDisplayName = (client: ClientRecord | undefined): string => {
+  if (!client) {
+    return 'Cliente non assegnato';
+  }
+
+  return [client.companyName, `${client.firstName} ${client.lastName}`.trim()].filter(Boolean).join(' ') || client.contactPerson;
+};
+
 export const addClient = (client: ClientRecord): ClientRecord[] => {
   clientsStore = [client, ...clientsStore];
   return getClients();

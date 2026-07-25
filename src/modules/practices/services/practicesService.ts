@@ -1,3 +1,4 @@
+import { getClientById, getClientDisplayName } from '../../clients/services/clientsService';
 import type { PracticeRecord, PracticeStatus, PracticePriority } from '../practices.types';
 
 const practicesSeed: PracticeRecord[] = [
@@ -7,6 +8,7 @@ const practicesSeed: PracticeRecord[] = [
     subject: 'Autorizzazione permesso edilizio',
     status: 'open',
     priority: 'high',
+    clientId: 'CLI-001',
     responsible: 'Laura Bianchi',
     group: 'Ufficio tecnico',
     dueDate: '2026-07-30',
@@ -18,6 +20,7 @@ const practicesSeed: PracticeRecord[] = [
     subject: 'Aggiornamento documentazione cliente',
     status: 'in_progress',
     priority: 'normal',
+    clientId: 'CLI-002',
     responsible: 'Marco Rossi',
     group: 'Amministrazione',
     dueDate: '2026-08-02',
@@ -29,6 +32,7 @@ const practicesSeed: PracticeRecord[] = [
     subject: 'Verifica conformità impianto',
     status: 'waiting',
     priority: 'urgent',
+    clientId: 'CLI-003',
     responsible: 'Sara Verdi',
     group: 'Controlli',
     dueDate: '2026-07-28',
@@ -40,6 +44,7 @@ const practicesSeed: PracticeRecord[] = [
     subject: 'Richiesta integrazione documenti',
     status: 'under_review',
     priority: 'high',
+    clientId: 'CLI-004',
     responsible: 'Luca Neri',
     group: 'Ufficio tecnico',
     dueDate: '2026-08-05',
@@ -51,6 +56,7 @@ const practicesSeed: PracticeRecord[] = [
     subject: 'Approvazione finale progetto',
     status: 'approved',
     priority: 'normal',
+    clientId: 'CLI-005',
     responsible: 'Giulia Ferri',
     group: 'Direzione',
     dueDate: '2026-08-10',
@@ -62,6 +68,7 @@ const practicesSeed: PracticeRecord[] = [
     subject: 'Chiusura pratica commerciale',
     status: 'completed',
     priority: 'low',
+    clientId: 'CLI-006',
     responsible: 'Paolo Galli',
     group: 'Amministrazione',
     dueDate: '2026-07-25',
@@ -73,6 +80,7 @@ const practicesSeed: PracticeRecord[] = [
     subject: 'Pratica sospesa per documenti mancanti',
     status: 'archived',
     priority: 'normal',
+    clientId: 'CLI-007',
     responsible: 'Elena Bassi',
     group: 'Segreteria',
     dueDate: '2026-07-18',
@@ -84,6 +92,7 @@ const practicesSeed: PracticeRecord[] = [
     subject: 'Annullamento richiesta iniziale',
     status: 'cancelled',
     priority: 'low',
+    clientId: 'CLI-008',
     responsible: 'Matteo Sala',
     group: 'Segreteria',
     dueDate: '2026-07-16',
@@ -102,25 +111,33 @@ export const addPractice = (practice: PracticeRecord): PracticeRecord[] => {
 
 export const getPracticeById = (id: string): PracticeRecord | undefined => practicesStore.find((practice) => practice.id === id);
 
+export const getPracticeClient = (practice: PracticeRecord) => getClientById(practice.clientId);
+
+export const getPracticeClientDisplayName = (practice: PracticeRecord): string => getClientDisplayName(getPracticeClient(practice));
+
 export const filterPractices = (
   practices: PracticeRecord[],
   search: string,
   status: PracticeStatus | 'all',
   priority: PracticePriority | 'all',
+  clientId: string | 'all' = 'all',
 ): PracticeRecord[] => {
   const normalized = search.trim().toLowerCase();
 
   return practices.filter((practice) => {
+    const clientName = getPracticeClientDisplayName(practice).toLowerCase();
     const matchesSearch =
       normalized.length === 0 ||
       practice.code.toLowerCase().includes(normalized) ||
       practice.subject.toLowerCase().includes(normalized) ||
       practice.responsible.toLowerCase().includes(normalized) ||
-      practice.group.toLowerCase().includes(normalized);
+      practice.group.toLowerCase().includes(normalized) ||
+      clientName.includes(normalized);
 
     const matchesStatus = status === 'all' || practice.status === status;
     const matchesPriority = priority === 'all' || practice.priority === priority;
+    const matchesClient = clientId === 'all' || practice.clientId === clientId;
 
-    return matchesSearch && matchesStatus && matchesPriority;
+    return matchesSearch && matchesStatus && matchesPriority && matchesClient;
   });
 };

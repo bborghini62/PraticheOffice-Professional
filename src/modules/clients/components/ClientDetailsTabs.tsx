@@ -1,6 +1,7 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { SectionCard } from '../../../design/components';
+import { getPractices } from '../../practices/services/practicesService';
 import type { ClientRecord } from '../clients.types';
 
 interface ClientDetailsTabsProps {
@@ -13,6 +14,7 @@ export const ClientDetailsTabs = ({ client }: ClientDetailsTabsProps) => {
   const tabItems = ['Riepilogo', 'Contatti', 'Pratiche', 'Documenti', 'Comunicazioni', 'Storico'];
 
   const displayName = [client.companyName, `${client.firstName} ${client.lastName}`.trim()].filter(Boolean).join(' ') || client.contactPerson;
+  const linkedPractices = useMemo(() => getPractices().filter((practice) => practice.clientId === client.id), [client.id]);
 
   return (
     <SectionCard>
@@ -74,9 +76,20 @@ export const ClientDetailsTabs = ({ client }: ClientDetailsTabsProps) => {
       {activeTab === 2 && (
         <Box sx={{ display: 'grid', gap: 1.25 }}>
           <Typography variant="subtitle2">Pratiche collegate</Typography>
-          <Typography variant="body2" color="text.secondary">
-            Le pratiche collegate al cliente saranno visualizzate qui.
-          </Typography>
+          {linkedPractices.length > 0 ? (
+            linkedPractices.map((practice) => (
+              <Box key={practice.id} sx={{ p: 1.2, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                <Typography variant="subtitle2">{practice.subject}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {practice.code} • {practice.status === 'open' ? 'Aperta' : 'In gestione'}
+                </Typography>
+              </Box>
+            ))
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              Nessuna pratica collegata al cliente per il momento.
+            </Typography>
+          )}
         </Box>
       )}
 
