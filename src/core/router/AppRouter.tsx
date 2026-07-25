@@ -6,6 +6,7 @@ import { MainLayout } from '../layout/MainLayout';
 import { appRoutes } from './routes';
 
 const DashboardPage = lazy(() => import('../../modules/dashboard/DashboardPage'));
+const PracticesPage = lazy(() => import('../../modules/practices/PracticesPage'));
 const SettingsPage = lazy(() => import('../../modules/settings/SettingsPage'));
 
 export const AppRouter = () => (
@@ -13,6 +14,7 @@ export const AppRouter = () => (
     <Routes>
       <Route element={<MainLayout />}>
         <Route path={appRoutes.dashboard.path} element={<DashboardPage />} />
+        <Route path={appRoutes.practices.path} element={<PracticesPage />} />
         <Route path={appRoutes.settings.path} element={<SettingsPage />} />
         <Route path="*" element={<Navigate to={appRoutes.dashboard.path} replace />} />
       </Route>

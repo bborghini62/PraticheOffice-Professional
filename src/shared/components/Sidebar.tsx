@@ -2,6 +2,7 @@
 
 import { Box, Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -9,6 +10,7 @@ import { appRoutes } from '../../core/router/routes';
 
 const navItems = [
   { label: appRoutes.dashboard.title, to: appRoutes.dashboard.path, icon: DashboardRoundedIcon },
+  { label: appRoutes.practices.title, to: appRoutes.practices.path, icon: FolderRoundedIcon },
   { label: appRoutes.settings.title, to: appRoutes.settings.path, icon: SettingsRoundedIcon },
 ];
 

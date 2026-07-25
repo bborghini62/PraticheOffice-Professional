@@ -7,6 +7,10 @@ export const appRoutes: AppRouteConfig = {
     path: '/',
     title: 'Dashboard',
   },
+  practices: {
+    path: '/pratiche',
+    title: 'Pratiche',
+  },
   settings: {
     path: '/settings',
     title: 'Settings',

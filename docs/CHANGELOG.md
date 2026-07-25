@@ -1,5 +1,14 @@
 # Changelog
 
+## FEAT-0001 — Elenco Pratiche - 2026-07-25
+- nuova sezione Pratiche
+- ricerca
+- filtri per stato e priorità
+- tabella responsive
+- dati dimostrativi
+- stato vuoto
+- azioni predisposte
+
 ## DOC-0001 — Blueprint V1 - 2026-07-25
 - visione funzionale
 - mappa navigazione

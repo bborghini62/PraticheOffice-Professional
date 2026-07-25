@@ -7,5 +7,6 @@ export interface RouteDefinition {
 
 export interface AppRouteConfig {
   dashboard: RouteDefinition;
+  practices: RouteDefinition;
   settings: RouteDefinition;
 }
