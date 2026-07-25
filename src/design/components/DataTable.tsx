@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, type TableProps } from '@mui/material';
 
 interface DataTableProps extends TableProps {
-  columns: string[];
+  columns: Array<string | { id: string; label: string }>;
   children: React.ReactNode;
 }
 
@@ -10,9 +10,16 @@ export const DataTable = ({ columns, children, ...props }: DataTableProps) => (
     <Table size="small" {...props}>
       <TableHead sx={{ bgcolor: 'grey.50' }}>
         <TableRow>
-          {columns.map((column) => (
-            <TableCell key={column} sx={{ py: 1.25 }}>{column}</TableCell>
-          ))}
+          {columns.map((column) => {
+            const label = typeof column === 'string' ? column : column.label;
+            const key = typeof column === 'string' ? column : column.id;
+
+            return (
+              <TableCell key={key} sx={{ py: 1.25 }}>
+                {label}
+              </TableCell>
+            );
+          })}
         </TableRow>
       </TableHead>
       <TableBody

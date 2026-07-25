@@ -71,6 +71,18 @@ export const appRoutes: AppRouteConfig = {
     path: '/report',
     title: 'Report',
   },
+  users: {
+    path: '/utenti',
+    title: 'Utenti',
+  },
+  newUser: {
+    path: '/utenti/nuovo',
+    title: 'Nuovo utente',
+  },
+  userDetail: {
+    path: '/utenti/:userId',
+    title: 'Scheda utente',
+  },
   settings: {
     path: '/impostazioni',
     title: 'Impostazioni',

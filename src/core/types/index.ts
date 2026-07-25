@@ -23,6 +23,9 @@ export interface AppRouteConfig {
   practiceDocumentsNew: RouteDefinition;
   calendar: RouteDefinition;
   report: RouteDefinition;
+  users: RouteDefinition;
+  newUser: RouteDefinition;
+  userDetail: RouteDefinition;
   settings: RouteDefinition;
   help: RouteDefinition;
 }

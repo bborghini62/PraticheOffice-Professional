@@ -11,6 +11,7 @@ import BusinessRoundedIcon from '@mui/icons-material/BusinessRounded';
 import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { appRoutes } from '../../core/router/routes';
 import { useAuth } from '../../modules/auth/context/useAuth';
@@ -23,6 +24,7 @@ const navItems = [
   { label: appRoutes.calendar.title, to: appRoutes.calendar.path, icon: CalendarTodayRoundedIcon, implemented: true },
   { label: appRoutes.documents.title, to: appRoutes.documents.path, icon: DescriptionRoundedIcon, implemented: true },
   { label: appRoutes.report.title, to: appRoutes.report.path, icon: BarChartRoundedIcon, implemented: false },
+  { label: appRoutes.users.title, to: appRoutes.users.path, icon: PersonRoundedIcon, implemented: true },
   { label: appRoutes.settings.title, to: appRoutes.settings.path, icon: SettingsRoundedIcon, implemented: true },
   { label: appRoutes.help.title, to: appRoutes.help.path, icon: HelpOutlineRoundedIcon, implemented: false },
 ];

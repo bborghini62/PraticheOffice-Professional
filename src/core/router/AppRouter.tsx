@@ -20,6 +20,9 @@ const DocumentsPage = lazy(() => import('../../modules/documents/DocumentsPage')
 const NewDocumentPage = lazy(() => import('../../modules/documents/NewDocumentPage'));
 const DocumentDetailPage = lazy(() => import('../../modules/documents/DocumentDetailPage'));
 const CalendarPage = lazy(() => import('../../modules/calendar/CalendarPage'));
+const UsersPage = lazy(() => import('../../modules/users/UsersPage'));
+const NewUserPage = lazy(() => import('../../modules/users/NewUserPage'));
+const UserDetailPage = lazy(() => import('../../modules/users/UserDetailPage'));
 const SettingsPage = lazy(() => import('../../modules/settings/SettingsPage'));
 
 export const AppRouter = () => (
@@ -42,6 +45,9 @@ export const AppRouter = () => (
         <Route path={appRoutes.documentDetail.path} element={<DocumentDetailPage />} />
         <Route path={appRoutes.practiceDocumentsNew.path} element={<NewDocumentPage />} />
         <Route path={appRoutes.calendar.path} element={<CalendarPage />} />
+        <Route path={appRoutes.users.path} element={<UsersPage />} />
+        <Route path={appRoutes.newUser.path} element={<NewUserPage />} />
+        <Route path={appRoutes.userDetail.path} element={<UserDetailPage />} />
         <Route path={appRoutes.settings.path} element={<SettingsPage />} />
         <Route path="*" element={<Navigate to={appRoutes.dashboard.path} replace />} />
       </Route>

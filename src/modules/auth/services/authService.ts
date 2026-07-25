@@ -1,44 +1,31 @@
 import type { AuthSession, AuthUser, LoginCredentials } from '../auth.types';
+import { getUsers } from '../../users/services/usersService';
 
 const storageKeys = {
   session: 'praticheoffice-auth-session',
   remember: 'praticheoffice-auth-remember',
 };
 
-const demoUsers: AuthUser[] = [
-  {
-    id: 'admin-demo',
-    email: 'amministratore@praticheoffice.local',
-    name: 'Admin Demo',
-    role: 'Amministratore',
-  },
-  {
-    id: 'operator-demo',
-    email: 'operatore@praticheoffice.local',
-    name: 'Operatore Demo',
-    role: 'Operatore',
-  },
-];
-
-const passwords: Record<string, string> = {
-  'amministratore@praticheoffice.local': 'Admin123!',
-  'operatore@praticheoffice.local': 'Operatore123!',
-};
-
 const getStorage = (rememberMe: boolean) => (rememberMe ? localStorage : sessionStorage);
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthSession> {
-    const user = demoUsers.find((candidate) => candidate.email.toLowerCase() === credentials.email.trim().toLowerCase());
+    const userRecord = getUsers().find((candidate) => candidate.email.toLowerCase() === credentials.email.trim().toLowerCase());
 
-    if (!user) {
+    if (!userRecord || !userRecord.isDemoUser) {
       throw new Error('Credenziali non valide. Controlla email e password.');
     }
 
-    const expectedPassword = passwords[user.email];
-    if (expectedPassword !== credentials.password) {
+    if (userRecord.password !== credentials.password) {
       throw new Error('Credenziali non valide. Controlla email e password.');
     }
+
+    const user: AuthUser = {
+      id: userRecord.id,
+      email: userRecord.email,
+      name: userRecord.displayName,
+      role: userRecord.role === 'Administrator' ? 'Amministratore' : 'Operatore',
+    };
 
     const session: AuthSession = { user };
     const storage = getStorage(credentials.rememberMe);
