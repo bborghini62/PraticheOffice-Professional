@@ -6,6 +6,7 @@ import { PageContainer, PageTitle, SectionCard, EmptyState } from '../../design/
 import { PracticeHeader } from './components/PracticeHeader';
 import { PracticeDetailsTabs } from './components/PracticeDetailsTabs';
 import { getPracticeById, getPracticeClientDisplayName } from './services/practicesService';
+import { getLatestEventByPracticeId } from '../timeline/services/timelineService';
 
 export const PracticeDetailPage = () => {
   const { practiceId } = useParams<{ practiceId: string }>();
@@ -28,6 +29,7 @@ export const PracticeDetailPage = () => {
 
   const clientName = getPracticeClientDisplayName(practice);
   const clientLink = practice.clientId ? appRoutes.clientDetail.path.replace(':clientId', practice.clientId) : undefined;
+  const latestTimelineEvent = getLatestEventByPracticeId(practice.id);
 
   return (
     <PageContainer>
@@ -97,6 +99,19 @@ export const PracticeDetailPage = () => {
                 </Typography>
                 <Typography variant="subtitle1">In verifica</Typography>
               </Box>
+              {latestTimelineEvent && (
+                <Box sx={{ p: 1.25, borderRadius: 2, bgcolor: 'primary.50', border: '1px solid', borderColor: 'primary.100' }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Ultimo evento
+                  </Typography>
+                  <Typography variant="subtitle2" sx={{ mt: 0.25 }}>
+                    {latestTimelineEvent.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                    {latestTimelineEvent.description}
+                  </Typography>
+                </Box>
+              )}
             </Box>
           </SectionCard>
         </Grid>

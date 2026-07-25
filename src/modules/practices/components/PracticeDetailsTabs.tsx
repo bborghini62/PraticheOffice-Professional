@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { PrimaryButton, SecondaryButton, SectionCard } from '../../../design/components';
 import { getPracticeClientDisplayName } from '../services/practicesService';
 import { getActivitiesByPracticeId, updateActivityStatus } from '../../activities/services/activitiesService';
+import { PracticeTimeline } from '../../timeline/components/PracticeTimeline';
+import { getEventsByPracticeId } from '../../timeline/services/timelineService';
 import { useNotification } from '../../../core/runtime/useNotification';
 import type { PracticePriority, PracticeRecord, PracticeStatus } from '../practices.types';
 
@@ -38,6 +40,7 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
   const tabItems = ['Riepilogo', 'Attività', 'Documenti', 'Comunicazioni', 'Scadenze', 'Timeline', 'Storico', 'Permessi'];
 
   const activities = getActivitiesByPracticeId(practice.id);
+  const timelineEvents = getEventsByPracticeId(practice.id);
 
   const summaryItems = [
     { label: 'Cliente', value: getPracticeClientDisplayName(practice) },
@@ -165,15 +168,7 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
       {activeTab === 5 && (
         <Box sx={{ display: 'grid', gap: 1.25 }}>
           <Typography variant="subtitle2">Timeline</Typography>
-          <Typography variant="body2" color="text.secondary">
-            09:30 • Inizio analisi documentale
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            11:00 • Richiesta di integrazione ai referenti
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            14:30 • Conferma di ricezione documenti
-          </Typography>
+          <PracticeTimeline events={timelineEvents} />
         </Box>
       )}
 

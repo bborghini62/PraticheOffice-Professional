@@ -1,4 +1,5 @@
 import { getClientById, getClientDisplayName } from '../../clients/services/clientsService';
+import { addEvent, createTimelineEvent } from '../../timeline/services/timelineService';
 import type { PracticeRecord, PracticeStatus, PracticePriority } from '../practices.types';
 
 const practicesSeed: PracticeRecord[] = [
@@ -106,6 +107,18 @@ export const getPractices = (): PracticeRecord[] => practicesStore.map((practice
 
 export const addPractice = (practice: PracticeRecord): PracticeRecord[] => {
   practicesStore = [practice, ...practicesStore];
+
+  addEvent(
+    createTimelineEvent(
+      practice.id,
+      'practice_created',
+      'Pratica creata',
+      `La pratica ${practice.subject} è stata avviata e inserita nel workflow operativo.`,
+      practice.responsible || 'Sistema',
+      new Date().toISOString(),
+    ),
+  );
+
   return getPractices();
 };
 

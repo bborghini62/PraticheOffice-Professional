@@ -1,4 +1,5 @@
 import { getPracticeById } from '../../practices/services/practicesService';
+import { addEvent, createTimelineEvent } from '../../timeline/services/timelineService';
 import type { ActivityPriority, ActivityRecord, ActivityStatus } from '../activities.types';
 
 const activitiesSeed: ActivityRecord[] = [
@@ -160,6 +161,18 @@ export const getActivities = (): ActivityRecord[] => activitiesStore.map((activi
 
 export const addActivity = (activity: ActivityRecord): ActivityRecord[] => {
   activitiesStore = [activity, ...activitiesStore];
+
+  addEvent(
+    createTimelineEvent(
+      activity.practiceId,
+      'activity_created',
+      'Attività creata',
+      `L’attività ${activity.title} è stata aggiunta alla pratica.`,
+      activity.assignee || 'Sistema',
+      new Date().toISOString(),
+    ),
+  );
+
   return getActivities();
 };
 
@@ -179,6 +192,33 @@ export const updateActivityStatus = (id: string, status: ActivityStatus): Activi
 
   activity.status = status;
   activity.updatedAt = new Date().toISOString().slice(0, 10);
+
+  if (status === 'completed') {
+    addEvent(
+      createTimelineEvent(
+        activity.practiceId,
+        'activity_completed',
+        'Attività completata',
+        `L’attività ${activity.title} è stata completata.`,
+        activity.assignee || 'Sistema',
+        new Date().toISOString(),
+      ),
+    );
+  }
+
+  if (status === 'cancelled') {
+    addEvent(
+      createTimelineEvent(
+        activity.practiceId,
+        'activity_cancelled',
+        'Attività annullata',
+        `L’attività ${activity.title} è stata annullata.`,
+        activity.assignee || 'Sistema',
+        new Date().toISOString(),
+      ),
+    );
+  }
+
   return { ...activity };
 };
 
