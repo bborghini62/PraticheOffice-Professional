@@ -6,6 +6,8 @@ import type { PracticePriority, PracticeStatus } from '../practices.types';
 export interface PracticeFormValues {
   code: string;
   subject: string;
+  customer: string;
+  contact: string;
   practiceType: string;
   responsible: string;
   group: string;
@@ -26,9 +28,28 @@ interface PracticeFormProps {
   onCancel: () => void;
 }
 
-const statusOptions: Array<PracticeStatus> = ['draft', 'open', 'in_progress', 'waiting', 'under_review', 'approved', 'completed', 'archived', 'cancelled'];
-const priorityOptions: Array<PracticePriority> = ['low', 'normal', 'high', 'urgent'];
-const practiceTypeOptions = ['Amministrativa', 'Tecnica', 'Contabile', 'Legale'];
+const statusOptions = [
+  { value: 'draft', label: 'Bozza' },
+  { value: 'open', label: 'Aperta' },
+  { value: 'in_progress', label: 'In lavorazione' },
+  { value: 'waiting', label: 'In attesa' },
+  { value: 'under_review', label: 'Da controllare' },
+  { value: 'approved', label: 'Approvata' },
+  { value: 'completed', label: 'Completata' },
+  { value: 'archived', label: 'Archiviata' },
+  { value: 'cancelled', label: 'Annullata' },
+] as const;
+const priorityOptions = [
+  { value: 'low', label: 'Bassa' },
+  { value: 'normal', label: 'Normale' },
+  { value: 'high', label: 'Alta' },
+  { value: 'urgent', label: 'Urgente' },
+] as const;
+const practiceTypeOptions = ['Amministrativa', 'Tecnica', 'Commerciale', 'Contrattuale', 'Assistenza'];
+const customerOptions = ['Studio Rossi', 'Comune di Firenze', 'Edilizia Toscana S.r.l.', 'Conformae S.r.l.'];
+const contactOptions = ['Marco Rossi', 'Laura Bianchi', 'Paolo Galli', 'Elena Bassi'];
+const responsibleOptions = ['Marco Rossi', 'Laura Bianchi', 'Giulia Ferri', 'Luca Neri'];
+const groupOptions = ['Amministrazione', 'Segreteria', 'Ufficio tecnico', 'Direzione'];
 
 export const PracticeForm = ({ values, errors, onChange, onSubmit, onCancel }: PracticeFormProps) => {
   const handleTextChange = (field: keyof PracticeFormValues) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -55,6 +76,29 @@ export const PracticeForm = ({ values, errors, onChange, onSubmit, onCancel }: P
           </Box>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
             <FormControl size="small" fullWidth>
+              <InputLabel id="customer-label">Cliente</InputLabel>
+              <Select labelId="customer-label" label="Cliente" value={values.customer} onChange={handleSelectChange('customer')} error={Boolean(errors.customer)}>
+                {customerOptions.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.customer ? <Typography variant="caption" color="error.main">{errors.customer}</Typography> : null}
+            </FormControl>
+            <FormControl size="small" fullWidth>
+              <InputLabel id="contact-label">Contatto</InputLabel>
+              <Select labelId="contact-label" label="Contatto" value={values.contact} onChange={handleSelectChange('contact')}>
+                {contactOptions.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
+            <FormControl size="small" fullWidth>
               <InputLabel id="practice-type-label">Tipo pratica</InputLabel>
               <Select labelId="practice-type-label" label="Tipo pratica" value={values.practiceType} onChange={handleSelectChange('practiceType')} error={Boolean(errors.practiceType)}>
                 {practiceTypeOptions.map((option) => (
@@ -65,11 +109,30 @@ export const PracticeForm = ({ values, errors, onChange, onSubmit, onCancel }: P
               </Select>
               {errors.practiceType ? <Typography variant="caption" color="error.main">{errors.practiceType}</Typography> : null}
             </FormControl>
-            <TextField label="Responsabile" value={values.responsible} onChange={handleTextChange('responsible')} error={Boolean(errors.responsible)} helperText={errors.responsible} required size="small" fullWidth />
+            <FormControl size="small" fullWidth>
+              <InputLabel id="responsible-label">Responsabile</InputLabel>
+              <Select labelId="responsible-label" label="Responsabile" value={values.responsible} onChange={handleSelectChange('responsible')} error={Boolean(errors.responsible)}>
+                {responsibleOptions.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.responsible ? <Typography variant="caption" color="error.main">{errors.responsible}</Typography> : null}
+            </FormControl>
           </Box>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
-            <TextField label="Gruppo" value={values.group} onChange={handleTextChange('group')} size="small" fullWidth />
-            <TextField label="Descrizione" value={values.description} onChange={handleTextChange('description')} multiline minRows={3} fullWidth />
+            <FormControl size="small" fullWidth>
+              <InputLabel id="group-label">Gruppo</InputLabel>
+              <Select labelId="group-label" label="Gruppo" value={values.group} onChange={handleSelectChange('group')}>
+                {groupOptions.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField label="Descrizione" value={values.description} onChange={handleTextChange('description')} multiline minRows={5} fullWidth />
           </Box>
         </Box>
 
@@ -80,8 +143,8 @@ export const PracticeForm = ({ values, errors, onChange, onSubmit, onCancel }: P
               <InputLabel id="priority-label">Priorità</InputLabel>
               <Select labelId="priority-label" label="Priorità" value={values.priority} onChange={handleSelectChange('priority')}>
                 {priorityOptions.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
                   </MenuItem>
                 ))}
               </Select>
@@ -90,8 +153,8 @@ export const PracticeForm = ({ values, errors, onChange, onSubmit, onCancel }: P
               <InputLabel id="status-label">Stato iniziale</InputLabel>
               <Select labelId="status-label" label="Stato iniziale" value={values.status} onChange={handleSelectChange('status')}>
                 {statusOptions.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
                   </MenuItem>
                 ))}
               </Select>

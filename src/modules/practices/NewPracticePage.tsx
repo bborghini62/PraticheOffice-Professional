@@ -13,6 +13,8 @@ const initialValues = (): PracticeFormValues => {
   return {
     code: getNextPracticeCode(existingPractices.map((practice) => practice.code)),
     subject: '',
+    customer: '',
+    contact: '',
     practiceType: 'Amministrativa',
     responsible: '',
     group: '',
@@ -35,6 +37,10 @@ const NewPracticePage = () => {
 
     if (!values.subject.trim()) {
       nextErrors.subject = 'L’oggetto è obbligatorio.';
+    }
+
+    if (!values.customer.trim()) {
+      nextErrors.customer = 'Il cliente è obbligatorio.';
     }
 
     if (!values.practiceType.trim()) {

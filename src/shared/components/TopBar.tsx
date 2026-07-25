@@ -13,6 +13,7 @@ interface TopBarProps {
 const pageMeta: Record<string, { title: string; subtitle: string }> = {
   '/': { title: 'Dashboard', subtitle: 'Panoramica operativa' },
   '/pratiche': { title: 'Pratiche', subtitle: 'Gestione delle pratiche operative' },
+  '/pratiche/nuova': { title: 'Nuova pratica', subtitle: 'Creazione di una nuova pratica operativa' },
   '/settings': { title: 'Impostazioni', subtitle: 'Configurazione dell’applicazione' },
 };
 
@@ -33,9 +34,6 @@ export const TopBar = ({ onMenuOpen }: TopBarProps) => {
             <MenuRoundedIcon />
           </IconButton>
           <Box>
-            <Typography variant="body2" color="text.secondary">
-              Pagina corrente
-            </Typography>
             <Typography variant="h6">{currentPage.title}</Typography>
             <Typography variant="body2" color="text.secondary">
               {currentPage.subtitle}

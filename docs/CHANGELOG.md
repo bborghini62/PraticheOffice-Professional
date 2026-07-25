@@ -1,5 +1,13 @@
 # Changelog
 
+## UX-0002 — Rifinitura Nuova Pratica - 2026-07-25
+- TopBar corretta
+- valori in italiano
+- cliente e contatto
+- responsabile e gruppo selezionabili
+- tipi pratica predisposti
+- descrizione ampliata
+
 ## FEAT-0002 — Nuova Pratica - 2026-07-25
 - nuova schermata di creazione pratica
 - rotta dedicata /pratiche/nuova
