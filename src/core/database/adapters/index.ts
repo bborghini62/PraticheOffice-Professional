@@ -1,0 +1,1 @@
+export { InMemoryDatabaseAdapter } from './InMemoryDatabaseAdapter';

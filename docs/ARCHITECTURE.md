@@ -27,9 +27,14 @@ PraticheOffice Professional is organized as a layered application so the foundat
 - Components should consume the shared theme instead of redefining styling values.
 
 ## Core Runtime
-- The runtime layer contains the application bootstrap, global error handling, logging, configuration, and notification services.
-- AppBootstrap wires the router with error boundaries, notifications, and lazy-loading fallback UI.
+- The runtime layer contains the application bootstrap, global error handling, logging, configuration, notification services, and the database foundation.
+- AppBootstrap wires the router with error boundaries, notifications, lazy-loading fallback UI, and database initialization.
 - Errors are captured centrally so the application stays resilient without changing the existing visual shell.
+
+## Database foundation
+- The database layer lives under [src/core/database](src/core/database) and provides an abstract adapter contract and a centralized service.
+- The initial implementation uses an in-memory adapter for development and testing without introducing external dependencies.
+- The database service is initialized during app bootstrap and uses the existing loading and error handling flow.
 
 ## Rules for future modules
 - Keep modules focused on a single feature area.

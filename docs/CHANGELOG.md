@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.4-alpha - 2026-07-25
+- adapter database astratto
+- servizio database centralizzato
+- adapter in-memory
+- integrazione con il runtime
+- predisposizione futura per SQLite ed Electron
+
 ## 0.0.3-alpha - 2026-07-25
 - modello di dominio iniziale
 - utenti e profili
