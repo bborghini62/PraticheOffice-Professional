@@ -6,6 +6,8 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import { useLocation } from 'react-router-dom';
 import { appRoutes } from '../../core/router/routes';
+import { getClientById } from '../../modules/clients/services/clientsService';
+import { getDocumentById } from '../../modules/documents/services/documentsService';
 import { getPracticeById } from '../../modules/practices/services/practicesService';
 
 interface TopBarProps {
@@ -13,20 +15,57 @@ interface TopBarProps {
 }
 
 const pageMeta: Record<string, { title: string; subtitle: string }> = {
-  [appRoutes.dashboard.path]: { title: 'Dashboard', subtitle: 'Panoramica operativa' },
+  [appRoutes.dashboard.path]: { title: 'Cruscotto', subtitle: 'Panoramica operativa quotidiana' },
+  [appRoutes.clients.path]: { title: 'Clienti', subtitle: 'Gestione delle anagrafiche clienti' },
+  [appRoutes.newClient.path]: { title: 'Nuovo cliente', subtitle: 'Creazione di una nuova anagrafica' },
+  [appRoutes.clientDetail.path]: { title: 'Scheda cliente', subtitle: 'Dettaglio anagrafico e contesto operativo' },
   [appRoutes.practices.path]: { title: 'Pratiche', subtitle: 'Gestione delle pratiche operative' },
-  [appRoutes.newPractice.path]: { title: 'Nuova pratica', subtitle: 'Creazione di una nuova pratica operativa' },
-  [appRoutes.settings.path]: { title: 'Impostazioni', subtitle: 'Configurazione dell’applicazione' },
+  [appRoutes.newPractice.path]: { title: 'Nuova pratica', subtitle: 'Creazione di una nuova pratica' },
+  [appRoutes.practiceDetail.path]: { title: 'Scheda pratica', subtitle: 'Dettaglio della pratica selezionata' },
+  [appRoutes.activities.path]: { title: 'Attività', subtitle: 'Monitoraggio dei lavori e delle scadenze' },
+  [appRoutes.newActivity.path]: { title: 'Nuova attività', subtitle: 'Aggiunta di una nuova attività operativa' },
+  [appRoutes.practiceActivitiesNew.path]: { title: 'Nuova attività', subtitle: 'Aggiunta di una nuova attività collegata' },
+  [appRoutes.documents.path]: { title: 'Documenti', subtitle: 'Gestione documenti e allegati' },
+  [appRoutes.newDocument.path]: { title: 'Nuovo documento', subtitle: 'Registrazione di un nuovo documento' },
+  [appRoutes.documentDetail.path]: { title: 'Scheda documento', subtitle: 'Dettaglio del documento selezionato' },
+  [appRoutes.practiceDocumentsNew.path]: { title: 'Nuovo documento', subtitle: 'Registrazione di un nuovo allegato' },
+  [appRoutes.calendar.path]: { title: 'Calendario', subtitle: 'Agenda operativa per pratiche, attività e documenti' },
+  [appRoutes.report.path]: { title: 'Report', subtitle: 'Panoramica dei risultati e delle performance' },
+  [appRoutes.settings.path]: { title: 'Impostazioni', subtitle: 'Personalizzazione dell’esperienza operativa' },
+  [appRoutes.help.path]: { title: 'Aiuto', subtitle: 'Supporto e indicazioni rapide' },
+};
+
+const getCurrentPageMeta = (pathname: string) => {
+  const practiceDetailMatch = pathname.match(/^\/pratiche\/([^/]+)$/);
+  if (practiceDetailMatch) {
+    const practice = getPracticeById(practiceDetailMatch[1]);
+    if (practice) {
+      return { title: 'Scheda pratica', subtitle: `${practice.code} • ${practice.subject}` };
+    }
+  }
+
+  const clientDetailMatch = pathname.match(/^\/clienti\/([^/]+)$/);
+  if (clientDetailMatch) {
+    const client = getClientById(clientDetailMatch[1]);
+    if (client) {
+      return { title: 'Scheda cliente', subtitle: `${client.code} • ${client.companyName || `${client.firstName} ${client.lastName}`.trim()}` };
+    }
+  }
+
+  const documentDetailMatch = pathname.match(/^\/documenti\/([^/]+)$/);
+  if (documentDetailMatch) {
+    const document = getDocumentById(documentDetailMatch[1]);
+    if (document) {
+      return { title: 'Scheda documento', subtitle: `${document.code} • ${document.name}` };
+    }
+  }
+
+  return pageMeta[pathname] ?? { title: 'PraticheOffice', subtitle: 'Workspace operativo professionale' };
 };
 
 export const TopBar = ({ onMenuOpen }: TopBarProps) => {
   const location = useLocation();
-  const practiceDetailMatch = location.pathname.match(/^\/pratiche\/([^/]+)$/);
-  const matchedPractice = practiceDetailMatch ? getPracticeById(practiceDetailMatch[1]) : undefined;
-
-  const currentPage = matchedPractice
-    ? { title: 'Scheda pratica', subtitle: `${matchedPractice.code} • ${matchedPractice.subject}` }
-    : pageMeta[location.pathname] ?? { title: 'Scheda pratica', subtitle: 'Dettaglio della pratica selezionata' };
+  const currentPage = getCurrentPageMeta(location.pathname);
 
   return (
     <AppBar

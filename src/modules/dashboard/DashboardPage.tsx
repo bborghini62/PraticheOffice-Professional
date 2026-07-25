@@ -1,29 +1,22 @@
-// Dashboard module entry page.
-
-import { Box, Chip, Paper, Typography } from '@mui/material';
+import { Box, Chip, Typography } from '@mui/material';
 import TrendingUpRoundedIcon from '@mui/icons-material/TrendingUpRounded';
+import { PageContainer, PageTitle, SectionCard } from '../../design/components';
 import { dashboardMetrics, recentActivities } from '../../shared/services/dashboardService';
 import { formatCurrency } from '../../shared/utils/formatters';
 
 const DashboardPage = () => (
-  <Box>
-    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2, mb: 3 }}>
+  <PageContainer>
+    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2 }}>
       <Box>
-        <Typography variant="overline" color="primary" sx={{ fontWeight: 700 }}>
-          Operations overview
-        </Typography>
-        <Typography variant="h4">Executive control center</Typography>
-        <Typography variant="body1" color="text.secondary">
-          Track your workflows, service quality, and team progress from one place.
-        </Typography>
+        <PageTitle subtitle="Panoramica operativa del giorno e dei principali indicatori di lavoro.">Cruscotto</PageTitle>
       </Box>
-      <Chip icon={<TrendingUpRoundedIcon />} label="Live insights" color="primary" variant="outlined" />
+      <Chip icon={<TrendingUpRoundedIcon />} label="Aggiornamenti live" color="primary" variant="outlined" />
     </Box>
 
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
       {dashboardMetrics.map((metric) => (
         <Box key={metric.id} sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 8px)', lg: '1 1 calc(25% - 12px)' } }}>
-          <Paper sx={{ p: 2.5, height: '100%' }}>
+          <SectionCard sx={{ p: 2.5, height: '100%' }}>
             <Typography variant="body2" color="text.secondary">
               {metric.title}
             </Typography>
@@ -33,36 +26,36 @@ const DashboardPage = () => (
             <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
               {metric.change}
             </Typography>
-          </Paper>
+          </SectionCard>
         </Box>
       ))}
     </Box>
 
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
       <Box sx={{ flex: { xs: '1 1 100%', lg: '1 1 calc(58% - 8px)' } }}>
-        <Paper sx={{ p: 3 }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Daily operations
+        <SectionCard>
+          <Typography variant="h6" sx={{ mb: 1.5 }}>
+            Attività giornaliere
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            The office is maintaining a healthy pace with fewer delays and stronger handoffs.
+            Il lavoro è in linea con il ritmo previsto, con minori ritardi e migliori passaggi tra i team.
           </Typography>
-          <Box sx={{ mt: 3, p: 2, borderRadius: 3, bgcolor: 'primary.50' }}>
+          <Box sx={{ mt: 3, p: 2.25, borderRadius: 3, bgcolor: 'primary.50' }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-              Revenue impact
+              Impatto economico
             </Typography>
             <Typography variant="h4" color="primary" sx={{ mt: 1 }}>
               {formatCurrency(158400)}
             </Typography>
           </Box>
-        </Paper>
+        </SectionCard>
       </Box>
       <Box sx={{ flex: { xs: '1 1 100%', lg: '1 1 calc(42% - 8px)' } }}>
-        <Paper sx={{ p: 3 }}>
+        <SectionCard>
           <Typography variant="h6" sx={{ mb: 2 }}>
-            Recent activity
+            Attività recenti
           </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
             {recentActivities.map((activity) => (
               <Box key={activity.id} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 1.75 }}>
                 <Typography variant="subtitle2">{activity.title}</Typography>
@@ -78,10 +71,10 @@ const DashboardPage = () => (
               </Box>
             ))}
           </Box>
-        </Paper>
+        </SectionCard>
       </Box>
     </Box>
-  </Box>
+  </PageContainer>
 );
 
 export default DashboardPage;

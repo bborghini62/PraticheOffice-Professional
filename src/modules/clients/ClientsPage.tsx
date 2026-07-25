@@ -1,9 +1,9 @@
-import { Box, Paper, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../core/runtime/useNotification';
 import { appRoutes } from '../../core/router/routes';
-import { PageContainer, PageTitle, PrimaryButton } from '../../design/components';
+import { PageContainer, PageTitle, PrimaryButton, SectionCard } from '../../design/components';
 import { ClientsFilters } from './components/ClientsFilters';
 import { ClientsTable } from './components/ClientsTable';
 import { EmptyClientsState } from './components/EmptyClientsState';
@@ -45,17 +45,14 @@ const ClientsPage = () => {
     <PageContainer>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2 }}>
         <Box>
-          <PageTitle>Clienti</PageTitle>
-          <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
-            Gestione delle anagrafiche clienti.
-          </Typography>
+          <PageTitle subtitle="Gestione delle anagrafiche clienti e dei riferimenti operativi.">Clienti</PageTitle>
         </Box>
         <PrimaryButton onClick={handleNewClient}>Nuovo cliente</PrimaryButton>
       </Box>
 
-      <Paper sx={{ p: { xs: 2, md: 2.5 }, borderRadius: 3 }}>
+      <SectionCard>
         <ClientsFilters filters={filters} onFiltersChange={setFilters} onReset={handleResetFilters} />
-      </Paper>
+      </SectionCard>
 
       {filteredClients.length > 0 ? (
         <ClientsTable clients={filteredClients} onOpenClient={handleOpenClient} onInformationalAction={handleInformationalAction} />

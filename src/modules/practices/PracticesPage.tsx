@@ -1,8 +1,9 @@
-import { Box, Button, Paper, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../core/runtime/useNotification';
 import { appRoutes } from '../../core/router/routes';
+import { PageContainer, PageTitle, PrimaryButton, SectionCard } from '../../design/components';
 import { EmptyPracticesState } from './components/EmptyPracticesState';
 import { PracticesFilters } from './components/PracticesFilters';
 import { PracticesTable } from './components/PracticesTable';
@@ -43,31 +44,24 @@ const PracticesPage = () => {
   };
 
   return (
-    <Box>
-      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2, mb: 3.5 }}>
+    <PageContainer>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2 }}>
         <Box>
-          <Typography variant="h4" sx={{ fontWeight: 700 }}>
-            Pratiche
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
-            Gestisci pratiche, stato, priorità e scadenze da una vista unica.
-          </Typography>
+          <PageTitle subtitle="Gestisci pratiche, stato, priorità e scadenze da una vista unica.">Pratiche</PageTitle>
         </Box>
-        <Button variant="contained" onClick={handleNewPractice} sx={{ alignSelf: { xs: 'flex-start', md: 'center' } }}>
-          Nuova pratica
-        </Button>
+        <PrimaryButton onClick={handleNewPractice}>Nuova pratica</PrimaryButton>
       </Box>
 
-      <Paper sx={{ p: { xs: 2, md: 2.5 }, mb: 3, borderRadius: 3 }}>
+      <SectionCard>
         <PracticesFilters filters={filters} onFiltersChange={setFilters} onReset={handleResetFilters} />
-      </Paper>
+      </SectionCard>
 
       {filteredPractices.length > 0 ? (
         <PracticesTable practices={filteredPractices} onOpenPractice={handleOpenPractice} onInformationalAction={handleInformationalAction} />
       ) : (
         <EmptyPracticesState onReset={handleResetFilters} />
       )}
-    </Box>
+    </PageContainer>
   );
 };
 

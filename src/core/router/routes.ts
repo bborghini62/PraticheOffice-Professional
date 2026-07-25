@@ -5,7 +5,7 @@ import type { AppRouteConfig } from '../types';
 export const appRoutes: AppRouteConfig = {
   dashboard: {
     path: '/',
-    title: 'Dashboard',
+    title: 'Cruscotto',
   },
   practices: {
     path: '/pratiche',
@@ -63,8 +63,16 @@ export const appRoutes: AppRouteConfig = {
     path: '/clienti/:clientId',
     title: 'Scheda cliente',
   },
+  report: {
+    path: '/report',
+    title: 'Report',
+  },
   settings: {
-    path: '/settings',
-    title: 'Settings',
+    path: '/impostazioni',
+    title: 'Impostazioni',
+  },
+  help: {
+    path: '/aiuto',
+    title: 'Aiuto',
   },
 };

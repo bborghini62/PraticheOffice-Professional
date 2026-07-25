@@ -1,5 +1,4 @@
 import { Chip, type ChipProps } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 const statusColors: Record<string, { color: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error'; label: string }> = {
   draft: { color: 'default', label: 'Bozza' },
@@ -20,8 +19,26 @@ interface StatusBadgeProps extends Omit<ChipProps, 'label' | 'color'> {
 }
 
 export const StatusBadge = ({ status, sx, ...props }: StatusBadgeProps) => {
-  const theme = useTheme();
   const resolved = statusColors[status] ?? { color: 'default', label: status };
 
-  return <Chip label={resolved.label} color={resolved.color} size="small" sx={{ borderRadius: theme.shape.borderRadius, fontWeight: 600, ...sx }} {...props} />;
+  return (
+    <Chip
+      label={resolved.label}
+      color={resolved.color}
+      size="small"
+      variant="filled"
+      sx={{
+        borderRadius: 999,
+        fontWeight: 700,
+        height: 28,
+        px: 0.5,
+        '& .MuiChip-label': {
+          px: 1.25,
+          fontSize: '0.75rem',
+        },
+        ...sx,
+      }}
+      {...props}
+    />
+  );
 };

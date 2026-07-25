@@ -1,13 +1,5 @@
-import { Chip } from '@mui/material';
+import { StatusBadge } from '../../../design/components';
 import type { ActivityStatus } from '../activities.types';
-
-const statusLabels: Record<ActivityStatus, string> = {
-  todo: 'Da fare',
-  in_progress: 'In corso',
-  blocked: 'Bloccata',
-  completed: 'Completata',
-  cancelled: 'Annullata',
-};
 
 const statusColors: Record<ActivityStatus, 'default' | 'secondary' | 'error' | 'success'> = {
   todo: 'default',
@@ -21,4 +13,4 @@ interface ActivityStatusBadgeProps {
   status: ActivityStatus;
 }
 
-export const ActivityStatusBadge = ({ status }: ActivityStatusBadgeProps) => <Chip label={statusLabels[status]} color={statusColors[status]} size="small" sx={{ borderRadius: 999, fontWeight: 600 }} />;
+export const ActivityStatusBadge = ({ status }: ActivityStatusBadgeProps) => <StatusBadge status={status} sx={{ bgcolor: statusColors[status] === 'default' ? 'grey.100' : undefined }} />;

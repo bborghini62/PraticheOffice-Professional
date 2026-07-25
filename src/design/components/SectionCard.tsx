@@ -1,8 +1,5 @@
 import { Paper, type PaperProps } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
-export const SectionCard = ({ sx, ...props }: PaperProps) => {
-  const theme = useTheme();
-
-  return <Paper elevation={0} sx={{ borderRadius: theme.shape.borderRadius, boxShadow: theme.shadows[2], p: 3, ...sx }} {...props} />;
-};
+export const SectionCard = ({ sx, ...props }: PaperProps) => (
+  <Paper elevation={0} sx={{ borderRadius: 3, border: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', p: { xs: 2, md: 3 }, boxShadow: 'none', ...sx }} {...props} />
+);

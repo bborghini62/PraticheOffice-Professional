@@ -1,18 +1,14 @@
-// Settings module entry page.
-
-import { Box, FormControlLabel, Paper, Switch, Typography } from '@mui/material';
+import { Box, FormControlLabel, Switch, Typography } from '@mui/material';
+import { PageContainer, PageTitle, SectionCard } from '../../design/components';
 import { settingsPreferences } from '../../shared/services/dashboardService';
 
 const SettingsPage = () => (
-  <Box>
-    <Typography variant="h4" sx={{ mb: 1 }}>
-      Workspace settings
-    </Typography>
-    <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-      Configure the experience that best supports your day-to-day operations.
-    </Typography>
+  <PageContainer>
+    <Box>
+      <PageTitle subtitle="Personalizza le preferenze operative per il tuo lavoro quotidiano.">Impostazioni</PageTitle>
+    </Box>
 
-    <Paper sx={{ p: 3 }}>
+    <SectionCard>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         {settingsPreferences.map((preference) => (
           <Box key={preference.id} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 2 }}>
@@ -23,8 +19,8 @@ const SettingsPage = () => (
           </Box>
         ))}
       </Box>
-    </Paper>
-  </Box>
+    </SectionCard>
+  </PageContainer>
 );
 
 export default SettingsPage;
