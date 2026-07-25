@@ -38,7 +38,9 @@ interface SidebarProps {
 export const Sidebar = ({ open, onClose, mobile = false }: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
+  const isAdmin = user?.role === 'Amministratore';
+  const visibleNavItems = navItems.filter((item) => item.to !== appRoutes.users.path || isAdmin);
 
   const isActive = (itemTo: string) => {
     if (itemTo === appRoutes.dashboard.path) {
@@ -71,7 +73,7 @@ export const Sidebar = ({ open, onClose, mobile = false }: SidebarProps) => {
       <Divider sx={{ mb: 2 }} />
       <Box sx={{ flexGrow: 1 }}>
         <List>
-          {navItems.map((item) => {
+          {visibleNavItems.map((item) => {
             const { label, to, icon: Icon, implemented } = item;
             const active = isActive(to);
 

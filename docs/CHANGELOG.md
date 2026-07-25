@@ -1,5 +1,11 @@
 # Changelog
 
+## FIX-000002 — Ricordami e visibilità Utenti - 2026-07-26
+- correzione del ripristino della sessione con “Ricordami” attivo
+- uso corretto di sessionStorage e localStorage per login e logout
+- rimozione della voce Utenti dalla sidebar per ruoli non amministrativi
+- mantenimento della protezione delle rotte utenti con accesso non autorizzato bloccato
+
 ## FEAT-0010 — Login e sessione utente - 2026-07-25
 - pagina di accesso
 - utenti dimostrativi

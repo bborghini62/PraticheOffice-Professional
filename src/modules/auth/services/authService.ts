@@ -8,6 +8,31 @@ const storageKeys = {
 
 const getStorage = (rememberMe: boolean) => (rememberMe ? localStorage : sessionStorage);
 
+const clearStoredSessions = () => {
+  sessionStorage.removeItem(storageKeys.session);
+  sessionStorage.removeItem(storageKeys.remember);
+  localStorage.removeItem(storageKeys.session);
+  localStorage.removeItem(storageKeys.remember);
+};
+
+const readSessionFromStorage = (storage: Storage | null) => {
+  if (!storage) {
+    return null;
+  }
+
+  const storedValue = storage.getItem(storageKeys.session);
+  if (!storedValue) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(storedValue) as AuthSession;
+    return parsed.user ? parsed : null;
+  } catch {
+    return null;
+  }
+};
+
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthSession> {
     const userRecord = getUsers().find((candidate) => candidate.email.toLowerCase() === credentials.email.trim().toLowerCase());
@@ -29,36 +54,36 @@ export const authService = {
 
     const session: AuthSession = { user };
     const storage = getStorage(credentials.rememberMe);
+    const oppositeStorage = credentials.rememberMe ? sessionStorage : localStorage;
+
     storage.setItem(storageKeys.session, JSON.stringify(session));
     if (credentials.rememberMe) {
-      storage.setItem(storageKeys.remember, 'true');
+      localStorage.setItem(storageKeys.remember, 'true');
+      sessionStorage.removeItem(storageKeys.session);
+      sessionStorage.removeItem(storageKeys.remember);
     } else {
-      storage.removeItem(storageKeys.remember);
+      sessionStorage.setItem(storageKeys.session, JSON.stringify(session));
+      localStorage.removeItem(storageKeys.session);
+      localStorage.removeItem(storageKeys.remember);
     }
+
+    oppositeStorage.removeItem(storageKeys.session);
+    oppositeStorage.removeItem(storageKeys.remember);
 
     return session;
   },
 
   async restoreSession(): Promise<AuthSession | null> {
-    const sessionStorageValue = sessionStorage.getItem(storageKeys.session);
-    const localStorageValue = localStorage.getItem(storageKeys.session);
-    const storedValue = localStorageValue ?? sessionStorageValue;
+    const rememberEnabled = localStorage.getItem(storageKeys.remember) === 'true';
 
-    if (!storedValue) {
-      return null;
+    if (rememberEnabled) {
+      return readSessionFromStorage(localStorage);
     }
 
-    try {
-      const parsed = JSON.parse(storedValue) as AuthSession;
-      return parsed.user ? parsed : null;
-    } catch {
-      return null;
-    }
+    return readSessionFromStorage(sessionStorage);
   },
 
   async logout(): Promise<void> {
-    sessionStorage.removeItem(storageKeys.session);
-    localStorage.removeItem(storageKeys.session);
-    localStorage.removeItem(storageKeys.remember);
+    clearStoredSessions();
   },
 };
