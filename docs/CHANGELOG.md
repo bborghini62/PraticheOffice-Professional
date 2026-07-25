@@ -1,5 +1,11 @@
 # Changelog
 
+## DESIGN-0001 — Design System - 2026-07-25
+- design system ufficiale introdotto
+- palette e token centralizzati
+- componenti riutilizzabili Material UI
+- documentazione design system e linee guida UI
+
 ## UX-0002 — Rifinitura Nuova Pratica - 2026-07-25
 - TopBar corretta
 - valori in italiano
