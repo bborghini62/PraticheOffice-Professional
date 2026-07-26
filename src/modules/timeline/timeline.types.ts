@@ -3,6 +3,7 @@ export type TimelineEventType =
   | 'practice_updated'
   | 'practice_status_changed'
   | 'practice_assignee_changed'
+  | 'practice_group_changed'
   | 'practice_client_changed'
   | 'activity_created'
   | 'activity_completed'

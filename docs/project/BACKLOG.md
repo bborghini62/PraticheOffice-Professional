@@ -155,6 +155,14 @@ Questo backlog definisce la pianificazione di riferimento per PraticheOffice Pro
 - Dipendenze: EPIC-002, EPIC-007
 - Stato: Completato
 
+### STORY-007 — Selezione responsabile e gruppo in modifica pratica
+- Tipo: STORY
+- Titolo: Selezione responsabile e gruppo in modifica pratica
+- Descrizione: Consentire la selezione di responsabile e gruppo tramite menu a tendina coerenti con i dati esistenti e registrare gli aggiornamenti nella timeline.
+- Priorità: Alta
+- Dipendenze: EPIC-002, EPIC-003
+- Stato: Completato
+
 ## Task
 
 ### TASK-001 — Routing principale

@@ -1,5 +1,12 @@
 # Changelog
 
+## FIX-000004 — Selezione responsabile e gruppo nella modifica pratica - 2026-07-26
+- sostituiti i campi testuali di responsabile e gruppo con menu a tendina basati sui dati esistenti
+- caricati i responsabili da usersService filtrando solo gli utenti attivi
+- ricavati i gruppi unici dagli utenti esistenti senza duplicazione di dati
+- aggiunti eventi di timeline specifici per cambio responsabile e cambio gruppo
+- verificati build e lint senza errori
+
 ## FIX-000003 — Dashboard interattiva e azioni pratica - 2026-07-26
 - dashboard resa completamente operativa con elementi cliccabili verso pratiche, attività e documenti
 - scheda pratica con dialog di modifica reale e azioni workflow/duplica/archivia/annulla/copia codice operative

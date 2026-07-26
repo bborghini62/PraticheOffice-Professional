@@ -5,6 +5,7 @@
 - Layout responsive con sidebar e top bar
 - Dashboard operativa e interattiva
 - Scheda pratica con azioni operative reali
+- Modifica pratica con selezione responsabile e gruppo da menu a tendina
 - Gestione clienti
 - Gestione pratiche
 - Gestione attività

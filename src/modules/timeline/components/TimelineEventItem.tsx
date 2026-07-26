@@ -17,6 +17,7 @@ const typeIcons: Record<TimelineEventType, typeof AssignmentTurnedInRoundedIcon>
   practice_updated: UpdateRoundedIcon,
   practice_status_changed: SwapHorizRoundedIcon,
   practice_assignee_changed: PersonRoundedIcon,
+  practice_group_changed: PersonRoundedIcon,
   practice_client_changed: PersonRoundedIcon,
   activity_created: AssignmentTurnedInRoundedIcon,
   activity_completed: AssignmentTurnedInRoundedIcon,

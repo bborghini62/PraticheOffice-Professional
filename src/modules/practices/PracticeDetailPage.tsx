@@ -43,22 +43,67 @@ export const PracticeDetailPage = () => {
   }, [workflow, userRole]);
 
   const handlePracticeSaved = (updatedPractice: PracticeRecord) => {
-    const savedPractice = updatePractice(updatedPractice);
+    if (!practice) {
+      return;
+    }
+
+    const hasResponsibleChange = practice.responsible !== updatedPractice.responsible;
+    const hasGroupChange = practice.group !== updatedPractice.group;
+    const hasOtherChanges =
+      practice.subject !== updatedPractice.subject ||
+      practice.status !== updatedPractice.status ||
+      practice.priority !== updatedPractice.priority ||
+      practice.dueDate !== updatedPractice.dueDate;
+
+    const nextPractice: PracticeRecord = {
+      ...updatedPractice,
+      updatedAt: hasResponsibleChange || hasGroupChange || hasOtherChanges ? new Date().toISOString() : practice.updatedAt,
+    };
+
+    const savedPractice = updatePractice(nextPractice);
     if (!savedPractice) {
       showNotification({ message: 'Impossibile salvare la pratica.', severity: 'error' });
       return;
     }
 
-    addEvent(
-      createTimelineEvent(
-        savedPractice.id,
-        'practice_updated',
-        'Pratica aggiornata',
-        `La pratica ${savedPractice.subject} è stata aggiornata.`,
-        user?.name ?? 'Sistema',
-        new Date().toISOString(),
-      ),
-    );
+    if (hasResponsibleChange) {
+      addEvent(
+        createTimelineEvent(
+          savedPractice.id,
+          'practice_assignee_changed',
+          'Responsabile modificato',
+          `Responsabile cambiato da ${practice.responsible} a ${savedPractice.responsible}`,
+          user?.name ?? 'Sistema',
+          new Date().toISOString(),
+        ),
+      );
+    }
+
+    if (hasGroupChange) {
+      addEvent(
+        createTimelineEvent(
+          savedPractice.id,
+          'practice_group_changed',
+          'Gruppo modificato',
+          `Gruppo cambiato da ${practice.group || 'Nessun gruppo'} a ${savedPractice.group || 'Nessun gruppo'}`,
+          user?.name ?? 'Sistema',
+          new Date().toISOString(),
+        ),
+      );
+    }
+
+    if (hasOtherChanges) {
+      addEvent(
+        createTimelineEvent(
+          savedPractice.id,
+          'practice_updated',
+          'Pratica aggiornata',
+          `La pratica ${savedPractice.subject} è stata aggiornata.`,
+          user?.name ?? 'Sistema',
+          new Date().toISOString(),
+        ),
+      );
+    }
 
     setPractice(savedPractice);
     showNotification({ message: 'Pratica aggiornata correttamente.', severity: 'success' });
