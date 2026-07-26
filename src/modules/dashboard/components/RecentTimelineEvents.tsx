@@ -1,5 +1,5 @@
 import { Box, Link, Stack, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { appRoutes } from '../../../core/router/routes';
 import type { DashboardTimelineItem } from '../dashboard.types';
 import { DashboardEmptyState } from './DashboardEmptyState';
@@ -10,6 +10,12 @@ interface RecentTimelineEventsProps {
 }
 
 export const RecentTimelineEvents = ({ items }: RecentTimelineEventsProps) => {
+  const navigate = useNavigate();
+
+  const handleOpenPractice = (practiceId: string) => {
+    navigate(appRoutes.practiceDetail.path.replace(':practiceId', practiceId));
+  };
+
   if (items.length === 0) {
     return (
       <DashboardSection title="Ultimi eventi Timeline" description="Non ci sono eventi di timeline pertinenti al filtro selezionato.">
@@ -22,7 +28,7 @@ export const RecentTimelineEvents = ({ items }: RecentTimelineEventsProps) => {
     <DashboardSection title="Ultimi eventi Timeline" description="Gli ultimi 8 eventi globali, ordinati per data e ora.">
       <Stack spacing={1.25}>
         {items.map((item) => (
-          <Box key={item.id} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 1.75 }}>
+          <Box key={item.id} role="button" tabIndex={0} onClick={() => handleOpenPractice(item.practiceId)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleOpenPractice(item.practiceId); } }} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 1.75, cursor: 'pointer', transition: 'background-color 0.2s ease', '&:hover': { bgcolor: 'grey.50' } }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
               {item.title}
             </Typography>

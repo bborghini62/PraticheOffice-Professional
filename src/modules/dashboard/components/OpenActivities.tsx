@@ -1,5 +1,5 @@
 import { Box, Chip, Link, Stack, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { appRoutes } from '../../../core/router/routes';
 import { DashboardEmptyState } from './DashboardEmptyState';
 import { DashboardSection } from './DashboardSection';
@@ -25,6 +25,12 @@ const statusLabels: Record<DashboardActivityItem['status'], string> = {
 };
 
 export const OpenActivities = ({ items }: OpenActivitiesProps) => {
+  const navigate = useNavigate();
+
+  const handleOpenItem = (practiceId: string) => {
+    navigate(appRoutes.practiceDetail.path.replace(':practiceId', practiceId));
+  };
+
   if (items.length === 0) {
     return (
       <DashboardSection title="Attività da completare" description="Nessuna attività aperta per il filtro selezionato.">
@@ -37,7 +43,7 @@ export const OpenActivities = ({ items }: OpenActivitiesProps) => {
     <DashboardSection title="Attività da completare" description="Attività aperte con pratica collegata, assegnatario e priorità.">
       <Stack spacing={1.25}>
         {items.map((item) => (
-          <Box key={item.id} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 1.75 }}>
+          <Box key={item.id} role="button" tabIndex={0} onClick={() => handleOpenItem(item.practiceId)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleOpenItem(item.practiceId); } }} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 1.75, cursor: 'pointer', transition: 'background-color 0.2s ease', '&:hover': { bgcolor: 'grey.50' } }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 1, alignItems: 'flex-start' }}>
               <Box>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>

@@ -1,4 +1,6 @@
 import { Box, Chip, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { appRoutes } from '../../../core/router/routes';
 import type { DashboardDeadlineItem } from '../dashboard.types';
 import { DashboardEmptyState } from './DashboardEmptyState';
 import { DashboardSection } from './DashboardSection';
@@ -18,6 +20,22 @@ const getPriorityLabel = (kind: DashboardDeadlineItem['kind']) => {
 };
 
 export const UpcomingDeadlines = ({ items }: UpcomingDeadlinesProps) => {
+  const navigate = useNavigate();
+
+  const handleOpenItem = (item: DashboardDeadlineItem) => {
+    if (item.kind === 'practice') {
+      navigate(appRoutes.practiceDetail.path.replace(':practiceId', item.id.replace('practice-', '')));
+      return;
+    }
+
+    if (item.kind === 'activity') {
+      navigate(appRoutes.practiceDetail.path.replace(':practiceId', item.id.replace('activity-', '')));
+      return;
+    }
+
+    navigate(appRoutes.documentDetail.path.replace(':documentId', item.id.replace('document-', '')));
+  };
+
   if (items.length === 0) {
     return (
       <DashboardSection title="Prossime scadenze" description="Nessuna scadenza rilevante nel periodo selezionato.">
@@ -30,7 +48,7 @@ export const UpcomingDeadlines = ({ items }: UpcomingDeadlinesProps) => {
     <DashboardSection title="Prossime scadenze" description="Pratiche, attività e documenti ordinati per data di scadenza.">
       <Stack spacing={1.25}>
         {items.map((item) => (
-          <Box key={item.id} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 1.75 }}>
+          <Box key={item.id} role="button" tabIndex={0} onClick={() => handleOpenItem(item)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleOpenItem(item); } }} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 1.75, cursor: 'pointer', transition: 'background-color 0.2s ease', '&:hover': { bgcolor: 'grey.50' } }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 1, alignItems: 'flex-start' }}>
               <Box>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>

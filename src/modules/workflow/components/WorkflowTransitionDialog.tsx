@@ -4,17 +4,22 @@ import { PrimaryButton, SecondaryButton } from '../../../design/components';
 import type { WorkflowDefinition, WorkflowTransition } from '../workflow.types';
 
 interface WorkflowTransitionDialogProps {
-  workflow: WorkflowDefinition;
+  workflow: WorkflowDefinition | undefined;
+  transitions?: WorkflowTransition[];
   open: boolean;
   onClose: () => void;
   onConfirm: (transitionId: string, note: string) => void;
 }
 
-export const WorkflowTransitionDialog = ({ workflow, open, onClose, onConfirm }: WorkflowTransitionDialogProps) => {
-  const [transitionId, setTransitionId] = useState(workflow.transitions[0]?.id ?? '');
+export const WorkflowTransitionDialog = ({ workflow, transitions, open, onClose, onConfirm }: WorkflowTransitionDialogProps) => {
+  const availableTransitions = transitions ?? workflow?.transitions ?? [];
+  const [transitionId, setTransitionId] = useState(availableTransitions[0]?.id ?? '');
   const [note, setNote] = useState('');
 
   const handleConfirm = () => {
+    if (!transitionId) {
+      return;
+    }
     onConfirm(transitionId, note);
     onClose();
   };
@@ -28,7 +33,7 @@ export const WorkflowTransitionDialog = ({ workflow, open, onClose, onConfirm }:
             Seleziona la transizione da applicare al workflow corrente.
           </Typography>
           <TextField select label="Transizione" value={transitionId} onChange={(event) => setTransitionId(event.target.value)} fullWidth>
-            {workflow.transitions.map((transition: WorkflowTransition) => (
+            {availableTransitions.map((transition: WorkflowTransition) => (
               <MenuItem key={transition.id} value={transition.id}>
                 {transition.name}
               </MenuItem>

@@ -2,6 +2,14 @@ import { Box, Stack, Typography } from '@mui/material';
 import type { ReactNode } from 'react';
 import { SectionCard } from '../../../design/components';
 
+const sectionBodySx = {
+  maxHeight: 360,
+  overflowY: 'auto',
+  pr: 0.5,
+  '&::-webkit-scrollbar': { width: '6px' },
+  '&::-webkit-scrollbar-thumb': { backgroundColor: 'divider', borderRadius: 999 },
+};
+
 interface DashboardSectionProps {
   title: string;
   description?: string;
@@ -9,8 +17,8 @@ interface DashboardSectionProps {
 }
 
 export const DashboardSection = ({ title, description, children }: DashboardSectionProps) => (
-  <SectionCard>
-    <Stack spacing={2}>
+  <SectionCard sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Stack spacing={2} sx={{ height: '100%' }}>
       <Box>
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
           {title}
@@ -21,7 +29,7 @@ export const DashboardSection = ({ title, description, children }: DashboardSect
           </Typography>
         ) : null}
       </Box>
-      {children}
+      <Box sx={sectionBodySx}>{children}</Box>
     </Stack>
   </SectionCard>
 );

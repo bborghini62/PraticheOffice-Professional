@@ -147,6 +147,14 @@ Questo backlog definisce la pianificazione di riferimento per PraticheOffice Pro
 - Dipendenze: EPIC-006
 - Stato: Completato
 
+### STORY-006 — Azioni operative dalla scheda pratica
+- Tipo: STORY
+- Titolo: Azioni operative dalla scheda pratica
+- Descrizione: Rendere operative le principali azioni dalla scheda pratica mantenendo il contesto della pratica corrente.
+- Priorità: Alta
+- Dipendenze: EPIC-002, EPIC-007
+- Stato: Completato
+
 ## Task
 
 ### TASK-001 — Routing principale

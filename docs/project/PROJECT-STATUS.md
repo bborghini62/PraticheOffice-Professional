@@ -3,7 +3,8 @@
 ## Funzioni completate
 - Routing principale centralizzato
 - Layout responsive con sidebar e top bar
-- Dashboard operativo
+- Dashboard operativa e interattiva
+- Scheda pratica con azioni operative reali
 - Gestione clienti
 - Gestione pratiche
 - Gestione attività

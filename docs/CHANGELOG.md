@@ -1,5 +1,11 @@
 # Changelog
 
+## FIX-000003 — Dashboard interattiva e azioni pratica - 2026-07-26
+- dashboard resa completamente operativa con elementi cliccabili verso pratiche, attività e documenti
+- scheda pratica con dialog di modifica reale e azioni workflow/duplica/archivia/annulla/copia codice operative
+- sezioni dashboard stabilizzate con layout a altezza costante e comportamento accessibile
+- verifica completata con build e lint senza errori
+
 ## FIX-000002 — Ricordami e visibilità Utenti - 2026-07-26
 - correzione del ripristino della sessione con “Ricordami” attivo
 - uso corretto di sessionStorage e localStorage per login e logout

@@ -8,7 +8,7 @@ interface PracticeHeaderProps {
   practice: PracticeRecord;
   onEdit: () => void;
   onChangeStatus: () => void;
-  onMoreActions: () => void;
+  onMoreActions: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const priorityLabels: Record<PracticePriority, string> = {
@@ -56,7 +56,7 @@ export const PracticeHeader = ({ practice, onEdit, onChangeStatus, onMoreActions
         <PrimaryButton size="small" sx={{ px: 1.5, py: 0.75 }} onClick={onChangeStatus}>
           Cambia stato
         </PrimaryButton>
-        <SecondaryButton size="small" sx={{ px: 1.5, py: 0.75 }} onClick={onMoreActions}>
+        <SecondaryButton size="small" sx={{ px: 1.5, py: 0.75 }} onClick={(event) => onMoreActions(event)}>
           Altre azioni
         </SecondaryButton>
       </Box>
