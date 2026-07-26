@@ -1,5 +1,6 @@
 import { addEvent, createTimelineEvent } from '../../timeline/services/timelineService';
 import { getPracticeById } from '../../practices/services/practicesService';
+import { getAttachmentsByDocumentId, removeAttachment } from './documentAttachmentsService';
 import type { DocumentCategory, DocumentRecord, DocumentStatus } from '../documents.types';
 
 const documentsSeed: DocumentRecord[] = [
@@ -197,6 +198,29 @@ export const addDocument = (document: DocumentRecord): DocumentRecord[] => {
 };
 
 export const getDocumentById = (id: string): DocumentRecord | undefined => documentsStore.find((document) => document.id === id);
+
+export const deleteDocument = (documentId: string, userName: string): DocumentRecord | undefined => {
+  const document = documentsStore.find((candidate) => candidate.id === documentId);
+  if (!document) {
+    return undefined;
+  }
+
+  getAttachmentsByDocumentId(documentId).forEach((attachment) => removeAttachment(attachment.id, { documentName: document.name, userName, practiceId: document.practiceId }));
+  documentsStore = documentsStore.filter((candidate) => candidate.id !== documentId);
+
+  addEvent(
+    createTimelineEvent(
+      document.practiceId,
+      'document_deleted',
+      'Documento eliminato',
+      `Il documento ${document.name} è stato eliminato.`,
+      userName,
+      new Date().toISOString(),
+    ),
+  );
+
+  return { ...document };
+};
 
 export const getDocumentsByPracticeId = (practiceId: string): DocumentRecord[] =>
   getDocuments()

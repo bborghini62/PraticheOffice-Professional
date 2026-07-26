@@ -3,6 +3,8 @@ export interface GroupRecord {
   name: string;
   description: string;
   responsible: string;
+  managerUserId?: string;
+  memberUserIds: string[];
   status: 'active' | 'archived';
   createdAt: string;
   updatedAt: string;

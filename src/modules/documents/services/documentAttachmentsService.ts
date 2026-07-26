@@ -167,7 +167,10 @@ export const createNewVersion = async (documentId: string, file: File, context: 
   return created[0];
 };
 
-export const removeAttachment = (attachmentId: string): DocumentAttachment | undefined => {
+export const removeAttachment = (
+  attachmentId: string,
+  context?: { documentName?: string; userName?: string; practiceId?: string },
+): DocumentAttachment | undefined => {
   const attachment = getAttachmentById(attachmentId);
   if (!attachment) {
     return undefined;
@@ -184,6 +187,17 @@ export const removeAttachment = (attachmentId: string): DocumentAttachment | und
   if (index >= 0) {
     attachmentStore.splice(index, 1);
   }
+
+  addEvent(
+    createTimelineEvent(
+      context?.practiceId ?? attachment.documentId,
+      'document_attachment_deleted',
+      'Allegato eliminato',
+      `L’allegato ${attachment.fileName} è stato eliminato dal documento ${context?.documentName ?? attachment.documentId}.`,
+      context?.userName ?? attachment.uploadedByName,
+      new Date().toISOString(),
+    ),
+  );
 
   return attachment;
 };

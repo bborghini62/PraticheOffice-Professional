@@ -24,6 +24,8 @@ const typeIcons: Record<TimelineEventType, typeof AssignmentTurnedInRoundedIcon>
   activity_cancelled: CancelRoundedIcon,
   document_added: DescriptionRoundedIcon,
   document_version_added: DescriptionRoundedIcon,
+  document_deleted: DescriptionRoundedIcon,
+  document_attachment_deleted: DescriptionRoundedIcon,
   note_added: NoteAltRoundedIcon,
 };
 

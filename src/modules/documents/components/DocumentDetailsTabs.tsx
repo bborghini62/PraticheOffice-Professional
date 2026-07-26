@@ -13,9 +13,11 @@ interface DocumentDetailsTabsProps {
   onArchive: (attachmentId: string) => void;
   onDelete: (attachmentId: string) => void;
   onPreview: (attachmentId: string) => void;
+  onOpen: (attachmentId: string) => void;
+  onDownload: (attachmentId: string) => void;
 }
 
-export const DocumentDetailsTabs = ({ document, attachments, onUpload, onNewVersion, onRename, onArchive, onDelete, onPreview }: DocumentDetailsTabsProps) => {
+export const DocumentDetailsTabs = ({ document, attachments, onUpload, onNewVersion, onRename, onArchive, onDelete, onPreview, onOpen, onDownload }: DocumentDetailsTabsProps) => {
   const [activeTab, setActiveTab] = useState(0);
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
   const versionInputRef = useRef<HTMLInputElement | null>(null);
@@ -109,7 +111,7 @@ export const DocumentDetailsTabs = ({ document, attachments, onUpload, onNewVers
             <Typography variant="body2" color="text.secondary">Aggiornata il {new Date(document.lastUpdatedAt).toLocaleDateString('it-IT')}</Typography>
           </Box>
           {attachments.length > 0 ? (
-            <AttachmentList attachments={attachments} onPreview={(attachment) => onPreview(attachment.id)} onOpen={(attachment) => onPreview(attachment.id)} onDownload={(attachment) => onPreview(attachment.id)} onNewVersion={() => versionInputRef.current?.click()} onRename={(attachment) => onRename(attachment.id)} onArchive={(attachment) => onArchive(attachment.id)} onDelete={(attachment) => onDelete(attachment.id)} />
+            <AttachmentList attachments={attachments} onPreview={(attachment) => onPreview(attachment.id)} onOpen={(attachment) => onOpen(attachment.id)} onDownload={(attachment) => onDownload(attachment.id)} onNewVersion={() => versionInputRef.current?.click()} onRename={(attachment) => onRename(attachment.id)} onArchive={(attachment) => onArchive(attachment.id)} onDelete={(attachment) => onDelete(attachment.id)} />
           ) : (
             <Typography variant="body2" color="text.secondary">Carica il primo allegato per aggiungere documenti reali alla scheda.</Typography>
           )}

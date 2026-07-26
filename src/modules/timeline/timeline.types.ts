@@ -10,6 +10,8 @@ export type TimelineEventType =
   | 'activity_cancelled'
   | 'document_added'
   | 'document_version_added'
+  | 'document_deleted'
+  | 'document_attachment_deleted'
   | 'note_added';
 
 export interface TimelineEventMetadata {
