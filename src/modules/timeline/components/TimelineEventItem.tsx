@@ -23,6 +23,7 @@ const typeIcons: Record<TimelineEventType, typeof AssignmentTurnedInRoundedIcon>
   activity_completed: AssignmentTurnedInRoundedIcon,
   activity_cancelled: CancelRoundedIcon,
   document_added: DescriptionRoundedIcon,
+  document_version_added: DescriptionRoundedIcon,
   note_added: NoteAltRoundedIcon,
 };
 

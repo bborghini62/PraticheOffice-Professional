@@ -6,6 +6,7 @@ import { appRoutes } from '../../core/router/routes';
 import { PageContainer, PageTitle } from '../../design/components';
 import { DocumentForm, type DocumentFormErrors, type DocumentFormValues } from './components/DocumentForm';
 import { addDocument, getDocuments } from './services/documentsService';
+import { addAttachments } from './services/documentAttachmentsService';
 import { getNextDocumentCode } from './services/documentCodeService';
 import type { DocumentCategory, DocumentProvider, DocumentRecord, DocumentStatus } from './documents.types';
 
@@ -35,6 +36,8 @@ const NewDocumentPage = () => {
   const { showNotification } = useNotification();
   const [values, setValues] = useState<DocumentFormValues>(initialValues(practiceId));
   const [errors, setErrors] = useState<DocumentFormErrors>({});
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [attachmentMessage, setAttachmentMessage] = useState<string | undefined>();
 
   const practiceContext = useMemo(() => {
     const match = location.pathname.match(/\/pratiche\/(.+?)\/documenti\/nuovo/);
@@ -77,7 +80,7 @@ const NewDocumentPage = () => {
     setErrors((current) => ({ ...current, [field]: undefined }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const nextErrors = validate();
     setErrors(nextErrors);
 
@@ -104,6 +107,24 @@ const NewDocumentPage = () => {
     };
 
     addDocument(newDocument);
+
+    if (selectedFiles.length > 0) {
+      try {
+        await addAttachments(newDocument.id, selectedFiles, {
+          userId: 'demo-user',
+          userName: newDocument.owner,
+          description: 'Allegato iniziale del documento',
+          practiceId: newDocument.practiceId,
+        });
+        setAttachmentMessage(undefined);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Impossibile caricare gli allegati.';
+        setAttachmentMessage(message);
+        showNotification({ message, severity: 'warning' });
+        return;
+      }
+    }
+
     showNotification({ message: 'Documento registrato correttamente', severity: 'success' });
 
     if (practiceContext) {
@@ -129,8 +150,11 @@ const NewDocumentPage = () => {
         <PageTitle subtitle="Compila i dati per registrare un nuovo documento operativo.">Nuovo documento</PageTitle>
       </Box>
       <Paper sx={{ p: { xs: 2, md: 3 }, borderRadius: 3 }}>
-        <DocumentForm values={values} errors={errors} onChange={handleChange} onSubmit={handleSubmit} onCancel={handleCancel} />
+        <DocumentForm values={values} errors={errors} onChange={handleChange} onSubmit={handleSubmit} onCancel={handleCancel} selectedFiles={selectedFiles} onFilesChange={setSelectedFiles} onAttachmentError={(message) => setAttachmentMessage(message)} />
       </Paper>
+      {attachmentMessage ? (
+        <Box sx={{ mt: 2, color: 'warning.main', fontSize: 14 }}>{attachmentMessage}</Box>
+      ) : null}
     </PageContainer>
   );
 };

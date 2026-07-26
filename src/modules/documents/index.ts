@@ -1,5 +1,6 @@
 export type { DocumentCategory, DocumentProvider, DocumentRecord, DocumentStatus } from './documents.types';
 export * from './services/documentsService';
+export * from './services/documentAttachmentsService';
 export * from './services/documentCodeService';
 export * from './components/DocumentsTable';
 export { DocumentsFilters } from './components/DocumentsFilters';

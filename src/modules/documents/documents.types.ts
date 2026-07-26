@@ -4,6 +4,31 @@ export type DocumentCategory = 'received' | 'produced' | 'communication' | 'sign
 
 export type DocumentProvider = 'local' | 'google_drive' | 'dropbox';
 
+export type DocumentAttachmentPreviewType = 'pdf' | 'image' | 'text' | 'office' | 'cad' | 'unsupported';
+
+export type DocumentAttachmentStatus = 'uploaded' | 'archived' | 'deleted';
+
+export type DocumentAttachmentStorageProvider = 'browser-memory' | 'electron-filesystem' | 'google-drive' | 'dropbox';
+
+export interface DocumentAttachment {
+  id: string;
+  documentId: string;
+  fileName: string;
+  originalFileName: string;
+  extension: string;
+  mimeType: string;
+  size: number;
+  versionNumber: number;
+  storageProvider: DocumentAttachmentStorageProvider;
+  storagePath: string;
+  uploadedByUserId: string;
+  uploadedByName: string;
+  uploadedAt: string;
+  description?: string;
+  previewType: DocumentAttachmentPreviewType;
+  status: DocumentAttachmentStatus;
+}
+
 export interface DocumentRecord {
   id: string;
   code: string;

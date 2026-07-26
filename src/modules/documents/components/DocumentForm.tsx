@@ -1,6 +1,7 @@
 import { Box, MenuItem, TextField } from '@mui/material';
 import { FormSection, PrimaryButton, SecondaryButton } from '../../../design/components';
 import { getPractices } from '../../practices/services/practicesService';
+import { AttachmentUploadArea } from './AttachmentUploadArea';
 import type { DocumentCategory, DocumentProvider, DocumentStatus } from '../documents.types';
 
 export interface DocumentFormValues {
@@ -34,9 +35,12 @@ interface DocumentFormProps {
   onChange: (field: keyof DocumentFormValues, value: string) => void;
   onSubmit: () => void;
   onCancel: () => void;
+  selectedFiles: File[];
+  onFilesChange: (files: File[]) => void;
+  onAttachmentError: (message: string) => void;
 }
 
-export const DocumentForm = ({ values, errors, onChange, onSubmit, onCancel }: DocumentFormProps) => {
+export const DocumentForm = ({ values, errors, onChange, onSubmit, onCancel, selectedFiles, onFilesChange, onAttachmentError }: DocumentFormProps) => {
   const practices = getPractices();
 
   return (
@@ -80,6 +84,9 @@ export const DocumentForm = ({ values, errors, onChange, onSubmit, onCancel }: D
           <TextField label="Data scadenza" type="date" slotProps={{ inputLabel: { shrink: true } }} value={values.dueDate} onChange={(event) => onChange('dueDate', event.target.value)} error={Boolean(errors.dueDate)} helperText={errors.dueDate} fullWidth />
           <TextField label="Note" value={values.notes} onChange={(event) => onChange('notes', event.target.value)} multiline minRows={3} fullWidth sx={{ gridColumn: { md: 'span 2' } }} />
         </Box>
+      </FormSection>
+      <FormSection title="Allegati">
+        <AttachmentUploadArea selectedFiles={selectedFiles} onFilesChange={onFilesChange} onError={onAttachmentError} />
       </FormSection>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1.5 }}>
         <SecondaryButton onClick={onCancel}>Annulla</SecondaryButton>

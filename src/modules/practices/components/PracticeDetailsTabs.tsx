@@ -7,6 +7,7 @@ import { getActivitiesByPracticeId, updateActivityStatus } from '../../activitie
 import { PracticeTimeline } from '../../timeline/components/PracticeTimeline';
 import { getEventsByPracticeId } from '../../timeline/services/timelineService';
 import { getDocumentsByPracticeId } from '../../documents/services/documentsService';
+import { getAttachmentsByDocumentId } from '../../documents/services/documentAttachmentsService';
 import { useNotification } from '../../../core/runtime/useNotification';
 import type { PracticePriority, PracticeRecord, PracticeStatus } from '../practices.types';
 
@@ -154,19 +155,25 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
             </PrimaryButton>
           </Box>
           {linkedDocuments.length > 0 ? (
-            linkedDocuments.map((document) => (
-              <Box key={document.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.2, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
-                <Box>
-                  <Typography variant="subtitle2">{document.name}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {document.code} • {document.owner}
-                  </Typography>
+            linkedDocuments.map((document) => {
+              const attachments = getAttachmentsByDocumentId(document.id);
+              return (
+                <Box key={document.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.2, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                  <Box>
+                    <Typography variant="subtitle2">{document.name}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {document.code} • {document.owner}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {attachments.length > 0 ? `${attachments.length} allegato${attachments.length > 1 ? 'i' : 'o'}` : 'Nessun allegato'}
+                    </Typography>
+                  </Box>
+                  <SecondaryButton size="small" onClick={() => handleOpenDocument(document.id)}>
+                    Apri
+                  </SecondaryButton>
                 </Box>
-                <SecondaryButton size="small" onClick={() => handleOpenDocument(document.id)}>
-                  Apri
-                </SecondaryButton>
-              </Box>
-            ))
+              );
+            })
           ) : (
             <Typography variant="body2" color="text.secondary">
               Nessun documento collegato a questa pratica per il momento.

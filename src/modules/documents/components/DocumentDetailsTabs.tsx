@@ -1,18 +1,26 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material';
-import { useState } from 'react';
-import { useNotification } from '../../../core/runtime/useNotification';
+import { useRef, useState } from 'react';
 import { PrimaryButton, SecondaryButton, SectionCard } from '../../../design/components';
-import type { DocumentRecord } from '../documents.types';
+import { AttachmentList } from './AttachmentList';
+import type { DocumentAttachment, DocumentRecord } from '../documents.types';
 
 interface DocumentDetailsTabsProps {
   document: DocumentRecord;
+  attachments: DocumentAttachment[];
+  onUpload: (files: File[]) => Promise<void> | void;
+  onNewVersion: (file: File) => Promise<void> | void;
+  onRename: (attachmentId: string) => void;
+  onArchive: (attachmentId: string) => void;
+  onDelete: (attachmentId: string) => void;
+  onPreview: (attachmentId: string) => void;
 }
 
-export const DocumentDetailsTabs = ({ document }: DocumentDetailsTabsProps) => {
-  const { showNotification } = useNotification();
+export const DocumentDetailsTabs = ({ document, attachments, onUpload, onNewVersion, onRename, onArchive, onDelete, onPreview }: DocumentDetailsTabsProps) => {
   const [activeTab, setActiveTab] = useState(0);
+  const uploadInputRef = useRef<HTMLInputElement | null>(null);
+  const versionInputRef = useRef<HTMLInputElement | null>(null);
 
-  const tabItems = ['Riepilogo', 'Versioni', 'Collegamenti', 'Storico'];
+  const tabItems = ['Riepilogo', 'Allegati', 'Collegamenti', 'Storico'];
   const categoryLabel =
     document.category === 'received'
       ? 'Documento ricevuto'
@@ -29,8 +37,24 @@ export const DocumentDetailsTabs = ({ document }: DocumentDetailsTabsProps) => {
   const providerLabel =
     document.provider === 'local' ? 'Archivio locale' : document.provider === 'google_drive' ? 'Google Drive' : 'Dropbox';
 
-  const handleNewVersion = () => {
-    showNotification({ message: 'Questa funzione sarà disponibile nel prossimo aggiornamento.', severity: 'info' });
+  const handleUploadSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files?.length) {
+      return;
+    }
+
+    await onUpload(Array.from(files));
+    event.target.value = '';
+  };
+
+  const handleVersionSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files?.length) {
+      return;
+    }
+
+    await onNewVersion(files[0]);
+    event.target.value = '';
   };
 
   return (
@@ -72,13 +96,23 @@ export const DocumentDetailsTabs = ({ document }: DocumentDetailsTabsProps) => {
       {activeTab === 1 && (
         <Box sx={{ display: 'grid', gap: 1.25 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
-            <Typography variant="subtitle2">Versioni disponibili</Typography>
-            <PrimaryButton size="small" onClick={handleNewVersion}>Nuova versione</PrimaryButton>
+            <Typography variant="subtitle2">Allegati e versioni</Typography>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <PrimaryButton size="small" onClick={() => uploadInputRef.current?.click()}>Carica allegati</PrimaryButton>
+              <PrimaryButton size="small" onClick={() => versionInputRef.current?.click()}>Nuova versione</PrimaryButton>
+            </Box>
           </Box>
+          <input ref={uploadInputRef} type="file" multiple hidden onChange={handleUploadSelection} />
+          <input ref={versionInputRef} type="file" hidden onChange={handleVersionSelection} />
           <Box sx={{ p: 1.35, borderRadius: 2, border: '1px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
             <Typography variant="subtitle2">Versione {document.version}</Typography>
             <Typography variant="body2" color="text.secondary">Aggiornata il {new Date(document.lastUpdatedAt).toLocaleDateString('it-IT')}</Typography>
           </Box>
+          {attachments.length > 0 ? (
+            <AttachmentList attachments={attachments} onPreview={(attachment) => onPreview(attachment.id)} onOpen={(attachment) => onPreview(attachment.id)} onDownload={(attachment) => onPreview(attachment.id)} onNewVersion={() => versionInputRef.current?.click()} onRename={(attachment) => onRename(attachment.id)} onArchive={(attachment) => onArchive(attachment.id)} onDelete={(attachment) => onDelete(attachment.id)} />
+          ) : (
+            <Typography variant="body2" color="text.secondary">Carica il primo allegato per aggiungere documenti reali alla scheda.</Typography>
+          )}
         </Box>
       )}
 

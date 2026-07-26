@@ -9,6 +9,7 @@ export type TimelineEventType =
   | 'activity_completed'
   | 'activity_cancelled'
   | 'document_added'
+  | 'document_version_added'
   | 'note_added';
 
 export interface TimelineEventMetadata {
