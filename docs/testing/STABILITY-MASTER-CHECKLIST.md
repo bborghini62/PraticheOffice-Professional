@@ -253,3 +253,13 @@ La RELEASE 0.9 può essere considerata completata soltanto quando:
 - [ ] Checklist funzionale completata
 - [ ] Build e lint superati
 - [ ] Test manuale finale approvato
+
+## 18. Risultato verifica STAB-0001
+
+Flusso Cliente → Pratica verificato con il seguente risultato:
+
+- [x] Il problema è stato ricondotto alla mancata navigazione React Router nella lista delle pratiche collegate nella scheda cliente.
+- [x] La lista delle pratiche collegate ora usa la route ufficiale della scheda pratica e l’ID persistente della pratica.
+- [x] Il codice e il titolo della pratica sono cliccabili e aprono la scheda corretta.
+- [x] Il flusso è stato verificato manualmente tramite navigazione locale e refresh.
+- [ ] I test di regressione su tutti gli altri moduli sono stati completati solo per il flusso interessato; gli altri punti restano da verificare nella checklist generale.

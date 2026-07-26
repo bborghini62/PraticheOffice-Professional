@@ -1,6 +1,8 @@
-import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Link, Tab, Tabs, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { SectionCard } from '../../../design/components';
+import { appRoutes } from '../../../core/router/routes';
 import { getPractices } from '../../practices/services/practicesService';
 import type { ClientRecord } from '../clients.types';
 
@@ -77,14 +79,23 @@ export const ClientDetailsTabs = ({ client }: ClientDetailsTabsProps) => {
         <Box sx={{ display: 'grid', gap: 1.25 }}>
           <Typography variant="subtitle2">Pratiche collegate</Typography>
           {linkedPractices.length > 0 ? (
-            linkedPractices.map((practice) => (
-              <Box key={practice.id} sx={{ p: 1.2, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
-                <Typography variant="subtitle2">{practice.subject}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {practice.code} • {practice.status === 'open' ? 'Aperta' : 'In gestione'}
-                </Typography>
-              </Box>
-            ))
+            linkedPractices.map((practice) => {
+              const practiceLink = appRoutes.practiceDetail.path.replace(':practiceId', practice.id);
+
+              return (
+                <Box key={practice.id} sx={{ p: 1.2, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                  <Link component={RouterLink} to={practiceLink} underline="hover" color="primary.main" sx={{ fontWeight: 600, display: 'block' }}>
+                    {practice.subject}
+                  </Link>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                    <Link component={RouterLink} to={practiceLink} underline="hover" color="text.secondary">
+                      {practice.code}
+                    </Link>{' • '}
+                    {practice.status === 'open' ? 'Aperta' : 'In gestione'}
+                  </Typography>
+                </Box>
+              );
+            })
           ) : (
             <Typography variant="body2" color="text.secondary">
               Nessuna pratica collegata al cliente per il momento.

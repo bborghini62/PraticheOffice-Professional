@@ -38,3 +38,8 @@
 - Rischio: medio-alto, perché richiede una revisione completa del contenuto iniziale e del modello di ambiente.
 - Tempo stimato: 1-2 settimane.
 - Beneficio: disponibilità di una base reale, stabile e pronta per evoluzioni sostenibili.
+
+## Verifica STAB-0001
+- Stato: verificato per il flusso Cliente → Pratica.
+- Risultato: la lista delle pratiche collegate nella scheda cliente ora apre correttamente la scheda della pratica tramite la route ufficiale e l’ID persistente della pratica.
+- Nota: la verifica è stata eseguita in ambiente locale e con refresh del browser; altri punti di regressione restano da completare nella checklist generale.
