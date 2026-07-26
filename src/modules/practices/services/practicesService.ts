@@ -1,6 +1,7 @@
 import { getClientById, getClientDisplayName } from '../../clients/services/clientsService';
 import { addEvent, createTimelineEvent } from '../../timeline/services/timelineService';
 import type { PracticeRecord, PracticeStatus, PracticePriority } from '../practices.types';
+import { loadPersistedArray, savePersistedArray } from '../../../core/persistence/localStorageStore';
 
 const practicesSeed: PracticeRecord[] = [
   {
@@ -101,12 +102,14 @@ const practicesSeed: PracticeRecord[] = [
   },
 ];
 
-let practicesStore: PracticeRecord[] = [...practicesSeed];
+const PRACTICES_STORAGE_KEY = 'praticheoffice.practices.v1';
+let practicesStore: PracticeRecord[] = loadPersistedArray(PRACTICES_STORAGE_KEY, practicesSeed);
 
 export const getPractices = (): PracticeRecord[] => practicesStore.map((practice) => ({ ...practice }));
 
 export const addPractice = (practice: PracticeRecord): PracticeRecord[] => {
   practicesStore = [practice, ...practicesStore];
+  savePersistedArray(PRACTICES_STORAGE_KEY, practicesStore);
 
   addEvent(
     createTimelineEvent(
@@ -131,6 +134,7 @@ export const updatePractice = (updatedPractice: PracticeRecord): PracticeRecord 
   }
 
   practicesStore = practicesStore.map((practice) => (practice.id === updatedPractice.id ? updatedPractice : practice));
+  savePersistedArray(PRACTICES_STORAGE_KEY, practicesStore);
   return getPracticeById(updatedPractice.id);
 };
 

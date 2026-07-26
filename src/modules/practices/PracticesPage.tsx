@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../core/runtime/useNotification';
 import { appRoutes } from '../../core/router/routes';
@@ -22,7 +22,19 @@ const PracticesPage = () => {
   const { showNotification } = useNotification();
   const [filters, setFilters] = useState<PracticesFilterState>(initialFilters);
 
-  const practices = useMemo(() => getPractices(), []);
+  const [practices, setPractices] = useState<PracticeRecord[]>(() => getPractices());
+
+  useEffect(() => {
+    const refreshPractices = () => setPractices(getPractices());
+
+    window.addEventListener('praticheoffice:data-changed', refreshPractices);
+    window.addEventListener('storage', refreshPractices);
+
+    return () => {
+      window.removeEventListener('praticheoffice:data-changed', refreshPractices);
+      window.removeEventListener('storage', refreshPractices);
+    };
+  }, []);
 
   const filteredPractices = useMemo(() => filterPractices(practices, filters.search, filters.status, filters.priority, filters.clientId), [practices, filters]);
 

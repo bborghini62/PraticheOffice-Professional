@@ -1,4 +1,5 @@
 import type { ClientRecord, ClientStatus, ClientType } from '../clients.types';
+import { loadPersistedArray, savePersistedArray } from '../../../core/persistence/localStorageStore';
 
 const clientsSeed: ClientRecord[] = [
   {
@@ -187,7 +188,8 @@ const clientsSeed: ClientRecord[] = [
   },
 ];
 
-let clientsStore: ClientRecord[] = [...clientsSeed];
+const CLIENTS_STORAGE_KEY = 'praticheoffice.clients.v1';
+let clientsStore: ClientRecord[] = loadPersistedArray(CLIENTS_STORAGE_KEY, clientsSeed);
 
 export const getClients = (): ClientRecord[] => clientsStore.map((client) => ({ ...client }));
 
@@ -201,6 +203,7 @@ export const getClientDisplayName = (client: ClientRecord | undefined): string =
 
 export const addClient = (client: ClientRecord): ClientRecord[] => {
   clientsStore = [client, ...clientsStore];
+  savePersistedArray(CLIENTS_STORAGE_KEY, clientsStore);
   return getClients();
 };
 
