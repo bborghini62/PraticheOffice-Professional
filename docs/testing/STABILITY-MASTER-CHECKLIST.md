@@ -263,3 +263,30 @@ Flusso Cliente → Pratica verificato con il seguente risultato:
 - [x] Il codice e il titolo della pratica sono cliccabili e aprono la scheda corretta.
 - [x] Il flusso è stato verificato manualmente tramite navigazione locale e refresh.
 - [ ] I test di regressione su tutti gli altri moduli sono stati completati solo per il flusso interessato; gli altri punti restano da verificare nella checklist generale.
+
+## 19. Risultato verifica STAB-0002
+
+Persistenza Documento → Pratica verificata con il seguente risultato:
+
+- [x] Aprire una pratica.
+- [x] Creare un documento.
+- [x] Allegare un PDF.
+- [x] Salvare.
+- [x] Verificare presenza del documento nella pratica.
+- [x] Aprire il modulo Documenti.
+- [x] Verificare presenza dello stesso documento nel modulo Documenti.
+- [x] Aprire la scheda documento.
+- [x] Verificare allegato e metadati (nome file, tipo, versione, pratica associata).
+- [x] Aggiornare il browser e verificare nuovamente la presenza del documento.
+- [x] Verificare localStorage per repository documenti e allegati.
+- [x] Aprire una nuova sessione applicativa (nuova pagina + login) e verificare la persistenza del documento.
+- [x] npm run build
+- [x] npm run lint
+- [x] npm run dev
+- [ ] Verifica completa anteprima PDF, download, rinomina, nuova versione, eliminazione con conferma.
+- [ ] Verifica completa regressione su attività pratica e timeline completa.
+
+Note operative:
+
+- Verificato: chiavi localStorage `praticheoffice.documents.v1` e `praticheoffice.document-attachments.v1` con record persistiti.
+- Verificato: relazione documento-pratica tramite `document.practiceId` coerente con `practice.id`.

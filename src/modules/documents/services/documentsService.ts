@@ -1,6 +1,7 @@
 import { addEvent, createTimelineEvent } from '../../timeline/services/timelineService';
 import { getPracticeById } from '../../practices/services/practicesService';
 import { getAttachmentsByDocumentId, removeAttachment } from './documentAttachmentsService';
+import { loadPersistedArray, savePersistedArray } from '../../../core/persistence/localStorageStore';
 import type { DocumentCategory, DocumentRecord, DocumentStatus } from '../documents.types';
 
 const documentsSeed: DocumentRecord[] = [
@@ -176,12 +177,14 @@ const documentsSeed: DocumentRecord[] = [
   },
 ];
 
-let documentsStore: DocumentRecord[] = [...documentsSeed];
+const DOCUMENTS_STORAGE_KEY = 'praticheoffice.documents.v1';
+let documentsStore: DocumentRecord[] = loadPersistedArray(DOCUMENTS_STORAGE_KEY, documentsSeed);
 
 export const getDocuments = (): DocumentRecord[] => documentsStore.map((document) => ({ ...document }));
 
 export const addDocument = (document: DocumentRecord): DocumentRecord[] => {
   documentsStore = [document, ...documentsStore];
+  savePersistedArray(DOCUMENTS_STORAGE_KEY, documentsStore);
 
   addEvent(
     createTimelineEvent(
@@ -207,6 +210,7 @@ export const deleteDocument = (documentId: string, userName: string): DocumentRe
 
   getAttachmentsByDocumentId(documentId).forEach((attachment) => removeAttachment(attachment.id, { documentName: document.name, userName, practiceId: document.practiceId }));
   documentsStore = documentsStore.filter((candidate) => candidate.id !== documentId);
+  savePersistedArray(DOCUMENTS_STORAGE_KEY, documentsStore);
 
   addEvent(
     createTimelineEvent(

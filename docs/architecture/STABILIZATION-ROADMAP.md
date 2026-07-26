@@ -43,3 +43,9 @@
 - Stato: verificato per il flusso Cliente → Pratica.
 - Risultato: la lista delle pratiche collegate nella scheda cliente ora apre correttamente la scheda della pratica tramite la route ufficiale e l’ID persistente della pratica.
 - Nota: la verifica è stata eseguita in ambiente locale e con refresh del browser; altri punti di regressione restano da completare nella checklist generale.
+
+## Verifica STAB-0002
+- Stato: verificato per il flusso di persistenza Documento/Allegato collegato alla pratica.
+- Risultato: il documento creato in pratica resta disponibile dopo navigazione, refresh e nuova sessione applicativa; il modulo Documenti e la scheda Pratica leggono la stessa fonte persistita.
+- Persistenza usata: chiavi localStorage `praticheoffice.documents.v1` e `praticheoffice.document-attachments.v1` tramite `core/persistence/localStorageStore`.
+- Nota: restano da completare le verifiche funzionali estese su anteprima/download/rinomina/nuova versione/eliminazione e regressione completa cross-modulo.

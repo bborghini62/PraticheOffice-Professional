@@ -1,10 +1,13 @@
 import { addEvent, createTimelineEvent } from '../../timeline/services/timelineService';
+import { loadPersistedArray, savePersistedArray } from '../../../core/persistence/localStorageStore';
 import type { DocumentAttachment, DocumentAttachmentPreviewType, DocumentAttachmentStatus, DocumentAttachmentStorageProvider } from '../documents.types';
 
 const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'csv', 'ppt', 'pptx', 'txt', 'rtf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'tiff', 'dwg', 'dxf', 'zip', '7z', 'xml'];
 const blockedExtensions = ['exe', 'app', 'dmg', 'pkg', 'sh', 'bat', 'cmd', 'js', 'msi'];
 
-const attachmentStore: DocumentAttachment[] = [];
+const ATTACHMENTS_STORAGE_KEY = 'praticheoffice.document-attachments.v1';
+const attachmentSeed: DocumentAttachment[] = [];
+const attachmentStore: DocumentAttachment[] = loadPersistedArray(ATTACHMENTS_STORAGE_KEY, attachmentSeed);
 const objectUrlStore: Record<string, string> = {};
 const previewTextStore: Record<string, string> = {};
 
@@ -138,6 +141,7 @@ export const addAttachments = async (documentId: string, files: File[], context:
   }
 
   if (created.length > 0) {
+    savePersistedArray(ATTACHMENTS_STORAGE_KEY, attachmentStore);
     const practiceId = context.practiceId ?? documentId;
     const timelineType = existing.length === 0 ? 'document_added' : 'document_version_added';
     const title = existing.length === 0 ? 'Allegato caricato' : 'Nuova versione allegata';
@@ -186,6 +190,7 @@ export const removeAttachment = (
   const index = attachmentStore.findIndex((candidate) => candidate.id === attachmentId);
   if (index >= 0) {
     attachmentStore.splice(index, 1);
+    savePersistedArray(ATTACHMENTS_STORAGE_KEY, attachmentStore);
   }
 
   addEvent(
@@ -220,6 +225,7 @@ export const renameAttachment = (attachmentId: string, newFileName: string): Doc
   const index = attachmentStore.findIndex((candidate) => candidate.id === attachmentId);
   if (index >= 0) {
     attachmentStore[index] = nextAttachment;
+    savePersistedArray(ATTACHMENTS_STORAGE_KEY, attachmentStore);
   }
 
   return nextAttachment;
@@ -239,6 +245,7 @@ export const updateAttachmentStatus = (attachmentId: string, status: DocumentAtt
   const index = attachmentStore.findIndex((candidate) => candidate.id === attachmentId);
   if (index >= 0) {
     attachmentStore[index] = nextAttachment;
+    savePersistedArray(ATTACHMENTS_STORAGE_KEY, attachmentStore);
   }
 
   return nextAttachment;
