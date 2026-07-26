@@ -23,6 +23,10 @@ export const appRoutes: AppRouteConfig = {
     path: '/pratiche/:practiceId',
     title: 'Dettaglio pratica',
   },
+  workflow: {
+    path: '/pratiche/:practiceId/workflow',
+    title: 'Workflow',
+  },
   clients: {
     path: '/clienti',
     title: 'Clienti',

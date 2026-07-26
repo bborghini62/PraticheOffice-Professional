@@ -124,6 +124,16 @@ export const addPractice = (practice: PracticeRecord): PracticeRecord[] => {
 
 export const getPracticeById = (id: string): PracticeRecord | undefined => practicesStore.find((practice) => practice.id === id);
 
+export const updatePractice = (updatedPractice: PracticeRecord): PracticeRecord | undefined => {
+  const index = practicesStore.findIndex((practice) => practice.id === updatedPractice.id);
+  if (index === -1) {
+    return undefined;
+  }
+
+  practicesStore = practicesStore.map((practice) => (practice.id === updatedPractice.id ? updatedPractice : practice));
+  return getPracticeById(updatedPractice.id);
+};
+
 export const getPracticeClient = (practice: PracticeRecord) => getClientById(practice.clientId);
 
 export const getPracticeClientDisplayName = (practice: PracticeRecord): string => getClientDisplayName(getPracticeClient(practice));

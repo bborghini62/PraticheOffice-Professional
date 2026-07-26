@@ -1,5 +1,6 @@
 import { Box, Divider, Grid, Link, Typography } from '@mui/material';
 import { useMemo } from 'react';
+import { PrimaryButton } from '../../design/components';
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import { appRoutes } from '../../core/router/routes';
 import { PageContainer, PageTitle, SectionCard, EmptyState } from '../../design/components';
@@ -101,6 +102,9 @@ export const PracticeDetailPage = () => {
                 </Typography>
                 <Typography variant="subtitle1">In verifica</Typography>
               </Box>
+              <PrimaryButton onClick={() => navigate(appRoutes.workflow.path.replace(':practiceId', practice.id))}>
+                Apri workflow
+              </PrimaryButton>
               {latestTimelineEvent && (
                 <Box sx={{ p: 1.25, borderRadius: 2, bgcolor: 'primary.50', border: '1px solid', borderColor: 'primary.100' }}>
                   <Typography variant="body2" color="text.secondary">

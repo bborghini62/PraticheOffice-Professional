@@ -11,6 +11,7 @@ export interface AppRouteConfig {
   practices: RouteDefinition;
   newPractice: RouteDefinition;
   practiceDetail: RouteDefinition;
+  workflow: RouteDefinition;
   clients: RouteDefinition;
   newClient: RouteDefinition;
   clientDetail: RouteDefinition;
