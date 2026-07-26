@@ -56,6 +56,7 @@ PraticheOffice Professional is organized as a layered application so the foundat
 
 ## Project planning documentation
 - The official product planning set lives under [docs/project](docs/project).
+- The definitive product specification is available in [docs/MASTER-SPECIFICATION.md](MASTER-SPECIFICATION.md).
 - Use [docs/project/BACKLOG.md](docs/project/BACKLOG.md) to track work items by type and priority.
 - Use [docs/project/ROADMAP.md](docs/project/ROADMAP.md) for the release sequence from Alpha to 1.0.
 - Use [docs/project/EPICS.md](docs/project/EPICS.md) to keep the core product scope aligned with the delivery plan.

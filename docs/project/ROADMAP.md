@@ -25,6 +25,7 @@
 
 ## Versione 1.0
 - Obiettivo: raggiungere la prima release stabile e utilizzabile in produzione.
+- La specifica ufficiale del prodotto è definita in [docs/MASTER-SPECIFICATION.md](../MASTER-SPECIFICATION.md).
 - Focus: completezza funzionale, robustezza, sicurezza operativa e onboarding del team.
 - Deliverable principali: versione stabile con supporto continuativo alla crescita del prodotto.
 - Stato: Pianificata

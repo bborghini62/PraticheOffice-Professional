@@ -37,6 +37,7 @@ npm run lint
 - Non sono presenti test automatici completi.
 
 ## Documentazione
+- Specifica master: [docs/MASTER-SPECIFICATION.md](docs/MASTER-SPECIFICATION.md)
 - Release: [docs/releases/RELEASE-0.1.0-alpha.1.md](docs/releases/RELEASE-0.1.0-alpha.1.md)
 - Changelog: [docs/CHANGELOG.md](docs/CHANGELOG.md)
 - Architettura: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)

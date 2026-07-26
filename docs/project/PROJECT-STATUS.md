@@ -26,6 +26,7 @@
 
 ## Stato architettura
 - Struttura Core / Modules / Shared consolidata.
+- La specifica master aggiornata è disponibile in [docs/MASTER-SPECIFICATION.md](../MASTER-SPECIFICATION.md).
 - Routing e layout centralizzati.
 - Il framework è pronto per evoluzioni successive senza modificare la UI di base.
 
