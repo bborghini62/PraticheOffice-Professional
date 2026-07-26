@@ -12,6 +12,7 @@ import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { appRoutes } from '../../core/router/routes';
 import { useAuth } from '../../modules/auth/context/useAuth';
@@ -25,6 +26,7 @@ const navItems = [
   { label: appRoutes.documents.title, to: appRoutes.documents.path, icon: DescriptionRoundedIcon, implemented: true },
   { label: appRoutes.report.title, to: appRoutes.report.path, icon: BarChartRoundedIcon, implemented: false },
   { label: appRoutes.users.title, to: appRoutes.users.path, icon: PersonRoundedIcon, implemented: true },
+  { label: appRoutes.groups.title, to: appRoutes.groups.path, icon: GroupRoundedIcon, implemented: true },
   { label: appRoutes.settings.title, to: appRoutes.settings.path, icon: SettingsRoundedIcon, implemented: true },
   { label: appRoutes.help.title, to: appRoutes.help.path, icon: HelpOutlineRoundedIcon, implemented: false },
 ];
@@ -40,7 +42,7 @@ export const Sidebar = ({ open, onClose, mobile = false }: SidebarProps) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const isAdmin = user?.role === 'Amministratore';
-  const visibleNavItems = navItems.filter((item) => item.to !== appRoutes.users.path || isAdmin);
+  const visibleNavItems = navItems.filter((item) => (item.to !== appRoutes.users.path && item.to !== appRoutes.groups.path) || isAdmin);
 
   const isActive = (itemTo: string) => {
     if (itemTo === appRoutes.dashboard.path) {

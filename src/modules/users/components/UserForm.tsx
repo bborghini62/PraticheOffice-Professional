@@ -1,6 +1,8 @@
 import { Alert, Box, Checkbox, FormControlLabel, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { PrimaryButton, SecondaryButton, SectionCard } from '../../../design/components';
+import { getActiveGroups } from '../../groups/services/groupsService';
+import { getStatusCatalog } from '../../../shared/services/statusCatalogService';
 import type { NewUserPayload, UserRole, UserStatus, UserLanguage } from '../users.types';
 
 interface UserFormProps {
@@ -18,11 +20,7 @@ const roleOptions: Array<{ value: UserRole; label: string }> = [
   { value: 'Viewer', label: 'Visualizzatore' },
 ];
 
-const statusOptions: Array<{ value: UserStatus; label: string }> = [
-  { value: 'Active', label: 'Attivo' },
-  { value: 'Suspended', label: 'Sospeso' },
-  { value: 'Disabled', label: 'Disabilitato' },
-];
+const statusOptions: Array<{ value: UserStatus; label: string }> = getStatusCatalog('user') as Array<{ value: UserStatus; label: string }>;
 
 const languageOptions: Array<{ value: UserLanguage; label: string }> = [
   { value: 'it-IT', label: 'Italiano' },
@@ -49,6 +47,7 @@ const initialValues: NewUserPayload = {
 
 export const UserForm = ({ onSubmit, isSubmitting, errorMessage, initialCode }: UserFormProps) => {
   const [values, setValues] = useState<NewUserPayload>(initialValues);
+  const groupOptions = useMemo(() => getActiveGroups().map((group) => group.name), []);
 
   const codeLabel = useMemo(() => initialCode ?? 'USR-001', [initialCode]);
 
@@ -85,7 +84,13 @@ export const UserForm = ({ onSubmit, isSubmitting, errorMessage, initialCode }: 
               <TextField label="Telefono" value={values.phone} onChange={(event) => handleChange('phone', event.target.value)} fullWidth />
               <TextField label="Qualifica" value={values.qualification} onChange={(event) => handleChange('qualification', event.target.value)} fullWidth />
               <TextField label="Reparto" value={values.department} onChange={(event) => handleChange('department', event.target.value)} fullWidth />
-              <TextField label="Gruppo" value={values.group} onChange={(event) => handleChange('group', event.target.value)} fullWidth />
+              <TextField select label="Gruppo" value={values.group} onChange={(event) => handleChange('group', event.target.value)} fullWidth>
+                {groupOptions.map((group) => (
+                  <MenuItem key={group} value={group}>
+                    {group}
+                  </MenuItem>
+                ))}
+              </TextField>
               <TextField select label="Ruolo" value={values.role} onChange={(event) => handleChange('role', event.target.value)} required fullWidth>
                 {roleOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>

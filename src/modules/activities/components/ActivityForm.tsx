@@ -2,6 +2,8 @@ import { Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography }
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { ChangeEvent, FormEvent } from 'react';
 import { FormSection, PrimaryButton, SecondaryButton } from '../../../design/components';
+import { getActiveGroups } from '../../groups/services/groupsService';
+import { getStatusCatalog } from '../../../shared/services/statusCatalogService';
 import { getActivities } from '../services/activitiesService';
 import type { ActivityPriority, ActivityStatus } from '../activities.types';
 
@@ -29,13 +31,7 @@ interface ActivityFormProps {
   onCancel: () => void;
 }
 
-const statusOptions = [
-  { value: 'todo', label: 'Da fare' },
-  { value: 'in_progress', label: 'In corso' },
-  { value: 'blocked', label: 'Bloccata' },
-  { value: 'completed', label: 'Completata' },
-  { value: 'cancelled', label: 'Annullata' },
-] as const;
+const statusOptions = getStatusCatalog('activity');
 
 const priorityOptions = [
   { value: 'low', label: 'Bassa' },
@@ -45,11 +41,11 @@ const priorityOptions = [
 ] as const;
 
 const assigneeOptions = ['Laura Bianchi', 'Marco Rossi', 'Sara Verdi', 'Luca Neri', 'Giulia Ferri', 'Paolo Galli', 'Elena Bassi', 'Matteo Sala'];
-const groupOptions = ['Amministrazione', 'Segreteria', 'Ufficio tecnico', 'Direzione', 'Controlli'];
 
 export const ActivityForm = ({ values, errors, onChange, onSubmit, onCancel }: ActivityFormProps) => {
   const activities = getActivities();
   const practiceOptions = Array.from(new Set(activities.map((activity) => activity.practiceId))).sort();
+  const groupOptions = getActiveGroups().map((group) => group.name);
 
   const handleTextChange = (field: keyof ActivityFormValues) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     onChange(field, event.target.value);

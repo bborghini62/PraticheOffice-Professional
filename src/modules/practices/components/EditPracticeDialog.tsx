@@ -1,6 +1,8 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Stack, TextField } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { PrimaryButton, SecondaryButton } from '../../../design/components';
+import { getActiveGroups } from '../../groups/services/groupsService';
+import { getStatusCatalog } from '../../../shared/services/statusCatalogService';
 import { getUsers } from '../../users/services/usersService';
 import type { PracticePriority, PracticeRecord, PracticeStatus } from '../practices.types';
 
@@ -11,7 +13,7 @@ interface EditPracticeDialogProps {
   onSaved: (practice: PracticeRecord) => void;
 }
 
-const statusOptions: PracticeStatus[] = ['draft', 'open', 'in_progress', 'waiting', 'under_review', 'approved', 'completed', 'archived', 'cancelled'];
+const statusOptions = getStatusCatalog('practice');
 const priorityOptions: PracticePriority[] = ['low', 'normal', 'high', 'urgent'];
 
 export const EditPracticeDialog = ({ practice, open, onClose, onSaved }: EditPracticeDialogProps) => {
@@ -42,7 +44,7 @@ export const EditPracticeDialog = ({ practice, open, onClose, onSaved }: EditPra
   }, [practice.responsible]);
 
   const groupOptions = useMemo(() => {
-    const uniqueGroups = Array.from(new Set(getUsers().map((user) => user.group).filter(Boolean)));
+    const uniqueGroups = getActiveGroups().map((group) => group.name);
     if (practice.group) {
       uniqueGroups.push(practice.group);
     }
@@ -84,8 +86,8 @@ export const EditPracticeDialog = ({ practice, open, onClose, onSaved }: EditPra
           <TextField label="Oggetto" value={subject} onChange={(event) => setSubject(event.target.value)} fullWidth />
           <TextField select label="Stato" value={status} onChange={(event) => setStatus(event.target.value as PracticeStatus)} fullWidth>
             {statusOptions.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
               </MenuItem>
             ))}
           </TextField>

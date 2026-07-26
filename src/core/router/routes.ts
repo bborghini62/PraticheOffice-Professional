@@ -79,6 +79,10 @@ export const appRoutes: AppRouteConfig = {
     path: '/utenti',
     title: 'Utenti',
   },
+  groups: {
+    path: '/gruppi',
+    title: 'Gruppi',
+  },
   newUser: {
     path: '/utenti/nuovo',
     title: 'Nuovo utente',

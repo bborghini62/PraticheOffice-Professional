@@ -2,6 +2,8 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typo
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { ChangeEvent, FormEvent } from 'react';
 import { getClientDisplayName, getClients } from '../../clients/services/clientsService';
+import { getActiveGroups } from '../../groups/services/groupsService';
+import { getStatusCatalog } from '../../../shared/services/statusCatalogService';
 import type { PracticePriority, PracticeStatus } from '../practices.types';
 
 export interface PracticeFormValues {
@@ -29,17 +31,7 @@ interface PracticeFormProps {
   onCancel: () => void;
 }
 
-const statusOptions = [
-  { value: 'draft', label: 'Bozza' },
-  { value: 'open', label: 'Aperta' },
-  { value: 'in_progress', label: 'In lavorazione' },
-  { value: 'waiting', label: 'In attesa' },
-  { value: 'under_review', label: 'Da controllare' },
-  { value: 'approved', label: 'Approvata' },
-  { value: 'completed', label: 'Completata' },
-  { value: 'archived', label: 'Archiviata' },
-  { value: 'cancelled', label: 'Annullata' },
-] as const;
+const statusOptions = getStatusCatalog('practice');
 const priorityOptions = [
   { value: 'low', label: 'Bassa' },
   { value: 'normal', label: 'Normale' },
@@ -48,10 +40,10 @@ const priorityOptions = [
 ] as const;
 const practiceTypeOptions = ['Amministrativa', 'Tecnica', 'Commerciale', 'Contrattuale', 'Assistenza'];
 const responsibleOptions = ['Marco Rossi', 'Laura Bianchi', 'Giulia Ferri', 'Luca Neri'];
-const groupOptions = ['Amministrazione', 'Segreteria', 'Ufficio tecnico', 'Direzione'];
 
 export const PracticeForm = ({ values, errors, onChange, onSubmit, onCancel }: PracticeFormProps) => {
   const clientOptions = getClients();
+  const groupOptions = getActiveGroups().map((group) => group.name);
   const handleTextChange = (field: keyof PracticeFormValues) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     onChange(field, event.target.value);
   };

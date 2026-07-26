@@ -12,6 +12,7 @@ import { RecentPractices } from './components/RecentPractices';
 import { RecentTimelineEvents } from './components/RecentTimelineEvents';
 import { UpcomingDeadlines } from './components/UpcomingDeadlines';
 import { WorkloadByUser } from './components/WorkloadByUser';
+import { getActiveGroups } from '../groups/services/groupsService';
 import { useDashboardData } from './services/dashboardService';
 import type { DashboardFilters } from './dashboard.types';
 
@@ -26,6 +27,7 @@ const DashboardPage = () => {
   const { user } = useAuth();
   const [filters, setFilters] = useState<DashboardFilters>(initialFilters);
   const users = useMemo(() => getUsers(), []);
+  const groups = useMemo(() => getActiveGroups(), []);
   const dashboardUser: { role: 'Administrator' | 'Operator'; displayName: string; group: string } | null = user
     ? { role: user.role === 'Amministratore' ? 'Administrator' : 'Operator', displayName: user.name, group: '' }
     : null;
@@ -66,8 +68,8 @@ const DashboardPage = () => {
             <InputLabel id="dashboard-group-label">Gruppo</InputLabel>
             <Select labelId="dashboard-group-label" label="Gruppo" value={filters.group} onChange={(event) => setFilters((current) => ({ ...current, group: event.target.value as DashboardFilters['group'] }))}>
               <MenuItem value="all">Tutti</MenuItem>
-              {[...new Set(users.map((candidate) => candidate.group))].map((group) => (
-                <MenuItem key={group} value={group}>{group}</MenuItem>
+              {groups.map((group) => (
+                <MenuItem key={group.id} value={group.name}>{group.name}</MenuItem>
               ))}
             </Select>
           </FormControl>

@@ -1,5 +1,7 @@
 import { Box, MenuItem, Stack, TextField } from '@mui/material';
+import { useMemo } from 'react';
 import { SecondaryButton } from '../../../design/components';
+import { getStatusCatalog } from '../../../shared/services/statusCatalogService';
 import type { CalendarFiltersState, CalendarEventType } from '../calendar.types';
 
 interface CalendarFiltersProps {
@@ -22,7 +24,10 @@ export const CalendarFilters = ({
   responsibleValues,
   groupValues,
   practiceValues,
-}: CalendarFiltersProps) => (
+}: CalendarFiltersProps) => {
+  const statusOptions = useMemo(() => getStatusCatalog('calendar'), []);
+
+  return (
   <Box sx={{ display: 'grid', gap: 2 }}>
     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} useFlexGap>
       <TextField select label="Tipo evento" value={filters.eventType} onChange={(event) => onFiltersChange({ ...filters, eventType: event.target.value as CalendarEventType | 'all' })} fullWidth>
@@ -34,11 +39,14 @@ export const CalendarFilters = ({
       </TextField>
       <TextField select label="Stato" value={filters.status} onChange={(event) => onFiltersChange({ ...filters, status: event.target.value })} fullWidth>
         <MenuItem value="all">Tutti</MenuItem>
-        {statuses.map((status) => (
-          <MenuItem key={status} value={status}>
-            {status}
-          </MenuItem>
-        ))}
+        {statuses.map((status) => {
+          const label = statusOptions.find((option) => option.value === status)?.label ?? status;
+          return (
+            <MenuItem key={status} value={status}>
+              {label}
+            </MenuItem>
+          );
+        })}
       </TextField>
       <TextField select label="Responsabile" value={filters.responsible} onChange={(event) => onFiltersChange({ ...filters, responsible: event.target.value })} fullWidth>
         <MenuItem value="all">Tutti</MenuItem>
@@ -69,4 +77,5 @@ export const CalendarFilters = ({
       <SecondaryButton onClick={onReset}>Azzera filtri</SecondaryButton>
     </Stack>
   </Box>
-);
+  );
+};

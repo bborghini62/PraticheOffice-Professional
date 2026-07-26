@@ -25,6 +25,7 @@ export interface AppRouteConfig {
   calendar: RouteDefinition;
   report: RouteDefinition;
   users: RouteDefinition;
+  groups: RouteDefinition;
   newUser: RouteDefinition;
   userDetail: RouteDefinition;
   settings: RouteDefinition;

@@ -1,5 +1,7 @@
 import { Box, MenuItem, TextField } from '@mui/material';
+import { useMemo } from 'react';
 import { SecondaryButton } from '../../../design/components';
+import { getActiveGroups } from '../../groups/services/groupsService';
 import type { UsersFilters as UsersFilterState } from '../users.types';
 
 interface UsersFiltersProps {
@@ -26,13 +28,6 @@ const statusOptions = [
 
 const groupOptions = [
   { value: 'all', label: 'Tutti i gruppi' },
-  { value: 'Executive', label: 'Executive' },
-  { value: 'Operations', label: 'Operations' },
-  { value: 'Legal', label: 'Legal' },
-  { value: 'Reporting', label: 'Reporting' },
-  { value: 'Client Services', label: 'Client Services' },
-  { value: 'Admin Support', label: 'Admin Support' },
-  { value: 'Case Management', label: 'Case Management' },
 ];
 
 const departmentOptions = [
@@ -45,7 +40,10 @@ const departmentOptions = [
   { value: 'Pratiche', label: 'Pratiche' },
 ];
 
-export const UsersFilters = ({ filters, onFiltersChange, onReset }: UsersFiltersProps) => (
+export const UsersFilters = ({ filters, onFiltersChange, onReset }: UsersFiltersProps) => {
+  const groups = useMemo(() => getActiveGroups(), []);
+
+  return (
   <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', md: 'repeat(5, minmax(0, 1fr))' } }}>
     <TextField
       label="Ricerca"
@@ -68,7 +66,10 @@ export const UsersFilters = ({ filters, onFiltersChange, onReset }: UsersFilters
       ))}
     </TextField>
     <TextField select label="Gruppo" value={filters.group} onChange={(event) => onFiltersChange({ ...filters, group: event.target.value })} fullWidth>
-      {groupOptions.map((option) => (
+      {[
+        ...groupOptions,
+        ...groups.map((group) => ({ value: group.name, label: group.name })),
+      ].map((option) => (
         <MenuItem key={option.value} value={option.value}>
           {option.label}
         </MenuItem>
@@ -85,4 +86,5 @@ export const UsersFilters = ({ filters, onFiltersChange, onReset }: UsersFilters
       <SecondaryButton onClick={onReset}>Azzera filtri</SecondaryButton>
     </Box>
   </Box>
-);
+  );
+};

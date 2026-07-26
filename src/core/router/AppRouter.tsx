@@ -22,6 +22,7 @@ const NewDocumentPage = lazy(() => import('../../modules/documents/NewDocumentPa
 const DocumentDetailPage = lazy(() => import('../../modules/documents/DocumentDetailPage'));
 const CalendarPage = lazy(() => import('../../modules/calendar/CalendarPage'));
 const UsersPage = lazy(() => import('../../modules/users/UsersPage'));
+const GroupsPage = lazy(() => import('../../modules/groups/GroupsPage'));
 const NewUserPage = lazy(() => import('../../modules/users/NewUserPage'));
 const UserDetailPage = lazy(() => import('../../modules/users/UserDetailPage'));
 const SettingsPage = lazy(() => import('../../modules/settings/SettingsPage'));
@@ -48,6 +49,7 @@ export const AppRouter = () => (
         <Route path={appRoutes.practiceDocumentsNew.path} element={<NewDocumentPage />} />
         <Route path={appRoutes.calendar.path} element={<CalendarPage />} />
         <Route path={appRoutes.users.path} element={<UsersPage />} />
+        <Route path={appRoutes.groups.path} element={<GroupsPage />} />
         <Route path={appRoutes.newUser.path} element={<NewUserPage />} />
         <Route path={appRoutes.userDetail.path} element={<UserDetailPage />} />
         <Route path={appRoutes.settings.path} element={<SettingsPage />} />
