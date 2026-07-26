@@ -1,80 +1,102 @@
-import { Box, Chip, Typography } from '@mui/material';
-import TrendingUpRoundedIcon from '@mui/icons-material/TrendingUpRounded';
-import { PageContainer, PageTitle, SectionCard } from '../../design/components';
-import { dashboardMetrics, recentActivities } from '../../shared/services/dashboardService';
-import { formatCurrency } from '../../shared/utils/formatters';
+import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/context/useAuth';
+import { appRoutes } from '../../core/router/routes';
+import { PageContainer, PageTitle, PrimaryButton, SecondaryButton } from '../../design/components';
+import { getUsers } from '../users/services/usersService';
+import { DashboardKpiCard } from './components/DashboardKpiCard';
+import { DashboardSection } from './components/DashboardSection';
+import { OpenActivities } from './components/OpenActivities';
+import { RecentPractices } from './components/RecentPractices';
+import { RecentTimelineEvents } from './components/RecentTimelineEvents';
+import { UpcomingDeadlines } from './components/UpcomingDeadlines';
+import { WorkloadByUser } from './components/WorkloadByUser';
+import { useDashboardData } from './services/dashboardService';
+import type { DashboardFilters } from './dashboard.types';
 
-const DashboardPage = () => (
-  <PageContainer>
-    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2 }}>
-      <Box>
-        <PageTitle subtitle="Panoramica operativa del giorno e dei principali indicatori di lavoro.">Cruscotto</PageTitle>
-      </Box>
-      <Chip icon={<TrendingUpRoundedIcon />} label="Aggiornamenti live" color="primary" variant="outlined" />
-    </Box>
+const initialFilters: DashboardFilters = {
+  period: '7days',
+  responsible: 'all',
+  group: 'all',
+};
 
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-      {dashboardMetrics.map((metric) => (
-        <Box key={metric.id} sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 8px)', lg: '1 1 calc(25% - 12px)' } }}>
-          <SectionCard sx={{ p: 2.5, height: '100%' }}>
-            <Typography variant="body2" color="text.secondary">
-              {metric.title}
-            </Typography>
-            <Typography variant="h4" sx={{ mt: 1 }}>
-              {metric.value}
-            </Typography>
-            <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-              {metric.change}
-            </Typography>
-          </SectionCard>
+const DashboardPage = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [filters, setFilters] = useState<DashboardFilters>(initialFilters);
+  const users = useMemo(() => getUsers(), []);
+  const dashboardUser: { role: 'Administrator' | 'Operator'; displayName: string; group: string } | null = user
+    ? { role: user.role === 'Amministratore' ? 'Administrator' : 'Operator', displayName: user.name, group: '' }
+    : null;
+  const { kpis, deadlines, openActivities, recentPractices, timelineEvents, workload } = useDashboardData(filters, dashboardUser);
+
+  return (
+    <PageContainer>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2 }}>
+        <Box>
+          <PageTitle subtitle="Panoramica operativa di PraticheOffice Professional">Dashboard</PageTitle>
         </Box>
-      ))}
-    </Box>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+          <SecondaryButton onClick={() => navigate(appRoutes.practices.path)}>Apri pratiche</SecondaryButton>
+          <PrimaryButton onClick={() => navigate(appRoutes.activities.path)}>Apri attività</PrimaryButton>
+        </Box>
+      </Box>
 
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-      <Box sx={{ flex: { xs: '1 1 100%', lg: '1 1 calc(58% - 8px)' } }}>
-        <SectionCard>
-          <Typography variant="h6" sx={{ mb: 1.5 }}>
-            Attività giornaliere
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Il lavoro è in linea con il ritmo previsto, con minori ritardi e migliori passaggi tra i team.
-          </Typography>
-          <Box sx={{ mt: 3, p: 2.25, borderRadius: 3, bgcolor: 'primary.50' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-              Impatto economico
-            </Typography>
-            <Typography variant="h4" color="primary" sx={{ mt: 1 }}>
-              {formatCurrency(158400)}
-            </Typography>
-          </Box>
-        </SectionCard>
+      <DashboardSection title="Filtri dashboard" description="Seleziona intervallo temporale e contesto di visibilità.">
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+          <FormControl size="small" sx={{ minWidth: 180 }}>
+            <InputLabel id="dashboard-period-label">Intervallo</InputLabel>
+            <Select labelId="dashboard-period-label" label="Intervallo" value={filters.period} onChange={(event) => setFilters((current) => ({ ...current, period: event.target.value as DashboardFilters['period'] }))}>
+              <MenuItem value="today">Oggi</MenuItem>
+              <MenuItem value="7days">7 giorni</MenuItem>
+              <MenuItem value="30days">30 giorni</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl size="small" sx={{ minWidth: 220 }}>
+            <InputLabel id="dashboard-responsible-label">Responsabile</InputLabel>
+            <Select labelId="dashboard-responsible-label" label="Responsabile" value={filters.responsible} onChange={(event) => setFilters((current) => ({ ...current, responsible: event.target.value as DashboardFilters['responsible'] }))}>
+              <MenuItem value="all">Tutti</MenuItem>
+              {users.map((candidate) => (
+                <MenuItem key={candidate.id} value={candidate.displayName}>{candidate.displayName}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl size="small" sx={{ minWidth: 220 }}>
+            <InputLabel id="dashboard-group-label">Gruppo</InputLabel>
+            <Select labelId="dashboard-group-label" label="Gruppo" value={filters.group} onChange={(event) => setFilters((current) => ({ ...current, group: event.target.value as DashboardFilters['group'] }))}>
+              <MenuItem value="all">Tutti</MenuItem>
+              {[...new Set(users.map((candidate) => candidate.group))].map((group) => (
+                <MenuItem key={group} value={group}>{group}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+      </DashboardSection>
+
+      <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', md: 'repeat(2, minmax(0, 1fr))', lg: 'repeat(3, minmax(0, 1fr))' } }}>
+        {kpis.map((kpi) => (
+          <DashboardKpiCard key={kpi.id} kpi={kpi} />
+        ))}
       </Box>
-      <Box sx={{ flex: { xs: '1 1 100%', lg: '1 1 calc(42% - 8px)' } }}>
-        <SectionCard>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Attività recenti
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-            {recentActivities.map((activity) => (
-              <Box key={activity.id} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 1.75 }}>
-                <Typography variant="subtitle2">{activity.title}</Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                  {activity.detail}
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-                  <Typography variant="caption" color="text.secondary">
-                    {activity.time}
-                  </Typography>
-                  <Chip label={activity.status} size="small" variant="outlined" />
-                </Box>
-              </Box>
-            ))}
-          </Box>
-        </SectionCard>
+
+      <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', lg: '1.2fr 0.8fr' } }}>
+        <UpcomingDeadlines items={deadlines} />
+        <OpenActivities items={openActivities} />
       </Box>
-    </Box>
-  </PageContainer>
-);
+
+      <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' } }}>
+        <RecentPractices items={recentPractices} />
+        <RecentTimelineEvents items={timelineEvents} />
+      </Box>
+
+      <WorkloadByUser items={workload} />
+
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+        Dati filtrati secondo il ruolo attivo e il contesto operativo selezionato.
+      </Typography>
+    </PageContainer>
+  );
+};
 
 export default DashboardPage;
