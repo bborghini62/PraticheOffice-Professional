@@ -4,6 +4,7 @@ import { appRoutes } from '../../core/router/routes';
 import { useAuth } from '../auth/context/useAuth';
 import { PageContainer, PageTitle, PrimaryButton, SectionCard } from '../../design/components';
 import { settingsPreferences } from '../../shared/services/dashboardService';
+import { GoogleCloudConnectionCard } from './components/GoogleCloudConnectionCard';
 
 const SettingsPage = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const SettingsPage = () => {
         <PageTitle subtitle="Personalizza le preferenze operative per il tuo lavoro quotidiano.">Impostazioni</PageTitle>
       </Box>
 
+      <GoogleCloudConnectionCard isAdmin={isAdmin} />
       {isAdmin ? (
         <SectionCard>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
