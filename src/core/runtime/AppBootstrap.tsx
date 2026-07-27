@@ -9,6 +9,7 @@ import { initializeGlobalErrorHandler } from './GlobalErrorHandler';
 import { databaseService } from '../database';
 import { configService } from '../config';
 import { AuthProvider } from '../../modules/auth/context/AuthProvider';
+import { bootstrapClientsCloudSync } from '../../modules/clients/services/clientsService';
 
 const AppRouter = lazy(() => import('../router/AppRouter').then((module) => ({ default: module.AppRouter })));
 
@@ -31,6 +32,25 @@ export const AppBootstrap = () => {
 
     void initializeRuntime();
   }, []);
+
+  useEffect(() => {
+    if (!isRuntimeReady) {
+      return;
+    }
+
+    const syncClients = () => {
+      void bootstrapClientsCloudSync();
+    };
+
+    syncClients();
+    window.addEventListener('praticheoffice:cloud-config-changed', syncClients);
+    window.addEventListener('praticheoffice:cloud-session-changed', syncClients);
+
+    return () => {
+      window.removeEventListener('praticheoffice:cloud-config-changed', syncClients);
+      window.removeEventListener('praticheoffice:cloud-session-changed', syncClients);
+    };
+  }, [isRuntimeReady]);
 
   if (runtimeError) {
     throw runtimeError;

@@ -68,6 +68,7 @@ export const saveGoogleIdToken = (idToken: string): CloudSession => {
   };
 
   window.localStorage.setItem(CLOUD_SESSION_STORAGE_KEY, JSON.stringify(session));
+  window.dispatchEvent(new Event('praticheoffice:cloud-session-changed'));
   return session;
 };
 
@@ -77,6 +78,7 @@ export const clearGoogleIdToken = (): void => {
   }
 
   window.localStorage.removeItem(CLOUD_SESSION_STORAGE_KEY);
+  window.dispatchEvent(new Event('praticheoffice:cloud-session-changed'));
 };
 
 export const getGoogleCloudSession = (): CloudSession | null => {
@@ -87,6 +89,9 @@ export const getGoogleCloudSession = (): CloudSession | null => {
 
   if (session.expiresAt !== null && session.expiresAt <= Date.now()) {
     clearGoogleIdToken();
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('praticheoffice:cloud-session-changed'));
+    }
     return null;
   }
 
@@ -106,6 +111,9 @@ export const isGoogleCloudSessionExpired = (): boolean => {
   const expired = session.expiresAt <= Date.now();
   if (expired) {
     clearGoogleIdToken();
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('praticheoffice:cloud-session-changed'));
+    }
   }
   return expired;
 };

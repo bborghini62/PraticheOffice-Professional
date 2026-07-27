@@ -1,11 +1,12 @@
 import { Box, Typography } from '@mui/material';
+import type { MouseEvent } from 'react';
 import { PrimaryButton, SecondaryButton, SectionCard, StatusBadge } from '../../../design/components';
 import type { ClientRecord, ClientStatus, ClientType } from '../clients.types';
 
 interface ClientHeaderProps {
   client: ClientRecord;
   onEdit: () => void;
-  onMoreActions: () => void;
+  onMoreActions: (event: MouseEvent<HTMLElement>) => void;
 }
 
 const clientTypeLabels: Record<ClientType, string> = {

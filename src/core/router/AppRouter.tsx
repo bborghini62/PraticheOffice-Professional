@@ -39,6 +39,7 @@ export const AppRouter = () => (
         <Route path={appRoutes.workflow.path} element={<WorkflowPage />} />
         <Route path={appRoutes.clients.path} element={<ClientsPage />} />
         <Route path={appRoutes.newClient.path} element={<NewClientPage />} />
+        <Route path={appRoutes.clientEdit.path} element={<NewClientPage />} />
         <Route path={appRoutes.clientDetail.path} element={<ClientDetailPage />} />
         <Route path={appRoutes.activities.path} element={<ActivitiesPage />} />
         <Route path={appRoutes.newActivity.path} element={<NewActivityPage />} />

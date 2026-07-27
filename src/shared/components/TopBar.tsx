@@ -21,6 +21,7 @@ const pageMeta: Record<string, { title: string; subtitle: string }> = {
   [appRoutes.dashboard.path]: { title: 'Cruscotto', subtitle: 'Panoramica operativa quotidiana' },
   [appRoutes.clients.path]: { title: 'Clienti', subtitle: 'Gestione delle anagrafiche clienti' },
   [appRoutes.newClient.path]: { title: 'Nuovo cliente', subtitle: 'Creazione di una nuova anagrafica' },
+  [appRoutes.clientEdit.path]: { title: 'Modifica cliente', subtitle: 'Aggiornamento dell’anagrafica cliente' },
   [appRoutes.clientDetail.path]: { title: 'Scheda cliente', subtitle: 'Dettaglio anagrafico e contesto operativo' },
   [appRoutes.practices.path]: { title: 'Pratiche', subtitle: 'Gestione delle pratiche operative' },
   [appRoutes.newPractice.path]: { title: 'Nuova pratica', subtitle: 'Creazione di una nuova pratica' },

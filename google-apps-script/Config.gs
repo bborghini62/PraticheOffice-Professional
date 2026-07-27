@@ -28,7 +28,7 @@ const PO_HEADERS = Object.freeze({
   Clienti: [
     'id', 'code', 'clientType', 'companyName', 'firstName', 'lastName', 'vatNumber', 'fiscalCode', 'contactPerson',
     'email', 'pec', 'phone', 'mobile', 'address', 'postalCode', 'city', 'province', 'country', 'notes', 'status',
-    'createdBy', 'createdAt', 'updatedBy', 'updatedAt'
+    'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'version'
   ],
   Pratiche: [
     'id', 'code', 'subject', 'description', 'status', 'priority', 'clientId', 'responsible', 'responsibleEmail', 'group',

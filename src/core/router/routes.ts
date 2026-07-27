@@ -71,6 +71,10 @@ export const appRoutes: AppRouteConfig = {
     path: '/clienti/:clientId',
     title: 'Scheda cliente',
   },
+  clientEdit: {
+    path: '/clienti/:clientId/modifica',
+    title: 'Modifica cliente',
+  },
   report: {
     path: '/report',
     title: 'Report',

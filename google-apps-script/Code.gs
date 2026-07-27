@@ -33,10 +33,14 @@ function routeAction_(action, payload, user) {
       return user;
     case 'clients.list':
       return listClients_();
+    case 'clients.get':
+      return getClient_(payload);
     case 'clients.create':
       return saveClient_(payload, user, false);
     case 'clients.update':
       return saveClient_(payload, user, true);
+    case 'clients.delete':
+      return deleteClient_(payload, user);
     case 'practices.list':
       return listPractices_();
     case 'practices.create':

@@ -6,6 +6,20 @@ function listClients_() {
   return listRows_(PO_SHEETS.CLIENTS);
 }
 
+function getClient_(payload) {
+  const id = String((payload || {}).id || '').trim();
+  if (!id) {
+    throw apiError_('INVALID_CLIENT', 'ID cliente obbligatorio.');
+  }
+
+  const client = findRowById_(PO_SHEETS.CLIENTS, id);
+  if (!client) {
+    throw apiError_('CLIENT_NOT_FOUND', 'Cliente non trovato.');
+  }
+
+  return client;
+}
+
 function saveClient_(payload, user, isUpdate) {
   const source = payload || {};
   const now = new Date().toISOString();
@@ -15,6 +29,12 @@ function saveClient_(payload, user, isUpdate) {
   }
 
   const clean = sanitizeRecord_(source, CLIENT_FIELDS_);
+  const sourceVersion = Number(source.version || 1);
+  const existingVersion = Number((existing && existing.version) || 0);
+  if (existing && existingVersion > sourceVersion) {
+    throw apiError_('CLIENT_VERSION_CONFLICT', 'Il cliente è stato aggiornato nel cloud. Ricarica e riprova.');
+  }
+
   const record = Object.assign({}, existing || {}, clean, {
     id: existing ? existing.id : String(source.id || Utilities.getUuid()),
     code: existing ? existing.code : String(source.code || generateCode_('CLI')),
@@ -22,6 +42,7 @@ function saveClient_(payload, user, isUpdate) {
     createdAt: existing ? existing.createdAt : now,
     updatedBy: user.email,
     updatedAt: now,
+    version: existing ? Math.max(existingVersion, sourceVersion) : sourceVersion,
   });
 
   if (!record.companyName && !record.firstName && !record.lastName) {
@@ -29,6 +50,29 @@ function saveClient_(payload, user, isUpdate) {
   }
   return withWriteLock_(function () {
     return upsertRecord_(PO_SHEETS.CLIENTS, record);
+  });
+}
+
+function deleteClient_(payload, user) {
+  const source = payload || {};
+  const id = String(source.id || '').trim();
+  if (!id) {
+    throw apiError_('INVALID_CLIENT', 'ID cliente obbligatorio.');
+  }
+
+  const existing = findRowById_(PO_SHEETS.CLIENTS, id);
+  if (!existing) {
+    return { id: id, deleted: true };
+  }
+
+  return withWriteLock_(function () {
+    removeRecordById_(PO_SHEETS.CLIENTS, id);
+    return {
+      id: id,
+      deleted: true,
+      updatedBy: user.email,
+      updatedAt: new Date().toISOString(),
+    };
   });
 }
 

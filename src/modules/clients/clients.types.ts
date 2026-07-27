@@ -23,7 +23,11 @@ export interface ClientRecord {
   country: string;
   notes: string;
   status: ClientStatus;
+  createdAt: string;
+  createdBy: string;
   updatedAt: string;
+  updatedBy: string;
+  version: number;
 }
 
 export interface ClientsFilters {

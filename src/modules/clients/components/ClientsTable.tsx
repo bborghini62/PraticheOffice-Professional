@@ -1,7 +1,9 @@
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import { useMemo, useState, type MouseEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DataTable, StatusBadge } from '../../../design/components';
+import { appRoutes } from '../../../core/router/routes';
 import type { ClientRecord, ClientType } from '../clients.types';
 
 interface ClientsTableProps {
@@ -19,6 +21,7 @@ const clientTypeLabels: Record<ClientType, string> = {
 };
 
 export const ClientsTable = ({ clients, onOpenClient, onInformationalAction }: ClientsTableProps) => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [selectedClient, setSelectedClient] = useState<ClientRecord | null>(null);
 
@@ -37,7 +40,11 @@ export const ClientsTable = ({ clients, onOpenClient, onInformationalAction }: C
 
   const handleAction = (action: string) => {
     if (selectedClient) {
-      onInformationalAction(action);
+      if (action === 'modifica') {
+        navigate(appRoutes.clientEdit.path.replace(':clientId', selectedClient.id));
+      } else {
+        onInformationalAction(action);
+      }
     }
     handleMenuClose();
   };

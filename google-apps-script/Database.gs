@@ -87,6 +87,30 @@ function upsertRecord_(sheetName, record) {
   return record;
 }
 
+function removeRecordById_(sheetName, id) {
+  const sheet = getSheet_(sheetName);
+  const headers = getHeaders_(sheet);
+  const idColumnIndex = headers.indexOf('id');
+  if (idColumnIndex === -1) {
+    throw apiError_('INVALID_SCHEMA', 'Il foglio ' + sheetName + ' non contiene la colonna id.');
+  }
+
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) {
+    return false;
+  }
+
+  const ids = sheet.getRange(2, idColumnIndex + 1, lastRow - 1, 1).getValues();
+  for (let index = 0; index < ids.length; index += 1) {
+    if (String(ids[index][0]) === String(id)) {
+      sheet.deleteRow(index + 2);
+      return true;
+    }
+  }
+
+  return false;
+}
+
 function withWriteLock_(callback) {
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);

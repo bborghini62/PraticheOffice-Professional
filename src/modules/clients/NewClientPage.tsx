@@ -1,15 +1,40 @@
 import { Box, Paper, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../core/runtime/useNotification';
 import { appRoutes } from '../../core/router/routes';
 import { PageContainer, PageTitle } from '../../design/components';
 import { ClientForm, type ClientFormErrors, type ClientFormValues } from './components/ClientForm';
-import { addClient, getClients } from './services/clientsService';
+import { addClient, getClientById, getClients, updateClient } from './services/clientsService';
 import { getNextClientCode } from './services/clientCodeService';
 import type { ClientRecord, ClientStatus, ClientType } from './clients.types';
+import { useParams } from 'react-router-dom';
 
-const initialValues = (): ClientFormValues => {
+const buildInitialValues = (client?: ClientRecord): ClientFormValues => {
+  if (client) {
+    return {
+      code: client.code,
+      clientType: client.clientType,
+      companyName: client.companyName,
+      firstName: client.firstName,
+      lastName: client.lastName,
+      vatNumber: client.vatNumber,
+      fiscalCode: client.fiscalCode,
+      contactPerson: client.contactPerson,
+      email: client.email,
+      pec: client.pec,
+      phone: client.phone,
+      mobile: client.mobile,
+      address: client.address,
+      postalCode: client.postalCode,
+      city: client.city,
+      province: client.province,
+      country: client.country,
+      notes: client.notes,
+      status: client.status,
+    };
+  }
+
   const existingClients = getClients();
   return {
     code: getNextClientCode(existingClients.map((client) => client.code)),
@@ -35,9 +60,12 @@ const initialValues = (): ClientFormValues => {
 };
 
 const NewClientPage = () => {
+  const { clientId } = useParams<{ clientId: string }>();
   const navigate = useNavigate();
   const { showNotification } = useNotification();
-  const [values, setValues] = useState<ClientFormValues>(initialValues);
+  const existingClient = useMemo(() => (clientId ? getClientById(clientId) : undefined), [clientId]);
+  const isEditMode = Boolean(existingClient);
+  const [values, setValues] = useState<ClientFormValues>(() => buildInitialValues(existingClient));
   const [errors, setErrors] = useState<ClientFormErrors>({});
 
   const validate = (): ClientFormErrors => {
@@ -74,7 +102,7 @@ const NewClientPage = () => {
     setErrors((current) => ({ ...current, [field]: undefined }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const nextErrors = validate();
     setErrors(nextErrors);
 
@@ -82,8 +110,9 @@ const NewClientPage = () => {
       return;
     }
 
-    const newClient: ClientRecord = {
-      id: values.code,
+    const now = new Date().toISOString();
+    const baseClient: ClientRecord = {
+      id: isEditMode && existingClient ? existingClient.id : `client-${values.code}`,
       code: values.code,
       clientType: values.clientType as ClientType,
       companyName: values.companyName.trim(),
@@ -103,12 +132,27 @@ const NewClientPage = () => {
       country: values.country.trim(),
       notes: values.notes.trim(),
       status: values.status as ClientStatus,
-      updatedAt: new Date().toISOString().slice(0, 10),
+      createdAt: isEditMode && existingClient ? existingClient.createdAt : now,
+      createdBy: isEditMode && existingClient ? existingClient.createdBy : 'local',
+      updatedAt: now,
+      updatedBy: 'local',
+      version: isEditMode && existingClient ? existingClient.version : 1,
     };
 
-    addClient(newClient);
-    showNotification({ message: 'Cliente creato correttamente', severity: 'success' });
-    navigate(appRoutes.clients.path);
+    try {
+      if (isEditMode) {
+        await updateClient(baseClient);
+        showNotification({ message: 'Cliente aggiornato correttamente', severity: 'success' });
+        navigate(appRoutes.clientDetail.path.replace(':clientId', baseClient.id));
+        return;
+      }
+
+      await addClient(baseClient);
+      showNotification({ message: 'Cliente creato correttamente', severity: 'success' });
+      navigate(appRoutes.clients.path);
+    } catch (error) {
+      showNotification({ message: error instanceof Error ? error.message : 'Impossibile salvare il cliente.', severity: 'error' });
+    }
   };
 
   const handleCancel = () => {
@@ -118,9 +162,9 @@ const NewClientPage = () => {
   return (
     <PageContainer>
       <Box>
-        <PageTitle>Nuovo cliente</PageTitle>
+        <PageTitle>{isEditMode ? 'Modifica cliente' : 'Nuovo cliente'}</PageTitle>
         <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
-          Compila i dati per creare una nuova anagrafica cliente.
+          {isEditMode ? 'Aggiorna i dati dell’anagrafica cliente.' : 'Compila i dati per creare una nuova anagrafica cliente.'}
         </Typography>
       </Box>
       <Paper sx={{ p: { xs: 2, md: 3 }, borderRadius: 3 }}>

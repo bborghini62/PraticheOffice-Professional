@@ -1,16 +1,34 @@
-import { Box, Divider, Grid, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { EmptyState, PageContainer, PageTitle, SectionCard } from '../../design/components';
+import { EmptyState, PageContainer, PageTitle, PrimaryButton, SecondaryButton, SectionCard } from '../../design/components';
+import { useNotification } from '../../core/runtime/useNotification';
+import { appRoutes } from '../../core/router/routes';
 import { ClientDetailsTabs } from './components/ClientDetailsTabs';
 import { ClientHeader } from './components/ClientHeader';
-import { getClientById, getClientDisplayName } from './services/clientsService';
+import { deleteClient, getClientById, getClientDisplayName } from './services/clientsService';
 
 export const ClientDetailPage = () => {
   const { clientId } = useParams<{ clientId: string }>();
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
+  const [clientMenuAnchor, setClientMenuAnchor] = useState<null | HTMLElement>(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [, forceRefresh] = useState(0);
 
-  const client = useMemo(() => (clientId ? getClientById(clientId) : undefined), [clientId]);
+  useEffect(() => {
+    const refreshClient = () => forceRefresh((current) => current + 1);
+
+    window.addEventListener('praticheoffice:data-changed', refreshClient);
+    window.addEventListener('storage', refreshClient);
+
+    return () => {
+      window.removeEventListener('praticheoffice:data-changed', refreshClient);
+      window.removeEventListener('storage', refreshClient);
+    };
+  }, []);
+
+  const client = clientId ? getClientById(clientId) : undefined;
 
   if (!client) {
     return (
@@ -22,10 +40,40 @@ export const ClientDetailPage = () => {
 
   const displayName = getClientDisplayName(client);
 
+  const handleEditClient = () => {
+    navigate(appRoutes.clientEdit.path.replace(':clientId', client.id));
+  };
+
+  const handleDeleteClient = async () => {
+    try {
+      await deleteClient(client.id);
+      setIsDeleteConfirmOpen(false);
+      setClientMenuAnchor(null);
+      showNotification({ message: 'Cliente eliminato correttamente.', severity: 'success' });
+      navigate(appRoutes.clients.path);
+    } catch (error) {
+      showNotification({ message: error instanceof Error ? error.message : 'Impossibile eliminare il cliente.', severity: 'error' });
+    }
+  };
+
   return (
     <PageContainer>
       <PageTitle subtitle={`${client.code} • ${displayName}`}>Scheda cliente</PageTitle>
-      <ClientHeader client={client} onEdit={() => navigate('/clienti')} onMoreActions={() => navigate('/clienti')} />
+      <ClientHeader client={client} onEdit={handleEditClient} onMoreActions={(event) => setClientMenuAnchor(event.currentTarget)} />
+      <Menu anchorEl={clientMenuAnchor} open={Boolean(clientMenuAnchor)} onClose={() => setClientMenuAnchor(null)}>
+        <MenuItem onClick={() => { setClientMenuAnchor(null); handleEditClient(); }}>Modifica cliente</MenuItem>
+        <MenuItem onClick={() => { setClientMenuAnchor(null); setIsDeleteConfirmOpen(true); }}>Elimina cliente</MenuItem>
+      </Menu>
+      <Dialog open={isDeleteConfirmOpen} onClose={() => setIsDeleteConfirmOpen(false)} fullWidth maxWidth="sm">
+        <DialogTitle>Elimina cliente</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">Confermi l'eliminazione di {displayName}? L'anagrafica verrà rimossa anche dal cloud.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <SecondaryButton onClick={() => setIsDeleteConfirmOpen(false)}>Annulla</SecondaryButton>
+          <PrimaryButton onClick={handleDeleteClient}>Conferma</PrimaryButton>
+        </DialogActions>
+      </Dialog>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, lg: 8 }}>
           <ClientDetailsTabs client={client} />

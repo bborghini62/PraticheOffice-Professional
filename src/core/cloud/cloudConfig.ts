@@ -37,9 +37,11 @@ export const saveCloudConfig = (config: CloudConfig): CloudConfig => {
   };
 
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+  window.dispatchEvent(new Event('praticheoffice:cloud-config-changed'));
   return normalized;
 };
 
 export const clearCloudConfig = (): void => {
   window.localStorage.removeItem(STORAGE_KEY);
+  window.dispatchEvent(new Event('praticheoffice:cloud-config-changed'));
 };
