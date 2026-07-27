@@ -13,6 +13,7 @@ export type DocumentAttachmentStorageProvider = 'browser-memory' | 'electron-fil
 export interface DocumentAttachment {
   id: string;
   documentId: string;
+  practiceId?: string;
   fileName: string;
   originalFileName: string;
   extension: string;
@@ -21,6 +22,10 @@ export interface DocumentAttachment {
   versionNumber: number;
   storageProvider: DocumentAttachmentStorageProvider;
   storagePath: string;
+  driveFileId?: string;
+  driveUrl?: string;
+  previewUrl?: string;
+  downloadUrl?: string;
   uploadedByUserId: string;
   uploadedByName: string;
   uploadedAt: string;
@@ -40,6 +45,11 @@ export interface DocumentRecord {
   owner: string;
   version: number;
   provider: DocumentProvider;
+  driveFileId?: string;
+  driveUrl?: string;
+  fileName?: string;
+  mimeType?: string;
+  size?: number;
   logicalPath: string;
   documentDate: string;
   dueDate: string;

@@ -1,4 +1,5 @@
 import { addEvent, createTimelineEvent } from '../../timeline/services/timelineService';
+import { callGoogleCloud, loadCloudConfig } from '../../../core/cloud';
 import { loadPersistedArray, savePersistedArray } from '../../../core/persistence/localStorageStore';
 import type { DocumentAttachment, DocumentAttachmentPreviewType, DocumentAttachmentStatus, DocumentAttachmentStorageProvider } from '../documents.types';
 
@@ -10,6 +11,23 @@ const attachmentSeed: DocumentAttachment[] = [];
 const attachmentStore: DocumentAttachment[] = loadPersistedArray(ATTACHMENTS_STORAGE_KEY, attachmentSeed);
 const objectUrlStore: Record<string, string> = {};
 const previewTextStore: Record<string, string> = {};
+
+interface UploadAttachmentCloudResponse {
+  id: string;
+  documentId: string;
+  practiceId: string;
+  version: number;
+  driveFileId: string;
+  driveUrl: string;
+  previewUrl: string;
+  downloadUrl: string;
+  fileName: string;
+  mimeType: string;
+  size: number;
+  uploadedBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const normalizeExtension = (fileName: string): string => {
   const match = fileName.split('.').pop();
@@ -71,6 +89,45 @@ export const validateAttachmentFile = (file: File): string | null => {
   return null;
 };
 
+const toBase64 = async (file: File): Promise<string> => {
+  const buffer = await file.arrayBuffer();
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  for (let index = 0; index < bytes.length; index += 1) {
+    binary += String.fromCharCode(bytes[index]);
+  }
+  return btoa(binary);
+};
+
+const uploadAttachmentToGoogleDrive = async (
+  documentId: string,
+  file: File,
+  attachmentId: string,
+  versionNumber: number,
+  context: AttachmentSubmitContext,
+): Promise<UploadAttachmentCloudResponse> => {
+  const config = loadCloudConfig();
+  const fileBase64 = await toBase64(file);
+
+  return callGoogleCloud<UploadAttachmentCloudResponse>(
+    config,
+    'documents.uploadAttachment',
+    {
+      id: attachmentId,
+      documentId,
+      practiceId: context.practiceId ?? documentId,
+      documentName: context.documentName ?? documentId,
+      category: context.documentCategory ?? 'attachment',
+      status: context.documentStatus ?? 'active',
+      version: versionNumber,
+      fileName: file.name,
+      mimeType: file.type || 'application/octet-stream',
+      size: file.size,
+      fileBase64,
+    },
+  );
+};
+
 export const getAttachmentObjectUrl = (attachmentId: string): string | undefined => objectUrlStore[attachmentId];
 export const getAttachmentPreviewText = (attachmentId: string): string | undefined => previewTextStore[attachmentId];
 
@@ -88,12 +145,16 @@ interface AttachmentSubmitContext {
   storageProvider?: DocumentAttachmentStorageProvider;
   versionNumber?: number;
   practiceId?: string;
+  documentName?: string;
+  documentCategory?: string;
+  documentStatus?: string;
 }
 
 export const addAttachments = async (documentId: string, files: File[], context: AttachmentSubmitContext): Promise<DocumentAttachment[]> => {
   const created: DocumentAttachment[] = [];
   const existing = getAttachmentsByDocumentId(documentId);
   const baseVersion = Math.max(...existing.map((attachment) => attachment.versionNumber), 0);
+  const storageProvider = context.storageProvider ?? documentAttachmentConfig.defaultStorageProvider;
 
   for (const file of files) {
     const validationError = validateAttachmentFile(file);
@@ -102,37 +163,51 @@ export const addAttachments = async (documentId: string, files: File[], context:
     }
 
     const extension = normalizeExtension(file.name);
-    const versionNumber = context.versionNumber ?? baseVersion + 1;
+    const versionNumber = context.versionNumber ?? baseVersion + created.length + 1;
     const attachmentId = `att-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     const previewType = detectPreviewType(file.name, file.type);
-    const objectUrl = URL.createObjectURL(file);
+    const isGoogleDrive = storageProvider === 'google-drive';
+    const cloudUpload = isGoogleDrive
+      ? await uploadAttachmentToGoogleDrive(documentId, file, attachmentId, versionNumber, context)
+      : null;
+
+    const objectUrl = !isGoogleDrive ? URL.createObjectURL(file) : undefined;
     let previewText: string | undefined;
 
-    if (previewType === 'text') {
+    if (!isGoogleDrive && previewType === 'text') {
       previewText = await file.text();
     }
 
     const attachment: DocumentAttachment = {
       id: attachmentId,
       documentId,
-      fileName: file.name,
-      originalFileName: file.name,
+      practiceId: context.practiceId,
+      fileName: cloudUpload?.fileName ?? file.name,
+      originalFileName: cloudUpload?.fileName ?? file.name,
       extension,
-      mimeType: file.type || 'application/octet-stream',
-      size: file.size,
+      mimeType: cloudUpload?.mimeType ?? (file.type || 'application/octet-stream'),
+      size: cloudUpload?.size ?? file.size,
       versionNumber,
-      storageProvider: context.storageProvider ?? documentAttachmentConfig.defaultStorageProvider,
-      storagePath: `browser-memory/${documentId}/${file.name}`,
+      storageProvider,
+      storagePath: isGoogleDrive
+        ? `google-drive/${cloudUpload?.driveFileId ?? attachmentId}`
+        : `browser-memory/${documentId}/${file.name}`,
+      driveFileId: cloudUpload?.driveFileId,
+      driveUrl: cloudUpload?.driveUrl,
+      previewUrl: cloudUpload?.previewUrl,
+      downloadUrl: cloudUpload?.downloadUrl,
       uploadedByUserId: context.userId ?? 'demo-user',
       uploadedByName: context.userName,
-      uploadedAt: new Date().toISOString(),
+      uploadedAt: cloudUpload?.createdAt ?? new Date().toISOString(),
       description: context.description,
       previewType,
       status: 'uploaded',
     };
 
     attachmentStore.push(attachment);
-    objectUrlStore[attachmentId] = objectUrl;
+    if (objectUrl) {
+      objectUrlStore[attachmentId] = objectUrl;
+    }
     if (previewText) {
       previewTextStore[attachmentId] = previewText;
     }

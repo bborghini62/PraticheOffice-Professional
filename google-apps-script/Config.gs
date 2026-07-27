@@ -39,7 +39,7 @@ const PO_HEADERS = Object.freeze({
     'createdBy', 'createdAt', 'updatedBy', 'updatedAt'
   ],
   Documenti: [
-    'id', 'practiceId', 'title', 'category', 'status', 'version', 'storageProvider', 'driveFileId', 'driveUrl', 'fileName',
+    'id', 'documentId', 'practiceId', 'title', 'category', 'status', 'version', 'storageProvider', 'driveFileId', 'driveUrl', 'fileName',
     'mimeType', 'size', 'uploadedBy', 'createdAt', 'updatedAt'
   ],
   Gruppi: ['id', 'nome', 'descrizione', 'responsabileEmail', 'membri', 'attivo', 'createdAt', 'updatedAt'],

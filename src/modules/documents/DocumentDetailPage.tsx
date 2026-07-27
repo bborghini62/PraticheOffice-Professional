@@ -1,16 +1,20 @@
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useNotification } from '../../core/runtime/useNotification';
+import { isCloudAuthError } from '../../core/cloud';
+import { appRoutes } from '../../core/router/routes';
 import { EmptyState, PageContainer, PageTitle, SectionCard, PrimaryButton, SecondaryButton } from '../../design/components';
 import { DocumentDetailsTabs } from './components/DocumentDetailsTabs';
 import { DocumentHeader } from './components/DocumentHeader';
 import { RenameAttachmentDialog } from './components/RenameAttachmentDialog';
 import { deleteDocument, getDocumentById } from './services/documentsService';
-import { addAttachments, createNewVersion, getAttachmentsByDocumentId, getAttachmentObjectUrl, removeAttachment, renameAttachment, updateAttachmentStatus } from './services/documentAttachmentsService';
+import { addAttachments, createNewVersion, getAttachmentById, getAttachmentsByDocumentId, getAttachmentObjectUrl, removeAttachment, renameAttachment, updateAttachmentStatus } from './services/documentAttachmentsService';
 
 export const DocumentDetailPage = () => {
   const { documentId } = useParams<{ documentId: string }>();
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   const documentRecord = useMemo(() => (documentId ? getDocumentById(documentId) : undefined), [documentId]);
   const [attachments, setAttachments] = useState(() => (documentId ? getAttachmentsByDocumentId(documentId) : []));
@@ -25,14 +29,70 @@ export const DocumentDetailPage = () => {
     }
   };
 
+  const getPreviewSource = (attachmentId: string): string | undefined => {
+    const attachment = getAttachmentById(attachmentId);
+    if (!attachment) {
+      return undefined;
+    }
+
+    if (attachment.storageProvider === 'google-drive') {
+      return attachment.previewUrl ?? attachment.driveUrl;
+    }
+
+    return getAttachmentObjectUrl(attachmentId);
+  };
+
+  const getOpenSource = (attachmentId: string): string | undefined => {
+    const attachment = getAttachmentById(attachmentId);
+    if (!attachment) {
+      return undefined;
+    }
+
+    if (attachment.storageProvider === 'google-drive') {
+      return attachment.driveUrl ?? attachment.previewUrl;
+    }
+
+    return getAttachmentObjectUrl(attachmentId);
+  };
+
+  const getDownloadSource = (attachmentId: string): string | undefined => {
+    const attachment = getAttachmentById(attachmentId);
+    if (!attachment) {
+      return undefined;
+    }
+
+    if (attachment.storageProvider === 'google-drive') {
+      return attachment.downloadUrl ?? attachment.driveUrl;
+    }
+
+    return getAttachmentObjectUrl(attachmentId);
+  };
+
   const handleUpload = async (files: File[]) => {
     if (!documentId) {
       return;
     }
 
-    const created = await addAttachments(documentId, files, { userId: 'demo-user', userName: documentRecord?.owner ?? 'Sistema', practiceId: documentRecord?.practiceId });
-    if (created.length > 0) {
-      refreshAttachments();
+    try {
+      const created = await addAttachments(documentId, files, {
+        userId: 'demo-user',
+        userName: documentRecord?.owner ?? 'Sistema',
+        practiceId: documentRecord?.practiceId,
+        documentName: documentRecord?.name,
+        documentCategory: documentRecord?.category,
+        documentStatus: documentRecord?.status,
+        storageProvider: documentRecord?.provider === 'google_drive' ? 'google-drive' : 'browser-memory',
+      });
+      if (created.length > 0) {
+        refreshAttachments();
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Impossibile caricare gli allegati.';
+      setPreviewError(message);
+      showNotification({ message, severity: 'error' });
+      if (isCloudAuthError(error)) {
+        navigate(appRoutes.settings.path);
+      }
     }
   };
 
@@ -41,9 +101,26 @@ export const DocumentDetailPage = () => {
       return;
     }
 
-    const created = await createNewVersion(documentId, file, { userId: 'demo-user', userName: documentRecord?.owner ?? 'Sistema', practiceId: documentRecord?.practiceId });
-    if (created) {
-      refreshAttachments();
+    try {
+      const created = await createNewVersion(documentId, file, {
+        userId: 'demo-user',
+        userName: documentRecord?.owner ?? 'Sistema',
+        practiceId: documentRecord?.practiceId,
+        documentName: documentRecord?.name,
+        documentCategory: documentRecord?.category,
+        documentStatus: documentRecord?.status,
+        storageProvider: documentRecord?.provider === 'google_drive' ? 'google-drive' : 'browser-memory',
+      });
+      if (created) {
+        refreshAttachments();
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Impossibile caricare la nuova versione.';
+      setPreviewError(message);
+      showNotification({ message, severity: 'error' });
+      if (isCloudAuthError(error)) {
+        navigate(appRoutes.settings.path);
+      }
     }
   };
 
@@ -90,7 +167,7 @@ export const DocumentDetailPage = () => {
       return;
     }
 
-    const objectUrl = getAttachmentObjectUrl(attachmentId);
+    const objectUrl = getOpenSource(attachmentId);
     if (!objectUrl) {
       setPreviewError('L’allegato non è ancora disponibile per l’apertura.');
       return;
@@ -107,7 +184,7 @@ export const DocumentDetailPage = () => {
       return;
     }
 
-    const objectUrl = getAttachmentObjectUrl(attachmentId);
+    const objectUrl = getDownloadSource(attachmentId);
     if (!objectUrl) {
       setPreviewError('L’allegato non è ancora disponibile per il download.');
       return;
@@ -189,9 +266,9 @@ export const DocumentDetailPage = () => {
             ) : (
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 320 }}>
                 {attachments.find((attachment) => attachment.id === previewAttachmentId)?.previewType === 'image' ? (
-                  <Box component="img" src={getAttachmentObjectUrl(previewAttachmentId)} alt="Anteprima allegato" sx={{ maxWidth: '100%', maxHeight: 420, objectFit: 'contain', borderRadius: 2 }} />
+                  <Box component="img" src={getPreviewSource(previewAttachmentId)} alt="Anteprima allegato" sx={{ maxWidth: '100%', maxHeight: 420, objectFit: 'contain', borderRadius: 2 }} />
                 ) : (
-                  <Box component="iframe" src={getAttachmentObjectUrl(previewAttachmentId)} title="Anteprima allegato" sx={{ width: '100%', minHeight: 420, border: 'none', borderRadius: 2 }} />
+                  <Box component="iframe" src={getPreviewSource(previewAttachmentId)} title="Anteprima allegato" sx={{ width: '100%', minHeight: 420, border: 'none', borderRadius: 2 }} />
                 )}
               </Box>
             )}

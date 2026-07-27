@@ -2,6 +2,7 @@ import { Box, Paper } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../core/runtime/useNotification';
+import { isCloudAuthError } from '../../core/cloud';
 import { appRoutes } from '../../core/router/routes';
 import { PageContainer, PageTitle } from '../../design/components';
 import { DocumentForm, type DocumentFormErrors, type DocumentFormValues } from './components/DocumentForm';
@@ -106,7 +107,12 @@ const NewDocumentPage = () => {
       notes: values.notes.trim(),
     };
 
-    addDocument(newDocument);
+    if (newDocument.provider === 'google_drive' && selectedFiles.length === 0) {
+      const message = 'Per il provider Google Drive devi allegare almeno un file.';
+      setAttachmentMessage(message);
+      showNotification({ message, severity: 'warning' });
+      return;
+    }
 
     if (selectedFiles.length > 0) {
       try {
@@ -115,15 +121,24 @@ const NewDocumentPage = () => {
           userName: newDocument.owner,
           description: 'Allegato iniziale del documento',
           practiceId: newDocument.practiceId,
+          documentName: newDocument.name,
+          documentCategory: newDocument.category,
+          documentStatus: newDocument.status,
+          storageProvider: newDocument.provider === 'google_drive' ? 'google-drive' : 'browser-memory',
         });
         setAttachmentMessage(undefined);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Impossibile caricare gli allegati.';
         setAttachmentMessage(message);
         showNotification({ message, severity: 'warning' });
+        if (isCloudAuthError(error)) {
+          navigate(appRoutes.settings.path);
+        }
         return;
       }
     }
+
+    addDocument(newDocument);
 
     showNotification({ message: 'Documento registrato correttamente', severity: 'success' });
 

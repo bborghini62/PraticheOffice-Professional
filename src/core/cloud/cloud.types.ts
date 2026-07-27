@@ -3,6 +3,14 @@ export interface CloudConfig {
   googleClientId: string;
 }
 
+export interface CloudSession {
+  idToken: string;
+  email: string;
+  name: string;
+  expiresAt: number | null;
+  updatedAt: number;
+}
+
 export interface CloudHealthData {
   service: string;
   version: string;
@@ -23,4 +31,10 @@ export interface CloudApiResponse<T> {
   data?: T;
   error?: CloudApiError;
   requestId?: string;
+}
+
+export interface GoogleCredentialPayload {
+  email?: string;
+  name?: string;
+  exp?: number;
 }

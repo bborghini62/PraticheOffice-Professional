@@ -1,5 +1,26 @@
 import { normalizeWebAppUrl } from './cloudConfig';
+import { clearGoogleIdToken, getGoogleIdToken } from './cloudSession';
 import type { CloudApiResponse, CloudConfig, CloudHealthData } from './cloud.types';
+
+class CloudRequestError extends Error {
+  readonly code?: string;
+  readonly requestId?: string;
+
+  constructor(message: string, options?: { code?: string; requestId?: string }) {
+    super(message);
+    this.name = 'CloudRequestError';
+    this.code = options?.code;
+    this.requestId = options?.requestId;
+  }
+}
+
+export const isCloudAuthError = (error: unknown): boolean => {
+  if (!(error instanceof CloudRequestError)) {
+    return false;
+  }
+
+  return error.code === 'AUTH_REQUIRED' || error.code === 'INVALID_GOOGLE_TOKEN';
+};
 
 const createRequestId = (): string =>
   typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
@@ -16,7 +37,18 @@ const parseResponse = async <T>(response: Response): Promise<CloudApiResponse<T>
 
   const parsed = body as CloudApiResponse<T>;
   if (!response.ok || !parsed.ok) {
-    throw new Error(parsed.error?.message ?? `Errore cloud HTTP ${response.status}.`);
+    const code = parsed.error?.code;
+    const message = parsed.error?.message ?? `Errore cloud HTTP ${response.status}.`;
+
+    if (code === 'AUTH_REQUIRED' || code === 'INVALID_GOOGLE_TOKEN') {
+      clearGoogleIdToken();
+      throw new CloudRequestError('Sessione Google scaduta o non valida. Vai in Impostazioni e accedi di nuovo con Google.', {
+        code,
+        requestId: parsed.requestId,
+      });
+    }
+
+    throw new CloudRequestError(message, { code, requestId: parsed.requestId });
   }
 
   return parsed;
@@ -48,14 +80,17 @@ export const callGoogleCloud = async <T>(
   config: CloudConfig,
   action: string,
   payload: Record<string, unknown>,
-  idToken: string,
+  idToken?: string,
 ): Promise<T> => {
   const webAppUrl = normalizeWebAppUrl(config.webAppUrl);
   if (!webAppUrl) {
     throw new Error('Configurazione cloud mancante.');
   }
-  if (!idToken) {
-    throw new Error('Sessione Google mancante. Accedi nuovamente.');
+  const resolvedToken = idToken ?? getGoogleIdToken();
+  if (!resolvedToken) {
+    throw new CloudRequestError('Sessione Google mancante o scaduta. Vai in Impostazioni e accedi con Google.', {
+      code: 'AUTH_REQUIRED',
+    });
   }
 
   const requestId = createRequestId();
@@ -65,7 +100,7 @@ export const callGoogleCloud = async <T>(
     headers: {
       'Content-Type': 'text/plain;charset=utf-8',
     },
-    body: JSON.stringify({ action, payload, idToken, requestId }),
+    body: JSON.stringify({ action, payload, idToken: resolvedToken, requestId }),
   });
 
   const parsed = await parseResponse<T>(response);

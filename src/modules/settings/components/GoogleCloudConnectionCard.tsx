@@ -1,28 +1,49 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Box, Button, Chip, Stack, TextField, Typography } from '@mui/material';
 import CloudDoneRounded from '@mui/icons-material/CloudDoneRounded';
 import CloudOffRounded from '@mui/icons-material/CloudOffRounded';
 import SyncRounded from '@mui/icons-material/SyncRounded';
 import { SectionCard } from '../../../design/components';
-import { loadCloudConfig, saveCloudConfig, testGoogleCloudConnection } from '../../../core/cloud';
-import type { CloudConfig, CloudHealthData } from '../../../core/cloud';
+import {
+  clearGoogleIdToken,
+  disconnectGoogleIdentity,
+  getGoogleCloudSession,
+  isGoogleCloudSessionExpired,
+  loadCloudConfig,
+  renderGoogleSignInButton,
+  saveCloudConfig,
+  saveGoogleIdToken,
+  testGoogleCloudConnection,
+} from '../../../core/cloud';
+import type { CloudConfig, CloudHealthData, CloudSession } from '../../../core/cloud';
 
 interface GoogleCloudConnectionCardProps {
   isAdmin: boolean;
 }
 
 type TestStatus = 'idle' | 'testing' | 'success' | 'error';
+type GoogleAuthStatus = 'disconnected' | 'connecting' | 'connected' | 'expired';
 
 export const GoogleCloudConnectionCard = ({ isAdmin }: GoogleCloudConnectionCardProps) => {
   const [config, setConfig] = useState<CloudConfig>(() => loadCloudConfig());
   const [status, setStatus] = useState<TestStatus>('idle');
   const [message, setMessage] = useState('');
+  const [googleSignInMessage, setGoogleSignInMessage] = useState('');
   const [health, setHealth] = useState<CloudHealthData | null>(null);
+  const [cloudSession, setCloudSession] = useState<CloudSession | null>(() => getGoogleCloudSession());
+  const googleButtonContainerRef = useRef<HTMLDivElement | null>(null);
+  const [googleAuthStatus, setGoogleAuthStatus] = useState<GoogleAuthStatus>(() => {
+    if (isGoogleCloudSessionExpired()) {
+      return 'expired';
+    }
+    return getGoogleCloudSession() ? 'connected' : 'disconnected';
+  });
 
   const updateField = (field: keyof CloudConfig, value: string) => {
     setConfig((current) => ({ ...current, [field]: value }));
     setStatus('idle');
     setMessage('');
+    setGoogleSignInMessage('');
     setHealth(null);
   };
 
@@ -49,7 +70,96 @@ export const GoogleCloudConnectionCard = ({ isAdmin }: GoogleCloudConnectionCard
     }
   };
 
+  useEffect(() => {
+    const container = googleButtonContainerRef.current;
+    if (!isAdmin || !container) {
+      return;
+    }
+
+    let active = true;
+    container.replaceChildren();
+
+    const clientId = config.googleClientId.trim();
+    if (!clientId) {
+      setGoogleAuthStatus('disconnected');
+      setGoogleSignInMessage('Google OAuth Client ID mancante. Configuralo nelle Impostazioni Cloud.');
+      return;
+    }
+
+    const setupButton = async () => {
+      try {
+        await renderGoogleSignInButton({
+          container,
+          googleClientId: clientId,
+          onCredential: (credential) => {
+            if (!active) {
+              return;
+            }
+
+            const session = saveGoogleIdToken(credential);
+            setCloudSession(session);
+            setGoogleAuthStatus('connected');
+            setStatus('success');
+            setMessage(`Collegato come ${session.name} (${session.email}).`);
+            setGoogleSignInMessage('');
+          },
+          onError: (error) => {
+            if (!active) {
+              return;
+            }
+
+            const detail = error instanceof Error ? error.message : 'Impossibile completare il login Google.';
+            setGoogleAuthStatus('disconnected');
+            setGoogleSignInMessage(detail === 'Google non ha restituito una credential valida.' ? 'Credential mancante: seleziona un account Google e riprova.' : detail);
+          },
+        });
+
+        if (!active) {
+          return;
+        }
+
+        setGoogleAuthStatus(cloudSession ? 'connected' : 'disconnected');
+        setGoogleSignInMessage('');
+      } catch (error) {
+        if (!active) {
+          return;
+        }
+
+        const detail = error instanceof Error ? error.message : 'Pulsante Google non caricato.';
+        setGoogleAuthStatus('disconnected');
+        setGoogleSignInMessage(detail);
+      }
+    };
+
+    void setupButton();
+
+    return () => {
+      active = false;
+      container.replaceChildren();
+    };
+  }, [cloudSession, config.googleClientId, isAdmin]);
+
+  const handleGoogleDisconnect = async () => {
+    const email = cloudSession?.email;
+    try {
+      await disconnectGoogleIdentity(email);
+    } catch {
+      // Keep local disconnect behavior even if revoke fails.
+    }
+
+    clearGoogleIdToken();
+    setCloudSession(null);
+    setGoogleAuthStatus('disconnected');
+    setStatus('idle');
+    setMessage('Sessione Google disconnessa.');
+  };
+
   const cloudReady = health?.configured === true;
+  const googleConnected = googleAuthStatus === 'connected' && Boolean(cloudSession);
+  const googleExpired = googleAuthStatus === 'expired';
+  const googleConnecting = googleAuthStatus === 'connecting';
+
+  const showGoogleSignInError = googleSignInMessage.trim().length > 0;
 
   return (
     <SectionCard>
@@ -68,6 +178,12 @@ export const GoogleCloudConnectionCard = ({ isAdmin }: GoogleCloudConnectionCard
             label={cloudReady ? 'Cloud configurato' : 'Cloud da configurare'}
             color={cloudReady ? 'success' : 'default'}
             variant={cloudReady ? 'filled' : 'outlined'}
+          />
+          <Chip
+            icon={googleConnected ? <CloudDoneRounded /> : <CloudOffRounded />}
+            label={googleConnected ? 'Collegato come utente Google' : googleConnecting ? 'Collegamento Google in corso' : googleExpired ? 'Sessione Google scaduta' : 'Utente Google non collegato'}
+            color={googleConnected ? 'success' : googleConnecting || googleExpired ? 'warning' : 'default'}
+            variant={googleConnected ? 'filled' : 'outlined'}
           />
         </Box>
 
@@ -91,12 +207,38 @@ export const GoogleCloudConnectionCard = ({ isAdmin }: GoogleCloudConnectionCard
           helperText="Non è una password: servirà per identificare in sicurezza gli utenti Google."
         />
 
+        <TextField
+          label="Sessione Google"
+          value={cloudSession ? `${cloudSession.name} <${cloudSession.email}>` : 'Nessuna sessione attiva'}
+          fullWidth
+          disabled
+          helperText={cloudSession?.expiresAt
+            ? `Scadenza sessione: ${new Date(cloudSession.expiresAt).toLocaleString('it-IT')}.`
+            : cloudSession
+              ? 'Sessione attiva (scadenza non disponibile nel token).'
+              : googleExpired
+                ? 'Sessione scaduta: accedi di nuovo con Google.'
+                : 'Usa "Accedi con Google" per autorizzare le chiamate cloud.'}
+        />
+
+        <Stack spacing={1}>
+          <Typography variant="body2" color="text.secondary">
+            Accesso esplicito tramite pulsante ufficiale Google.
+          </Typography>
+          <Box
+            ref={googleButtonContainerRef}
+            sx={{ minHeight: 44, display: 'flex', alignItems: 'center' }}
+          />
+          {showGoogleSignInError ? <Alert severity="error">{googleSignInMessage}</Alert> : null}
+        </Stack>
+
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
           {isAdmin ? (
             <Button variant="contained" onClick={handleSave} disabled={!config.webAppUrl.trim()}>
               Salva configurazione
             </Button>
           ) : null}
+          {isAdmin ? <Button variant="text" color="inherit" onClick={handleGoogleDisconnect} disabled={!cloudSession}>Disconnetti Google</Button> : null}
           <Button
             variant="outlined"
             startIcon={<SyncRounded />}

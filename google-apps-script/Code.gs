@@ -45,6 +45,8 @@ function routeAction_(action, payload, user) {
       return savePractice_(payload, user, true);
     case 'users.createOrUpdate':
       return addUser_(payload, user);
+    case 'documents.uploadAttachment':
+      return uploadDocumentAttachment_(payload, user);
     default:
       throw apiError_('UNKNOWN_ACTION', 'Operazione cloud non riconosciuta: ' + action);
   }

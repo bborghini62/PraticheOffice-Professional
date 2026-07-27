@@ -5,12 +5,17 @@ function setupPraticheOfficeCloud(adminEmail, googleClientId, allowedDomain) {
     throw new Error('Indica l’email dell’amministratore come primo parametro.');
   }
 
+  // Do not attempt to enable Drive API programmatically.
+  // The setup only verifies that DriveApp is usable with current permissions.
+  assertDriveServiceAvailable_();
+
   let rootFolder;
   const existingRootId = properties.getProperty(PO_PROPERTIES.ROOT_FOLDER_ID);
   if (existingRootId) {
-    rootFolder = DriveApp.getFolderById(existingRootId);
+    rootFolder = getAccessibleFolderById_(existingRootId, 'cartella root configurata');
   } else {
     rootFolder = DriveApp.createFolder('PraticheOffice Cloud');
+    assertFolderAccessible_(rootFolder, 'cartella root creata');
     properties.setProperty(PO_PROPERTIES.ROOT_FOLDER_ID, rootFolder.getId());
   }
 
@@ -99,13 +104,41 @@ function ensureSubfolderProperty_(rootFolder, folderName, propertyName) {
   const properties = PropertiesService.getScriptProperties();
   const existingId = properties.getProperty(propertyName);
   if (existingId) {
-    return DriveApp.getFolderById(existingId);
+    return getAccessibleFolderById_(existingId, 'sottocartella configurata: ' + folderName);
   }
 
   const matchingFolders = rootFolder.getFoldersByName(folderName);
   const folder = matchingFolders.hasNext() ? matchingFolders.next() : rootFolder.createFolder(folderName);
   properties.setProperty(propertyName, folder.getId());
   return folder;
+}
+
+function assertDriveServiceAvailable_() {
+  try {
+    // Innocuous check: confirms DriveApp is callable in this execution context.
+    DriveApp.getRootFolder().getId();
+  } catch (error) {
+    throw new Error('Google Drive non utilizzabile in questo script. Verifica che Drive sia accessibile nel progetto Apps Script e riprova.');
+  }
+}
+
+function getAccessibleFolderById_(folderId, contextLabel) {
+  try {
+    const folder = DriveApp.getFolderById(folderId);
+    assertFolderAccessible_(folder, contextLabel);
+    return folder;
+  } catch (error) {
+    throw new Error('Cartella Drive non accessibile (' + contextLabel + ') [' + folderId + ']. Verifica ID cartella e permessi di accesso.');
+  }
+}
+
+function assertFolderAccessible_(folder, contextLabel) {
+  try {
+    folder.getId();
+    folder.getName();
+  } catch (error) {
+    throw new Error('Cartella Drive non accessibile (' + contextLabel + '). Verifica permessi di lettura/scrittura.');
+  }
 }
 
 function ensureInitialAdmin_(email) {
