@@ -23,7 +23,7 @@ export const WorkflowHistory = ({ history }: WorkflowHistoryProps) => (
               {entry.actor} · {new Date(entry.createdAt).toLocaleString('it-IT')}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              {entry.note ?? 'Transizione workflow applicata.'}
+              {entry.note ?? 'Transizione del flusso di lavoro applicata.'}
             </Typography>
           </Box>
         ))

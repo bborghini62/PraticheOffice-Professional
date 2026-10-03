@@ -6,7 +6,7 @@ import type { WorkflowDefinition, WorkflowTransitionRecord } from '../workflow.t
 const workflowDefinitions: WorkflowDefinition[] = [
   {
     id: 'workflow-standard',
-    name: 'Workflow standard',
+    name: 'Flusso di lavoro standard',
     description: 'Gestione operativa delle pratiche standard.',
     practiceType: 'standard',
     initialStageId: 'stage-open',

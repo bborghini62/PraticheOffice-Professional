@@ -13,7 +13,7 @@ export interface ActivityItem {
   title: string;
   detail: string;
   time: string;
-  status: 'Completed' | 'In progress' | 'Scheduled';
+  status: 'Completata' | 'In corso' | 'Programmata';
 }
 
 export interface SettingsPreference {

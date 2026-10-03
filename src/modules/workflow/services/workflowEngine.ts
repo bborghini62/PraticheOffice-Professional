@@ -12,7 +12,7 @@ export const createWorkflowSelectionState = (practiceId: string, workflowId: str
 export const executeWorkflowTransition = (state: WorkflowSelectionState, actor: string): WorkflowTransitionResult => {
   const workflow = getWorkflowDefinitionById(state.workflowId);
   if (!workflow) {
-    return { success: false, message: 'Workflow non trovato.' };
+    return { success: false, message: 'Flusso di lavoro non trovato.' };
   }
 
   const transitionRecord = applyWorkflowTransition(state.workflowId, state.practiceId, state.transitionId, actor, state.note);

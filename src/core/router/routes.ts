@@ -25,7 +25,7 @@ export const appRoutes: AppRouteConfig = {
   },
   workflow: {
     path: '/pratiche/:practiceId/workflow',
-    title: 'Workflow',
+    title: 'Flusso di lavoro',
   },
   clients: {
     path: '/clienti',
@@ -77,7 +77,7 @@ export const appRoutes: AppRouteConfig = {
   },
   report: {
     path: '/report',
-    title: 'Report',
+    title: 'Reportistica',
   },
   users: {
     path: '/utenti',

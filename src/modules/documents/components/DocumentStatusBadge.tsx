@@ -4,7 +4,4 @@ interface DocumentStatusBadgeProps {
   status: string;
 }
 
-export const DocumentStatusBadge = ({ status }: DocumentStatusBadgeProps) => {
-  const normalized = status === 'draft' ? 'draft' : status === 'active' ? 'active' : status === 'signed' ? 'approved' : status === 'expired' ? 'cancelled' : 'archived';
-  return <StatusBadge status={normalized} />;
-};
+export const DocumentStatusBadge = ({ status }: DocumentStatusBadgeProps) => <StatusBadge status={status} />;

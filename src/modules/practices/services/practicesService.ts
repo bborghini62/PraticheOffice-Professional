@@ -116,7 +116,7 @@ export const addPractice = (practice: PracticeRecord): PracticeRecord[] => {
       practice.id,
       'practice_created',
       'Pratica creata',
-      `La pratica ${practice.subject} è stata avviata e inserita nel workflow operativo.`,
+      `La pratica ${practice.subject} è stata avviata e inserita nel flusso di lavoro operativo.`,
       practice.responsible || 'Sistema',
       new Date().toISOString(),
     ),

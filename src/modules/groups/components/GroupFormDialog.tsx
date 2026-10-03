@@ -1,7 +1,7 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Stack, TextField } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { PrimaryButton, SecondaryButton } from '../../../design/components';
-import { getUsers } from '../../users/services/usersService';
+import { getUserRoleLabel, getUsers } from '../../users/services/usersService';
 import type { GroupRecord } from '../groups.types';
 
 interface GroupFormDialogProps {
@@ -18,7 +18,7 @@ export const GroupFormDialog = ({ open, group, onClose, onSubmit }: GroupFormDia
   const [managerUserId, setManagerUserId] = useState('');
   const [memberUserIds, setMemberUserIds] = useState<string[]>([]);
   const [status, setStatus] = useState<GroupRecord['status']>('active');
-  const userOptions = useMemo(() => getUsers().map((user) => ({ value: user.id, label: `${user.displayName} (${user.role})` })), []);
+  const userOptions = useMemo(() => getUsers().map((user) => ({ value: user.id, label: `${user.displayName} (${getUserRoleLabel(user.role)})` })), []);
 
   useEffect(() => {
     if (!group) {

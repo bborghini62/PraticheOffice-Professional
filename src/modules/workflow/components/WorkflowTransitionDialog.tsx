@@ -26,11 +26,11 @@ export const WorkflowTransitionDialog = ({ workflow, transitions, open, onClose,
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Nuova transizione workflow</DialogTitle>
+      <DialogTitle>Nuova transizione del flusso</DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ pt: 1 }}>
           <Typography variant="body2" color="text.secondary">
-            Seleziona la transizione da applicare al workflow corrente.
+            Seleziona la transizione da applicare al flusso di lavoro corrente.
           </Typography>
           <TextField select label="Transizione" value={transitionId} onChange={(event) => setTransitionId(event.target.value)} fullWidth>
             {availableTransitions.map((transition: WorkflowTransition) => (

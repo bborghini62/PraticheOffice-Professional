@@ -20,10 +20,10 @@ const WorkflowPage = () => {
   if (!practice || !workflow) {
     return (
       <PageContainer>
-        <PageTitle subtitle="Dettaglio workflow non disponibile.">Workflow</PageTitle>
+        <PageTitle subtitle="Dettaglio del flusso di lavoro non disponibile.">Flusso di lavoro</PageTitle>
         <SectionCard>
           <Typography variant="body2" color="text.secondary">
-            Seleziona una pratica per vedere il workflow associato.
+            Seleziona una pratica per vedere il flusso di lavoro associato.
           </Typography>
         </SectionCard>
       </PageContainer>
@@ -46,7 +46,7 @@ const WorkflowPage = () => {
   return (
     <PageContainer>
       <Box>
-        <PageTitle subtitle="Gestione del ciclo di vita delle pratiche tramite workflow configurabile.">Workflow</PageTitle>
+        <PageTitle subtitle="Gestione del ciclo di vita delle pratiche tramite flusso di lavoro configurabile.">Flusso di lavoro</PageTitle>
       </Box>
 
       <Stack spacing={2.5}>

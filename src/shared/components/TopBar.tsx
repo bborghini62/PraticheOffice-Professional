@@ -34,7 +34,7 @@ const pageMeta: Record<string, { title: string; subtitle: string }> = {
   [appRoutes.documentDetail.path]: { title: 'Scheda documento', subtitle: 'Dettaglio del documento selezionato' },
   [appRoutes.practiceDocumentsNew.path]: { title: 'Nuovo documento', subtitle: 'Registrazione di un nuovo allegato' },
   [appRoutes.calendar.path]: { title: 'Calendario', subtitle: 'Agenda operativa per pratiche, attività e documenti' },
-  [appRoutes.report.path]: { title: 'Report', subtitle: 'Panoramica dei risultati e delle performance' },
+  [appRoutes.report.path]: { title: 'Reportistica', subtitle: 'Panoramica dei risultati e delle performance' },
   [appRoutes.settings.path]: { title: 'Impostazioni', subtitle: 'Personalizzazione dell’esperienza operativa' },
   [appRoutes.help.path]: { title: 'Aiuto', subtitle: 'Supporto e indicazioni rapide' },
 };
@@ -64,7 +64,7 @@ const getCurrentPageMeta = (pathname: string) => {
     }
   }
 
-  return pageMeta[pathname] ?? { title: 'PraticheOffice', subtitle: 'Workspace operativo professionale' };
+  return pageMeta[pathname] ?? { title: 'PraticheOffice', subtitle: 'Ambiente operativo professionale' };
 };
 
 export const TopBar = ({ onMenuOpen }: TopBarProps) => {

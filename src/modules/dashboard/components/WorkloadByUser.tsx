@@ -1,6 +1,7 @@
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { appRoutes } from '../../../core/router/routes';
+import { getUserRoleLabel } from '../../users/services/usersService';
 import type { DashboardWorkloadItem } from '../dashboard.types';
 import { DashboardEmptyState } from './DashboardEmptyState';
 import { DashboardSection } from './DashboardSection';
@@ -38,7 +39,7 @@ export const WorkloadByUser = ({ items }: WorkloadByUserProps) => {
                   {item.group}
                 </Typography>
               </Box>
-              <Chip label={item.role} size="small" variant="outlined" />
+              <Chip label={getUserRoleLabel(item.role)} size="small" variant="outlined" />
             </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1.25 }}>
               <Chip label={`Attività aperte: ${item.openActivities}`} size="small" />

@@ -5,8 +5,10 @@ interface UserStatusBadgeProps {
   status: UserStatus;
 }
 
-export const UserStatusBadge = ({ status }: UserStatusBadgeProps) => {
-  const resolvedStatus = status.toLowerCase();
-
-  return <StatusBadge status={resolvedStatus} />;
+const statusMap: Record<UserStatus, string> = {
+  Active: 'active',
+  Suspended: 'suspended',
+  Disabled: 'disabled',
 };
+
+export const UserStatusBadge = ({ status }: UserStatusBadgeProps) => <StatusBadge status={statusMap[status]} />;

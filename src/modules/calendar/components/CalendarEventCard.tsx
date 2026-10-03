@@ -1,17 +1,11 @@
 import { Box, Chip, Typography } from '@mui/material';
+import { getStatusLabel } from '../../../design/components/statusLabels';
 import type { CalendarEvent } from '../calendar.types';
 
 interface CalendarEventCardProps {
   event: CalendarEvent;
   onClick?: () => void;
 }
-
-const eventLabels: Record<string, string> = {
-  practice: 'Pratica',
-  activity: 'Attività',
-  document: 'Documento',
-  deadline: 'Scadenza',
-};
 
 export const CalendarEventCard = ({ event, onClick }: CalendarEventCardProps) => (
   <Box
@@ -28,8 +22,8 @@ export const CalendarEventCard = ({ event, onClick }: CalendarEventCardProps) =>
     }}
   >
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-      <Chip size="small" label={eventLabels[event.type]} color={event.isUrgent ? 'error' : event.isOverdue ? 'warning' : 'default'} />
-      <Chip size="small" label={event.status} color="default" />
+      <Chip size="small" label={getStatusLabel(event.type)} color={event.isUrgent ? 'error' : event.isOverdue ? 'warning' : 'default'} />
+      <Chip size="small" label={getStatusLabel(event.status)} color="default" />
     </Box>
     <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
       {event.title}

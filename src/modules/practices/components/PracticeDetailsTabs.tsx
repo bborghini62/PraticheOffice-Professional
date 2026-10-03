@@ -39,7 +39,7 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
     urgent: 'Urgente',
   };
 
-  const tabItems = ['Riepilogo', 'Attività', 'Documenti', 'Comunicazioni', 'Scadenze', 'Timeline', 'Storico', 'Permessi'];
+  const tabItems = ['Riepilogo', 'Attività', 'Documenti', 'Comunicazioni', 'Scadenze', 'Cronologia', 'Storico', 'Permessi'];
 
   const activities = getActivitiesByPracticeId(practice.id);
   const timelineEvents = getEventsByPracticeId(practice.id);
@@ -202,7 +202,7 @@ export const PracticeDetailsTabs = ({ practice }: PracticeDetailsTabsProps) => {
 
       {activeTab === 5 && (
         <Box sx={{ display: 'grid', gap: 1.25 }}>
-          <Typography variant="subtitle2">Timeline</Typography>
+          <Typography variant="subtitle2">Cronologia</Typography>
           <PracticeTimeline events={timelineEvents} />
         </Box>
       )}
