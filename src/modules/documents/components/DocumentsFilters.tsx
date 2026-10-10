@@ -1,4 +1,5 @@
 import { Box, Button, Chip, Stack } from '@mui/material';
+import { getStatusLabel } from '../../../design/components/statusLabels';
 import type { DocumentsFilters as DocumentsFilterState } from '../documents.types';
 
 interface DocumentsFiltersProps {
@@ -14,11 +15,11 @@ export const DocumentsFilters = ({ filters, onFiltersChange, onReset }: Document
     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2 }}>
       <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
         <Chip label="Filtri documenti" color={hasActiveFilters ? 'primary' : 'default'} variant={hasActiveFilters ? 'filled' : 'outlined'} />
-        <Chip label={filters.status === 'all' ? 'Tutti gli stati' : filters.status} variant="outlined" />
-        <Chip label={filters.category === 'all' ? 'Tutte le categorie' : filters.category} variant="outlined" />
+        <Chip label={filters.status === 'all' ? 'Tutti gli stati' : getStatusLabel(filters.status)} variant="outlined" />
+        <Chip label={filters.category === 'all' ? 'Tutte le categorie' : getStatusLabel(filters.category)} variant="outlined" />
       </Stack>
       <Button variant="outlined" size="small" onClick={() => onFiltersChange({ ...filters, search: '', status: 'all', category: 'all', practiceId: 'all', owner: 'all' })}>
-        Reset
+        Azzera
       </Button>
       {hasActiveFilters ? <Button variant="text" size="small" onClick={onReset}>Chiudi filtri</Button> : null}
     </Box>

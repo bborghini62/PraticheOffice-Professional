@@ -74,7 +74,7 @@ export const DocumentForm = ({ values, errors, onChange, onSubmit, onCancel, sel
           </TextField>
           <TextField label="Proprietario" value={values.owner} onChange={(event) => onChange('owner', event.target.value)} error={Boolean(errors.owner)} helperText={errors.owner} required fullWidth />
           <TextField label="Versione iniziale" type="number" slotProps={{ htmlInput: { min: 1 } }} value={values.version} onChange={(event) => onChange('version', event.target.value)} error={Boolean(errors.version)} helperText={errors.version} required fullWidth />
-          <TextField select label="Provider di archiviazione" value={values.provider} onChange={(event) => onChange('provider', event.target.value)} fullWidth>
+          <TextField select label="Fornitore di archiviazione" value={values.provider} onChange={(event) => onChange('provider', event.target.value)} fullWidth>
             <MenuItem value="local">Archivio locale</MenuItem>
             <MenuItem value="google_drive">Google Drive</MenuItem>
             <MenuItem value="dropbox">Dropbox</MenuItem>

@@ -1,6 +1,7 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import { useRef, useState } from 'react';
 import { PrimaryButton, SecondaryButton, SectionCard } from '../../../design/components';
+import { getStatusLabel } from '../../../design/components/statusLabels';
 import { AttachmentList } from './AttachmentList';
 import type { DocumentAttachment, DocumentRecord } from '../documents.types';
 
@@ -38,6 +39,7 @@ export const DocumentDetailsTabs = ({ document, attachments, onUpload, onNewVers
 
   const providerLabel =
     document.provider === 'local' ? 'Archivio locale' : document.provider === 'google_drive' ? 'Google Drive' : 'Dropbox';
+  const statusLabel = getStatusLabel(document.status);
 
   const handleUploadSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -78,10 +80,10 @@ export const DocumentDetailsTabs = ({ document, attachments, onUpload, onNewVers
               { label: 'Codice', value: document.code },
               { label: 'Pratica collegata', value: document.practiceId },
               { label: 'Categoria', value: categoryLabel },
-              { label: 'Stato', value: document.status },
+              { label: 'Stato', value: statusLabel },
               { label: 'Versione corrente', value: document.version },
               { label: 'Proprietario', value: document.owner },
-              { label: 'Provider', value: providerLabel },
+              { label: 'Fornitore', value: providerLabel },
               { label: 'Percorso logico', value: document.logicalPath },
               { label: 'Data documento', value: new Date(document.documentDate).toLocaleDateString('it-IT') },
               { label: 'Data scadenza', value: new Date(document.dueDate).toLocaleDateString('it-IT') },

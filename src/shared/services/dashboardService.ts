@@ -37,23 +37,23 @@ export const recentActivities: ActivityItem[] = [
   {
     id: 'a1',
     title: 'Aggiornamento approvato',
-    detail: 'Revisionato il flusso di approvazione della pratica di procurement.',
+    detail: 'Revisionato il flusso di approvazione della pratica di approvvigionamento.',
     time: '10 minuti fa',
-    status: 'Completed',
+    status: 'Completata',
   },
   {
     id: 'a2',
-    title: 'Package documenti assegnato',
+    title: 'Pacchetto documenti assegnato',
     detail: 'Tre nuove pratiche inviate al team legale.',
     time: '42 minuti fa',
-    status: 'In progress',
+    status: 'In corso',
   },
   {
     id: 'a3',
     title: 'Controllo di conformità',
     detail: 'Verifica programmata per l’archivio regionale.',
     time: 'Oggi, 14:30',
-    status: 'Scheduled',
+    status: 'Programmata',
   },
 ];
 

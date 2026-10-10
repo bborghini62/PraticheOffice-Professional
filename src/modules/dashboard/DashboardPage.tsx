@@ -37,7 +37,7 @@ const DashboardPage = () => {
     <PageContainer>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2 }}>
         <Box>
-          <PageTitle subtitle="Panoramica operativa di PraticheOffice Professional">Dashboard</PageTitle>
+          <PageTitle subtitle="Panoramica operativa di PraticheOffice Professional">Cruscotto</PageTitle>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
           <SecondaryButton onClick={() => navigate(appRoutes.practices.path)}>Apri pratiche</SecondaryButton>
@@ -45,7 +45,7 @@ const DashboardPage = () => {
         </Box>
       </Box>
 
-      <DashboardSection title="Filtri dashboard" description="Seleziona intervallo temporale e contesto di visibilità.">
+      <DashboardSection title="Filtri cruscotto" description="Seleziona intervallo temporale e contesto di visibilità.">
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
           <FormControl size="small" sx={{ minWidth: 180 }}>
             <InputLabel id="dashboard-period-label">Intervallo</InputLabel>

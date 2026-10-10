@@ -18,14 +18,14 @@ export const RecentTimelineEvents = ({ items }: RecentTimelineEventsProps) => {
 
   if (items.length === 0) {
     return (
-      <DashboardSection title="Ultimi eventi Timeline" description="Non ci sono eventi di timeline pertinenti al filtro selezionato.">
+      <DashboardSection title="Ultimi eventi della cronologia" description="Non ci sono eventi di cronologia pertinenti al filtro selezionato.">
         <DashboardEmptyState title="Nessun evento recente" description="Gli eventi operativi non sono disponibili in questo momento." />
       </DashboardSection>
     );
   }
 
   return (
-    <DashboardSection title="Ultimi eventi Timeline" description="Gli ultimi 8 eventi globali, ordinati per data e ora.">
+    <DashboardSection title="Ultimi eventi della cronologia" description="Gli ultimi 8 eventi globali, ordinati per data e ora.">
       <Stack spacing={1.25}>
         {items.map((item) => (
           <Box key={item.id} role="button" tabIndex={0} onClick={() => handleOpenPractice(item.practiceId)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleOpenPractice(item.practiceId); } }} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 1.75, cursor: 'pointer', transition: 'background-color 0.2s ease', '&:hover': { bgcolor: 'grey.50' } }}>

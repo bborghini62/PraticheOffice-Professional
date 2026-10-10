@@ -99,7 +99,7 @@ const initialUsers: UserRecord[] = [
     phone: '+39 333 222 3333',
     qualification: 'Analista report',
     department: 'Controllo',
-    group: 'Reporting',
+    group: 'Reportistica',
     role: 'Viewer',
     status: 'Suspended',
     language: 'it-IT',

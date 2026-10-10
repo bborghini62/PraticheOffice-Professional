@@ -26,7 +26,7 @@ export const AppBootstrap = () => {
         await databaseService.initialize();
         setIsRuntimeReady(true);
       } catch (error) {
-        setRuntimeError(error instanceof Error ? error : new Error('Runtime initialization failed'));
+        setRuntimeError(error instanceof Error ? error : new Error('Inizializzazione del runtime non riuscita'));
       }
     };
 

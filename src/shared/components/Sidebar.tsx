@@ -68,7 +68,7 @@ export const Sidebar = ({ open, onClose, mobile = false }: SidebarProps) => {
             PraticheOffice
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Workspace operativo professionale
+            Ambiente operativo professionale
           </Typography>
         </Box>
       </Box>

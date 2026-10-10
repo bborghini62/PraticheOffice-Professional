@@ -1,4 +1,5 @@
 import { Box, Chip, Typography } from '@mui/material';
+import { getStatusLabel } from '../../../design/components/statusLabels';
 import type { WorkflowStage } from '../workflow.types';
 
 interface WorkflowStageCardProps {
@@ -14,6 +15,6 @@ export const WorkflowStageCard = ({ stage, isActive }: WorkflowStageCardProps) =
     <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
       {stage.description}
     </Typography>
-    <Chip size="small" label={stage.practiceStatus} sx={{ mt: 1.5 }} />
+    <Chip size="small" label={getStatusLabel(stage.practiceStatus)} sx={{ mt: 1.5 }} />
   </Box>
 );
